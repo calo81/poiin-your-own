@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:id="@+id/tableLayout1" android:layout_width="fill_parent">
-        <TableRow android:id="@+id/tableRow1" android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <TextView android:text="TextView" android:id="@+id/textView1" android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
-        </TableRow>
-        <TableRow android:id="@+id/tableRow2" android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <Button android:text="Button" android:id="@+id/button1" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
-        </TableRow>
-        <TableRow android:id="@+id/tableRow3" android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <Button android:text="Button" android:id="@+id/button2" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
-        </TableRow>
-    </TableLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:gravity="center_horizontal" android:padding="10px">
+	<com.google.android.maps.MapView
+		android:id="@+id/map_view" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:enabled="true"
+		android:clickable="true" android:apiKey="0YNirIfPWIR6wezxhpWQxRi0RVDyR9c9u-THe7Q" />
+		
+</RelativeLayout>
