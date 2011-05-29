@@ -1,16 +1,17 @@
 package com.poiin.yourown.ui;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import com.google.android.maps.MapView;
+import com.poiin.yourown.R;
 import com.poiin.yourown.people.MockPeople;
 import com.poiin.yourown.people.People;
 
 public class PoiinPoller {
-	private static final String TAG = "PoiinPoller";
 	private static final int TIME_BETWEN_POLLS = 30000;
 	private People people = new MockPeople();
 	private Drawable marker;
@@ -19,9 +20,11 @@ public class PoiinPoller {
 	private Thread pollingThread;
 	private volatile boolean keepPolling=true;
 
-	public PoiinPoller(Drawable marker, MapView mapView) {
-		this.marker = marker;
+	public PoiinPoller(MapView mapView,Context context) {
 		this.mapView = mapView;
+		this.marker = context.getResources().getDrawable(R.drawable.buoy);
+		this.marker.setBounds(0, 0, this.marker.getIntrinsicWidth(), this.marker
+	            .getIntrinsicHeight());
 	}
 
 	public void pollAndUpdate() {
@@ -33,7 +36,7 @@ public class PoiinPoller {
 			private void pollServerContinuously() {
 				while(keepPolling){
 					people.retrieve();
-					Log.i(TAG, "Polling server");
+					Log.i("PoiinPoller", "Polling server");
 					handler.sendEmptyMessage(0);
 					sleepBeforeNextPoll();
 				}

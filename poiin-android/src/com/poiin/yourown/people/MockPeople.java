@@ -20,6 +20,14 @@ public class MockPeople implements People {
 		person.setLongitude(0.065002);
 		person.setLatitude(51.578094);
 		list.add(person);
+		person = new Person();
+		person.setLongitude(-3.876083);
+		person.setLatitude(40.493505);
+		list.add(person);
+		person = new Person();
+		person.setLongitude(-3.869389);
+		person.setLatitude(40.491432);
+		list.add(person);
 		return list;
 	}
 

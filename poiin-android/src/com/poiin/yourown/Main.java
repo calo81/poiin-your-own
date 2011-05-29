@@ -1,7 +1,6 @@
 package com.poiin.yourown;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,7 +28,6 @@ public class Main extends MapActivity {
 	private LocationProvider locationProvider;
 	private MapView mapView;
 	private MyLocationOverlay myLocationOverlay;
-	private Drawable defaultMarker;
 	private PoiinPoller poiinPoller;
 
 	@Override
@@ -37,7 +35,7 @@ public class Main extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		initMap();
-		poiinPoller = new PoiinPoller(defaultMarker, mapView);
+		poiinPoller = new PoiinPoller(mapView,this);
 	}
 
 	@Override
@@ -116,9 +114,7 @@ public class Main extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapView.displayZoomControls(true);
-		this.defaultMarker = getResources().getDrawable(R.drawable.buoy);
-		this.defaultMarker.setBounds(0, 0, this.defaultMarker.getIntrinsicWidth(), this.defaultMarker
-	            .getIntrinsicHeight());
+		
 	}
 
 	private void poiin() {
