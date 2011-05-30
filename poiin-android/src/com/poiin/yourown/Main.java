@@ -81,7 +81,9 @@ public class Main extends MapActivity {
 	public void onPause(){
 	    super.onPause();
 	    this.locationManager.removeUpdates(locationListenerRecenterMap);
+	    myLocationOverlay.disableMyLocation();
 	}
+	    
 
 	private void locateMap() {
 		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

@@ -50,6 +50,7 @@ public class PoiinBackgroundService extends Service {
 			CharSequence contentTitle = "New Poiin!!";
 			CharSequence contentText = "Hey there is somebody new around.. check out!";
 			Intent notificationIntent = new Intent(PoiinBackgroundService.this, Main.class);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
