@@ -20,6 +20,7 @@ import com.poiin.yourown.location.LocationHelper;
 import com.poiin.yourown.poiin.Poiin;
 import com.poiin.yourown.poiin.PoiinService;
 import com.poiin.yourown.poiin.PoiinServiceImpl;
+import com.poiin.yourown.ui.PoiinPoller;
 
 public class Main extends MapActivity {
 

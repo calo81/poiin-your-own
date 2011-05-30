@@ -14,45 +14,47 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
-public class PoiinBackgroundService extends Service{
-	
+public class PoiinBackgroundService extends Service {
+
 	private PoiinPoller poiinPoller;
 	private MapView mapView;
 	private NotificationManager mNotificationManager;
-	
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-	
+
 	@Override
-	public void onCreate(){
+	public void onCreate() {
 		String ns = Context.NOTIFICATION_SERVICE;
 		mNotificationManager = (NotificationManager) getSystemService(ns);
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId){
-		mapView = ((ApplicationState)getApplication()).getMapView();
-		poiinPoller = new PoiinPoller(mapView, this);
-		poiinPoller.pollAndUpdate(notificatorNewPoiiners);
+	public void onStart(Intent intent, int startId) {
+			mapView = ((ApplicationState) getApplication()).getMapView();
+			poiinPoller = ((ApplicationState) getApplication()).getPoiinPoller(mapView, this);
+			poiinPoller.pollAndUpdate(notificatorNewPoiiners);
 	}
-	
-	 private final Handler notificatorNewPoiiners = new Handler() {
 
-	        @Override
-	        public void handleMessage(final Message msg) {
-	        	int icon = R.drawable.icon;
-	        	CharSequence tickerText = "New Poiin!!";
-	        	long when = System.currentTimeMillis();
-	        	Notification notification = new Notification(icon, tickerText, when);
-	        	Context context = getApplicationContext();
-	        	CharSequence contentTitle = "New Poiin!!";
-	        	CharSequence contentText = "Hey there is somebody new around.. check out!";
-	        	Intent notificationIntent = new Intent(PoiinBackgroundService.this, Main.class);
-	        	PendingIntent contentIntent = PendingIntent.getActivity(PoiinBackgroundService.this, 0, notificationIntent, 0);
-	        	notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-	        	mNotificationManager.notify(1, notification);
-	        }
-	    };
+	private final Handler notificatorNewPoiiners = new Handler() {
+
+		@Override
+		public void handleMessage(final Message msg) {
+			int icon = R.drawable.icon;
+			CharSequence tickerText = "New Poiin!!";
+			long when = System.currentTimeMillis();
+			Notification notification = new Notification(icon, tickerText, when);
+			Context context = getApplicationContext();
+			CharSequence contentTitle = "New Poiin!!";
+			CharSequence contentText = "Hey there is somebody new around.. check out!";
+			Intent notificationIntent = new Intent(PoiinBackgroundService.this, Main.class);
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			mNotificationManager.notify(1, notification);
+			
+		}
+	};
 }
