@@ -1,6 +1,7 @@
 package com.poiin.yourown;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,26 +17,29 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.poiin.yourown.location.LocationHelper;
-import com.poiin.yourown.network.RestClientService;
-import com.poiin.yourown.ui.PoiinPoller;
+import com.poiin.yourown.poiin.Poiin;
+import com.poiin.yourown.poiin.PoiinService;
+import com.poiin.yourown.poiin.PoiinServiceImpl;
 
 public class Main extends MapActivity {
 
+	private static final int POIIN_MENU_ID = 0;
 	private static final int MY_LOCATION_MENU_ID = 3;
-	private RestClientService restClient;
 	private MapController mapController;
 	private LocationManager locationManager;
 	private LocationProvider locationProvider;
 	private MapView mapView;
 	private MyLocationOverlay myLocationOverlay;
-	private PoiinPoller poiinPoller;
+	private PoiinService poiinService;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		initMap();
-		poiinPoller = new PoiinPoller(mapView,this);
+		initMap();	
+		((ApplicationState)getApplication()).setMapView(mapView);
+		startService(new Intent(this, PoiinBackgroundService.class));
+		poiinService = new PoiinServiceImpl();
 	}
 
 	@Override
@@ -43,7 +47,6 @@ public class Main extends MapActivity {
 		super.onStart();
 		locateMap();
 	}
-	
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -53,74 +56,87 @@ public class Main extends MapActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, 0, 0, "Poiin").setIcon(android.R.drawable.ic_menu_more);
+		menu.add(0, POIIN_MENU_ID, 0, "Poiin").setIcon(android.R.drawable.ic_menu_more);
 		menu.add(0, 1, 0, "Profile").setIcon(android.R.drawable.ic_menu_more);
 		menu.add(0, 2, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
 		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(android.R.drawable.ic_menu_more);
 		return true;
 	}
+
+	@Override
+	public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
+		switch (item.getItemId()) {
+		case MY_LOCATION_MENU_ID:
+			this.mapController.animateTo(getLastKnownPoint());
+			break;
+		case POIIN_MENU_ID:
+			poiin();
+			break;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
 	
-	 @Override
-	    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
-	        switch (item.getItemId()) {
-	            case MY_LOCATION_MENU_ID:
-	            	if(myLocationOverlay.getMyLocation() != null){
-	            		this.mapController.animateTo(myLocationOverlay.getMyLocation());
-	            	}
-	                break;
-	        }
-	        return super.onMenuItemSelected(featureId, item);
-	    }
+	@Override
+	public void onPause(){
+	    super.onPause();
+	    this.locationManager.removeUpdates(locationListenerRecenterMap);
+	}
 
 	private void locateMap() {
 		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		this.locationProvider = this.locationManager.getProvider(LocationManager.GPS_PROVIDER);
 		this.mapController = this.mapView.getController();
-		this.mapController.setZoom(10);	
+		this.mapController.setZoom(10);
 		establishMyOwnLocationAndMarker();
-   		listenOnLocationChange();
-   		pollForNewPoiins();
+		listenOnLocationChange();
 	}
 
-	private void pollForNewPoiins() {
-		poiinPoller.pollAndUpdate();
-	}
 
 	private void establishMyOwnLocationAndMarker() {
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
-        mapView.getOverlays().add(myLocationOverlay);
-        myLocationOverlay.enableCompass();
-        myLocationOverlay.enableMyLocation();
-        myLocationOverlay.runOnFirstFix(new Runnable() {
-            public void run() {
-                mapController.animateTo(myLocationOverlay.getMyLocation());
-            }
-        });
+		mapView.getOverlays().add(myLocationOverlay);
+		myLocationOverlay.enableCompass();
+		myLocationOverlay.enableMyLocation();
+		myLocationOverlay.runOnFirstFix(new Runnable() {
+			public void run() {
+				mapController.animateTo(myLocationOverlay.getMyLocation());
+			}
+		});
 	}
 
 	private void listenOnLocationChange() {
 		if (this.locationProvider != null) {
 			this.locationManager.requestLocationUpdates(this.locationProvider.getName(), 3000, 1000, this.locationListenerRecenterMap);
 		} else {
-			Toast.makeText(this, "Location Provider Not available.", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, "Location Provider Not available.", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 	}
-
 
 	private void initMap() {
 		mapView = (MapView) findViewById(R.id.map_view);
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapView.displayZoomControls(true);
-		
+
 	}
 
 	private void poiin() {
-		restClient.poiin();
+		ApplicationState application = (ApplicationState)getApplication();
+		Poiin poiin = new Poiin(getLastKnownPoint(),application.getMe());
+		poiinService.sendPoiin(poiin);
 	}
 
+	private GeoPoint getLastKnownPoint() {
+		if (myLocationOverlay.getMyLocation() != null) {
+			return myLocationOverlay.getMyLocation();
+		}
+		Location lastKnownLocation = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if (lastKnownLocation != null) {
+			return LocationHelper.getGeoPoint(lastKnownLocation);
+		}
+		return null;
+	}
 
 	private final LocationListener locationListenerRecenterMap = new LocationListener() {
 

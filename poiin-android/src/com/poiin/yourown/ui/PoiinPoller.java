@@ -27,7 +27,7 @@ public class PoiinPoller {
 	            .getIntrinsicHeight());
 	}
 
-	public void pollAndUpdate() {
+	public void pollAndUpdate(final Handler notificationHandler) {
 		pollingThread = new Thread() {
 			public void run() {
 				pollServerContinuously();
@@ -38,6 +38,7 @@ public class PoiinPoller {
 					people.retrieve();
 					Log.i("PoiinPoller", "Polling server");
 					handler.sendEmptyMessage(0);
+					notificationHandler.sendEmptyMessage(0);
 					sleepBeforeNextPoll();
 				}
 			}

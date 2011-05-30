@@ -1,7 +1,9 @@
 package com.poiin.yourown.network;
 
+import com.poiin.yourown.poiin.Poiin;
+
 public interface RestClientService {
 
-	void poiin();
+	void sendPoiin(Poiin poiin);
 
 }
