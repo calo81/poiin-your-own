@@ -12,4 +12,7 @@ public class Poiin {
 		this.longitude=lastKnownPoint.getLongitudeE6()/1E6;
 		this.user = me;
 	}
+	public String toJsonString() {
+		return "{user_id:"+user+",latitude:"+latitude+",longitude:"+longitude+"}";
+	}
 }
