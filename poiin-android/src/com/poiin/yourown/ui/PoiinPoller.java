@@ -1,6 +1,5 @@
 package com.poiin.yourown.ui;
 
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -10,12 +9,12 @@ import android.util.Log;
 import com.google.android.maps.MapView;
 import com.poiin.yourown.ApplicationState;
 import com.poiin.yourown.R;
-import com.poiin.yourown.people.MockPeople;
 import com.poiin.yourown.people.People;
+import com.poiin.yourown.people.RestPeople;
 
 public class PoiinPoller {
 	private static final int TIME_BETWEN_POLLS = 30000;
-	private People people = new MockPeople();
+	private People people = null;
 	private Drawable marker;
 	private MapView mapView;
 	private PeopleItemizedOverlay peopleOverlay;
@@ -38,6 +37,7 @@ public class PoiinPoller {
 		this.marker = context.getResources().getDrawable(R.drawable.buoy);
 		this.marker.setBounds(0, 0, this.marker.getIntrinsicWidth(), this.marker.getIntrinsicHeight());
 		this.context=context;
+		people=new RestPeople(((ApplicationState)context.getApplicationContext()).getMe());
 	}
 
 	public void pollAndUpdate(final Handler notificationHandler) {
@@ -49,8 +49,7 @@ public class PoiinPoller {
 			private void pollServerContinuously() {
 				while (keepPolling) {
 					people.retrieve();
-					Log.i("PoiinPoller", "Polling server");
-					handler.sendEmptyMessage(0);
+					Log.i("PoiinPoller", "Polling server");					
 					ifPeopleChangeNotifyNewPoiiners(notificationHandler);
 					sleepBeforeNextPoll();
 				}
@@ -59,6 +58,7 @@ public class PoiinPoller {
 			private void ifPeopleChangeNotifyNewPoiiners(final Handler notificationHandler) {
 				//TODO: Temporal notification condition, checking on size of people returned
 				if (lastPeopleRetrieved()==null || people.iterate().size() != lastPeopleRetrieved()) {
+					handler.sendEmptyMessage(0);
 					notificationHandler.sendEmptyMessage(0);
 					((ApplicationState)context.getApplicationContext()).setLastPeopleReturned(people.iterate());
 				}

@@ -117,6 +117,7 @@
     <orderEntry type="library" scope="PROVIDED" name="[gem] abstract (v1.0.0, /var/lib/gems/1.9.1/gems/abstract-1.0.0)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] erubis (v2.6.6, /var/lib/gems/1.9.1/gems/erubis-2.6.6)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] thor (v0.14.6, /var/lib/gems/1.9.1/gems/thor-0.14.6)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] rspec-rails (v2.6.1, /var/lib/gems/1.9.1/gems/rspec-rails-2.6.1)" level="application" />
   </component>
 </module>
 

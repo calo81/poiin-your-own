@@ -1,5 +1,5 @@
 MongoMapper.connection = Mongo::Connection.new('82.165.139.7', 27017)
-MongoMapper.database = "#remin-#{Rails.env}"
+MongoMapper.database = "#poiin-#{Rails.env}"
 
 if defined?(PhusionPassenger)
    PhusionPassenger.on_event(:starting_worker_process) do |forked|

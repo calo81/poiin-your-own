@@ -2,6 +2,9 @@ package com.poiin.yourown;
 
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.facebook.android.Facebook;
 import com.google.android.maps.MapView;
 import com.poiin.yourown.people.MockPeople;
@@ -15,7 +18,7 @@ import android.content.ContextWrapper;
 
 public class ApplicationState extends Application{
 	private Facebook facebook;
-	private String me;
+	private JSONObject me;
 	private MapView mapView;
 	private PoiinPoller poiinPoller;
 	private List<Person> people;
@@ -29,10 +32,14 @@ public class ApplicationState extends Application{
 	}
 
 	public void setMe(String me) {
-		this.me=me;
+		try {
+			this.me=new JSONObject(me);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public String getMe() {
+	public JSONObject getMe() {
 		return this.me;
 	}
 
