@@ -46,7 +46,9 @@ describe "PoiinController" do
       user = mock("user")
       User.should_receive(:find).with(123).and_return(user)
       user.should_receive(:categories).and_return(["category1"])
-      Poiin.should_receive(:all_by_categories).with(["category1"])
+      mock_plucky = mock("plucky")
+      Poiin.should_receive(:where).with(:categories=>["category1"]).and_return(mock_plucky)
+      mock_plucky.should_receive(:all)
       @controller.should_receive(:render)
       @controller.index
     end
