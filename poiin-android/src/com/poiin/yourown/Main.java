@@ -24,6 +24,7 @@ import com.poiin.yourown.ui.PoiinPoller;
 
 public class Main extends MapActivity {
 
+	private static final int PROFILE = 1;
 	private static final int POIIN_MENU_ID = 0;
 	private static final int MY_LOCATION_MENU_ID = 3;
 	private MapController mapController;
@@ -58,7 +59,7 @@ public class Main extends MapActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, POIIN_MENU_ID, 0, "Poiin").setIcon(android.R.drawable.ic_menu_more);
-		menu.add(0, 1, 0, "Profile").setIcon(android.R.drawable.ic_menu_more);
+		menu.add(0, PROFILE, 0, "Profile").setIcon(android.R.drawable.ic_menu_more);
 		menu.add(0, 2, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
 		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(android.R.drawable.ic_menu_more);
 		return true;
@@ -72,6 +73,9 @@ public class Main extends MapActivity {
 			break;
 		case POIIN_MENU_ID:
 			poiin();
+			break;
+		case PROFILE:
+			startActivity(new Intent(this, ProfileActivity.class));
 			break;
 		}
 		return super.onMenuItemSelected(featureId, item);

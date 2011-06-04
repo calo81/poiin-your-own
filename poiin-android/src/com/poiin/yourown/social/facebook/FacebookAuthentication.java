@@ -53,6 +53,7 @@ public class FacebookAuthentication extends Activity {
 
 			private String getMyFacebookProfile(){
 				try {
+					
 					return facebook.request("me");
 				} catch (Exception e) {
 					throw new RuntimeException(e);

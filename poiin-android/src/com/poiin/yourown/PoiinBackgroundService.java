@@ -30,6 +30,12 @@ public class PoiinBackgroundService extends Service {
 		String ns = Context.NOTIFICATION_SERVICE;
 		mNotificationManager = (NotificationManager) getSystemService(ns);
 	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+	    super.onStartCommand(intent, flags, startId);
+		return START_REDELIVER_INTENT ;
+	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
