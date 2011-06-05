@@ -19,7 +19,7 @@ import android.content.ContextWrapper;
 public class ApplicationState extends Application{
 	private Facebook facebook;
 	private JSONObject me;
-	private MapView mapView;
+	private volatile MapView mapView;
 	private PoiinPoller poiinPoller;
 	private List<Person> people;
 
@@ -51,9 +51,9 @@ public class ApplicationState extends Application{
 		return mapView;
 	}
 
-	public PoiinPoller getPoiinPoller(MapView mapView,ContextWrapper context) {
+	public PoiinPoller getPoiinPoller(ContextWrapper context) {
 		if(poiinPoller==null){
-			return PoiinPoller.getInstance(mapView, context);
+			return PoiinPoller.getInstance(context);
 		}
 		return poiinPoller;
 	}

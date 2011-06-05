@@ -39,7 +39,6 @@ public class Main extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		initMap();	
-		((ApplicationState)getApplication()).setMapView(mapView);
 		startService(new Intent(this, PoiinBackgroundService.class));
 		poiinService = new PoiinServiceImpl();
 	}
@@ -125,7 +124,7 @@ public class Main extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapView.displayZoomControls(true);
-
+		((ApplicationState)getApplication()).setMapView(mapView);
 	}
 
 	private void poiin() {
