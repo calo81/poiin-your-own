@@ -24,7 +24,7 @@ import android.util.Log;
 import com.poiin.yourown.poiin.Poiin;
 
 public class RestClientServiceImpl implements RestClientService {
-	private static final String HTTP_POIIN_ENDPOINT = "http://192.168.122.1:3000/poiin";
+	private static final String HTTP_POIIN_ENDPOINT = "http://192.168.0.13:3000/poiin";
 	private HttpClient httpClient = new DefaultHttpClient();
 
 	@Override

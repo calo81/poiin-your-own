@@ -45,6 +45,7 @@ public class RestPeople implements People {
 		try {
 			Person person = new Person();
 			person.setName(poiin.getString("id"));
+			person.setId(poiin.getString("id"));
 			person.setLatitude(poiin.getDouble("latitude"));
 			person.setLongitude(poiin.getDouble("longitude"));
 			return person;

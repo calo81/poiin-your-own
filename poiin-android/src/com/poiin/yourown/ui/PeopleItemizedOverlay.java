@@ -3,31 +3,41 @@ package com.poiin.yourown.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
+import com.poiin.yourown.PoiinerDetailsActivity;
 import com.poiin.yourown.people.People;
 import com.poiin.yourown.people.Person;
 
 public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 
 	private List<PersonOverlayItem> people;
-	
-	public PeopleItemizedOverlay(final People people, final Drawable defaultMarker) {
+	private Context context;
+
+	public PeopleItemizedOverlay(final People people,
+			final Drawable defaultMarker, Context context) {
 		super(defaultMarker);
-		this.people=new ArrayList<PersonOverlayItem>();
-		for(Person person:people.iterate()){
+		this.context = context;
+		this.people = new ArrayList<PersonOverlayItem>();
+		for (Person person : people.iterate()) {
 			PersonOverlayItem item = new PersonOverlayItem(person);
 			this.people.add(item);
 		}
 		populate();
 	}
 
-	public PeopleItemizedOverlay(final List<PersonOverlayItem> people, final Drawable defaultMarker) {
+	public PeopleItemizedOverlay(final List<PersonOverlayItem> people,
+			final Drawable defaultMarker) {
 		super(defaultMarker);
-		this.people=people;
+		this.people = people;
 		populate();
 	}
 
@@ -40,10 +50,19 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	public int size() {
 		return this.people.size();
 	}
-	
-	 @Override
-	    public void draw(Canvas canvas, MapView mapView, boolean b) {
-	        super.draw(canvas, mapView, false);     
-	    }
+
+	@Override
+	public void draw(Canvas canvas, MapView mapView, boolean b) {
+		super.draw(canvas, mapView, false);
+	}
+
+	@Override
+	protected boolean onTap(int index) {
+		PersonOverlayItem item = people.get(index);
+		Intent i = new Intent(Intent.ACTION_VIEW,Uri.parse("poiin://poiin.yourown/"+item.getPerson().getId()));
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(i);		
+		return true;
+	}
 
 }

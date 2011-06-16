@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:gravity="center_horizontal" android:padding="10px">
-	<com.google.android.maps.MapView
-		android:id="@+id/map_view" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:enabled="true"
-		android:clickable="true" android:apiKey="0YNirIfPWIR7nfGQUu_UnygWYUc8UMwK44rsZUw" />
-		
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<TextView android:id="@+id/poiinerName" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+	</LinearLayout>
 </RelativeLayout>

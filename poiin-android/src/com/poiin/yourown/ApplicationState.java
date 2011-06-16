@@ -5,21 +5,18 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Application;
+import android.content.ContextWrapper;
+
 import com.facebook.android.Facebook;
 import com.google.android.maps.MapView;
-import com.poiin.yourown.people.MockPeople;
-import com.poiin.yourown.people.People;
 import com.poiin.yourown.people.Person;
 import com.poiin.yourown.ui.PoiinPoller;
-
-import android.app.Application;
-import android.content.Context;
-import android.content.ContextWrapper;
 
 public class ApplicationState extends Application{
 	private Facebook facebook;
 	private JSONObject me;
-	private MapView mapView;
+	private volatile MapView mapView;
 	private PoiinPoller poiinPoller;
 	private List<Person> people;
 
@@ -51,9 +48,9 @@ public class ApplicationState extends Application{
 		return mapView;
 	}
 
-	public PoiinPoller getPoiinPoller(MapView mapView,ContextWrapper context) {
+	public PoiinPoller getPoiinPoller(ContextWrapper context) {
 		if(poiinPoller==null){
-			return PoiinPoller.getInstance(mapView, context);
+			return PoiinPoller.getInstance(context);
 		}
 		return poiinPoller;
 	}

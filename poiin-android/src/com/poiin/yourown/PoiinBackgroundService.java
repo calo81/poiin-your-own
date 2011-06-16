@@ -40,7 +40,7 @@ public class PoiinBackgroundService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 			mapView = ((ApplicationState) getApplication()).getMapView();
-			poiinPoller = ((ApplicationState) getApplication()).getPoiinPoller(mapView, this);
+			poiinPoller = ((ApplicationState) getApplication()).getPoiinPoller(this);
 			poiinPoller.pollAndUpdate(notificatorNewPoiiners);
 	}
 
@@ -56,7 +56,7 @@ public class PoiinBackgroundService extends Service {
 			CharSequence contentTitle = "New Poiin!!";
 			CharSequence contentText = "Hey there is somebody new around.. check out!";
 			Intent notificationIntent = new Intent(PoiinBackgroundService.this, Main.class);
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
