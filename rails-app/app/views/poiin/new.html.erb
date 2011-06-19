@@ -4,6 +4,8 @@ POIINER<BR/><BR/>
 <%= form_tag("/poiin", :method => "post") do %>
   <%= label_tag(:user_id, "User ID:") %>
   <%= text_field_tag(:user_id) %>
+  <%= label_tag(:user_id, "User Name:") %>
+  <%= text_field_tag(:user_name) %>
   <%= label_tag(:longitude, "Longiude:") %>
   <%= text_field_tag(:longitude) %>
   <%= label_tag(:latitude, "Latitude:") %>

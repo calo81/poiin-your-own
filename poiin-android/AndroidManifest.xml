@@ -5,16 +5,18 @@
 	<uses-sdk android:minSdkVersion="8" />
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
-		android:name="com.poiin.yourown.ApplicationState">
-		<activity android:name="Main" android:launchMode="singleInstance"
+		android:name="com.poiin.yourown.ApplicationState" android:debuggable="true">
+		<activity android:name="Main" android:launchMode="singleInstance" android:alwaysRetainTaskState="true"
 			android:label="@string/app_name">
 		</activity>
-		<activity android:name=".social.facebook.FacebookAuthentication"
+		<activity android:name=".social.facebook.FacebookAuthentication" android:noHistory="true"
 			android:label="@string/app_name">
 		</activity>
 		<activity android:name="ProfileActivity" android:label="@string/app_name">
 		</activity>
-		<activity android:name="PoiinerDetailsActivity"
+		<activity android:name="NewMessageActivity" android:label="@string/app_name" android:noHistory="true">
+		</activity>
+		<activity android:name="PoiinerDetailsActivity" android:noHistory="true"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
@@ -22,7 +24,7 @@
 				<data android:scheme="poiin" />
 			</intent-filter>
 		</activity>
-		<activity android:name="StartActivity" android:label="@string/app_name">
+		<activity android:name="StartActivity" android:label="@string/app_name" android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

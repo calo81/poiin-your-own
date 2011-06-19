@@ -24,7 +24,7 @@ import android.util.Log;
 import com.poiin.yourown.poiin.Poiin;
 
 public class RestClientServiceImpl implements RestClientService {
-	private static final String HTTP_POIIN_ENDPOINT = "http://192.168.0.13:3000/poiin";
+	private static final String HTTP_POIIN_ENDPOINT = "http://192.168.0.5:3000/poiin";
 	private HttpClient httpClient = new DefaultHttpClient();
 
 	@Override
@@ -36,24 +36,10 @@ public class RestClientServiceImpl implements RestClientService {
 	}
 
 	@Override
-	public JSONObject getPoiins(JSONObject user) {
+	public JSONArray getPoiins(JSONObject user) {
 		Log.i("RestClient", user.toString());
 		HttpGet get = getUrlWithQueryString(user);
-		JSONObject poiins = sendRequest(get);
-		return poiinsOrEmpty(poiins);
-	}
-
-	private JSONObject poiinsOrEmpty(JSONObject poiins) {
-		try {
-			 poiins.getJSONArray("poiins");
-			return poiins;
-		} catch (JSONException e1) {
-			try {
-				return new JSONObject("{poiins:[]}");
-			} catch (JSONException e) {
-				throw new RuntimeException(e);
-			}
-		}
+		return sendRequest(get);
 	}
 
 	private HttpGet getUrlWithQueryString(JSONObject user) {
@@ -64,14 +50,14 @@ public class RestClientServiceImpl implements RestClientService {
 		}
 	}
 
-	private JSONObject sendRequest(HttpRequestBase request) {
+	private JSONArray sendRequest(HttpRequestBase request) {
 		try {
 			HttpEntity entity = httpClient.execute(request).getEntity();
 			String responseAsString = EntityUtils.toString(entity);
-			return new JSONObject(responseAsString);
+			return new JSONArray(responseAsString);
 		} catch (Exception e) {
 			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
-			return new JSONObject();
+			return new JSONArray();
 		}
 	}
 

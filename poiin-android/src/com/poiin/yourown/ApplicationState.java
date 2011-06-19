@@ -11,6 +11,7 @@ import android.content.ContextWrapper;
 import com.facebook.android.Facebook;
 import com.google.android.maps.MapView;
 import com.poiin.yourown.people.Person;
+import com.poiin.yourown.people.message.UserMessageListener;
 import com.poiin.yourown.ui.PoiinPoller;
 
 public class ApplicationState extends Application{
@@ -18,6 +19,7 @@ public class ApplicationState extends Application{
 	private JSONObject me;
 	private volatile MapView mapView;
 	private PoiinPoller poiinPoller;
+	private UserMessageListener userMessageListener;
 	private List<Person> people;
 
 	public Facebook getFacebook() {
@@ -61,6 +63,13 @@ public class ApplicationState extends Application{
 
 	public void setLastPeopleReturned(List<Person> people) {
 		this.people=people;
+	}
+
+	public UserMessageListener getUserMessageListener(ContextWrapper context) {
+		if(userMessageListener==null){
+			return UserMessageListener.getInstance(context);
+		}
+		return userMessageListener;
 	}
 	
 }

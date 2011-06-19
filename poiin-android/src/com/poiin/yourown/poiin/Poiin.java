@@ -17,7 +17,7 @@ public class Poiin {
 	}
 	public String toJsonString() {
 		try {
-			return "{user_id:"+user.getLong("id")+",latitude:"+latitude+",longitude:"+longitude+"}";
+			return "{user_id:"+user.getLong("id")+",latitude:"+latitude+",longitude:"+longitude+",user_name:"+user.getString("name")+"}";
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
 		}

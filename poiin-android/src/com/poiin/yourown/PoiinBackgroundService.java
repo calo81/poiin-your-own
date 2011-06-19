@@ -1,9 +1,5 @@
 package com.poiin.yourown;
 
-import com.google.android.maps.MapView;
-import com.poiin.yourown.social.facebook.FacebookAuthentication;
-import com.poiin.yourown.ui.PoiinPoller;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,11 +10,14 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
+import com.poiin.yourown.people.message.UserMessageListener;
+import com.poiin.yourown.ui.PoiinPoller;
+
 public class PoiinBackgroundService extends Service {
 
 	private PoiinPoller poiinPoller;
-	private MapView mapView;
 	private NotificationManager mNotificationManager;
+	private UserMessageListener messageListener;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -39,9 +38,18 @@ public class PoiinBackgroundService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-			mapView = ((ApplicationState) getApplication()).getMapView();
-			poiinPoller = ((ApplicationState) getApplication()).getPoiinPoller(this);
-			poiinPoller.pollAndUpdate(notificatorNewPoiiners);
+			startPoiinPoller();
+			startMessageListener();
+	}
+
+	private void startMessageListener() {
+		messageListener = ((ApplicationState) getApplication()).getUserMessageListener(this);
+		messageListener.start(messageReceivedHandler);
+	}
+
+	private void startPoiinPoller() {
+		poiinPoller = ((ApplicationState) getApplication()).getPoiinPoller(this);
+		poiinPoller.pollAndUpdate(notificatorNewPoiiners);
 	}
 
 	private final Handler notificatorNewPoiiners = new Handler() {
@@ -63,5 +71,11 @@ public class PoiinBackgroundService extends Service {
 			mNotificationManager.notify(1, notification);
 			
 		}
+	};
+	
+	private final Handler messageReceivedHandler = new Handler() {
+
+		@Override
+		public void handleMessage(final Message msg) {}
 	};
 }
