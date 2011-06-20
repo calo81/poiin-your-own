@@ -52,11 +52,13 @@ describe "PoiinController" do
       poiin2 = mock("poiin2")
       poiins =[poiin1,poiin2]
       mock_plucky.should_receive(:all).and_return(poiins)
-      poiins.should_receive(:map).and_yield(poiin1).and_yield(poiin2)
+      to_return = mock("to_return")
+      poiins.should_receive(:map).and_yield(poiin1).and_yield(poiin2).and_return(to_return)
       poiin1.should_receive(:user_id).and_return(1)
       poiin2.should_receive(:user_id).and_return(2)
       User.should_receive(:find).twice()
       @controller.should_receive(:render)
+      to_return.should_receive(:to_json)
       @controller.index
     end
   end

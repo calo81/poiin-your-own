@@ -32,7 +32,7 @@ public class UserMessageListener {
 					public void receiveMessage(UserMessage message) {
 						Log.i(this.getClass().getName(), "Received USer Message "+message.getContent());					
 					}
-				});
+				},context);
 			}
 		}).start();
 	}
