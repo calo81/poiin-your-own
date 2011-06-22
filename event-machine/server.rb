@@ -3,23 +3,24 @@
 require 'rubygems'
 require 'eventmachine'
 require 'em-http'
+require 'net/http'
 
 module Server
   def post_init
     puts "Received a new connection"
-    timer = EM::PeriodicTimer.new(5) do
-      http_call = EM::HttpRequest.new("http://www.google.com/message/#{@user_id}").get
-      http_call.callback do |http|  
-        puts http.response
-        puts "Sending data to client ..."
-        send_data http.response   
-    end  
-   end
+    timer = EM::PeriodicTimer.new(5) do         
+      http = EventMachine::HttpRequest.new('http://127.0.0.1:3000/message').get :query => {'user_id' => @user_id}
+      http.callback do
+        if http.response_header.status == 200
+          send_data http.response
+        end
+      end
+    end
   end
 
   def receive_data(data)
     puts "User ID received #{data}"
-    @user_id = data
+    @user_id = data.chop.chop
   end
 end
 
