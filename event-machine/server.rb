@@ -8,17 +8,18 @@ module Server
   def post_init
     puts "Received a new connection"
     timer = EM::PeriodicTimer.new(5) do
-      EM::HttpRequest.new('http://sitepoint.com/').get.callback do|http|  
+      http_call = EM::HttpRequest.new("http://www.google.com/message/#{@user_id}").get
+      http_call.callback do |http|  
         puts http.response
         puts "Sending data to client ..."
-        send_data "hola\n"   
+        send_data http.response   
     end  
    end
   end
 
   def receive_data(data)
-    puts data
-    send_data("helo\n")
+    puts "User ID received #{data}"
+    @user_id = data
   end
 end
 

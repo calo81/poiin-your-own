@@ -1,6 +1,7 @@
 RailsApp::Application.routes.draw do
   root :to => "poiin#new"
   resources :poiin
+  resources :message
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

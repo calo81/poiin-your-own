@@ -35,7 +35,7 @@ public class SocketClient {
 			PrintWriter writer = new PrintWriter(socket.getOutputStream());
 			long userId = ((ApplicationState) context.getApplicationContext()).getMe().getLong("id");
 			writer.println(userId);
-			writer.close();
+			writer.flush();
 		} catch (Exception e) {
 			Log.e("SocketClient", "Unable to write User Id to socket", e);
 		}
