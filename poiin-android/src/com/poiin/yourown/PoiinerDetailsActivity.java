@@ -40,7 +40,7 @@ public class PoiinerDetailsActivity extends Activity {
 	public void onStart() {
 		super.onStart();
 		startImageRetrieval();
-		poiinerId = getIntent().getData().getPath();
+		poiinerId = getIntent().getData().getPath().substring(1);
 		poiinerName = getIntent().getData().getQueryParameter("name");
 		userIdView.setText(poiinerName);
 
@@ -59,7 +59,9 @@ public class PoiinerDetailsActivity extends Activity {
 	public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
 		switch (item.getItemId()) {
 		case POIIN_MESSAGE_MENU:
-			startActivity(new Intent(this, NewMessageActivity.class));
+			Intent intent = new Intent(this, NewMessageActivity.class);
+			intent.putExtra("messageReceiver", poiinerId);
+			startActivity(intent);
 			break;
 		}
 		return super.onMenuItemSelected(featureId, item);

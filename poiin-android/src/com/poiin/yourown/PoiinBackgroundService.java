@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
+import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.people.message.UserMessageListener;
 import com.poiin.yourown.ui.PoiinPoller;
 
@@ -76,6 +77,26 @@ public class PoiinBackgroundService extends Service {
 	private final Handler messageReceivedHandler = new Handler() {
 
 		@Override
-		public void handleMessage(final Message msg) {}
+		public void handleMessage(final Message msg) {
+			UserMessage message = (UserMessage)msg.getData().getSerializable("message");
+			sendNotification(message);
+			
+		}
+
+		private void sendNotification(UserMessage message) {
+			int icon = R.drawable.icon;
+			CharSequence tickerText = "New Message Received";
+			long when = System.currentTimeMillis();
+			Notification notification = new Notification(icon, tickerText, when);
+			Context context = getApplicationContext();
+			CharSequence contentTitle = "New Message";
+			CharSequence contentText = "You have a new message";
+			Intent notificationIntent = new Intent(PoiinBackgroundService.this, MessageReceivedActivity.class);
+			notificationIntent.putExtra("userMessage", message);
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			mNotificationManager.notify(2, notification);
+		}
 	};
 }

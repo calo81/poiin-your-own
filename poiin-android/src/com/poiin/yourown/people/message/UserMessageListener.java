@@ -3,7 +3,9 @@ package com.poiin.yourown.people.message;
 import com.poiin.yourown.network.SocketClient;
 
 import android.content.ContextWrapper;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 public class UserMessageListener {
@@ -23,14 +25,23 @@ public class UserMessageListener {
 		return instance;
 	}
 
-	public void start(Handler messageReceivedHandler) {
+	public void start(final Handler messageReceivedHandler) {
 		new Thread(new Runnable() {		
 			@Override
 			public void run() {
 				socketClient.establishConnectionAndWaitForMessage(new UserMessageReceivedHandler() {					
 					@Override
 					public void receiveMessage(UserMessage message) {
-						Log.i(this.getClass().getName(), "Received USer Message "+message.getContent());					
+						Log.i(this.getClass().getName(), "Received USer Message "+message.getContent());		
+						messageReceivedHandler.sendMessage(createMessageFromUserMessage(message));
+					}
+
+					private Message createMessageFromUserMessage(UserMessage userMessage) {
+						Message message = new Message();
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("message", userMessage);
+						message.setData(bundle);
+						return message;
 					}
 				},context);
 			}

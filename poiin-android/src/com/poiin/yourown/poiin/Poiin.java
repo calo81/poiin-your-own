@@ -4,8 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
+import com.poiin.yourown.model.JsonStringSupport;
 
-public class Poiin {
+public class Poiin implements JsonStringSupport{
 	
 	private JSONObject user;
 	private double latitude;
@@ -15,6 +16,8 @@ public class Poiin {
 		this.longitude=lastKnownPoint.getLongitudeE6()/1E6;
 		this.user = me;
 	}
+	
+	@Override
 	public String toJsonString() {
 		try {
 			return "{user_id:"+user.getLong("id")+",latitude:"+latitude+",longitude:"+longitude+",user_name:"+user.getString("name")+"}";

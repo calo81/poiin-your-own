@@ -20,7 +20,7 @@ module Server
 
   def receive_data(data)
     puts "User ID received #{data}"
-    @user_id = data.chop.chop
+    @user_id = data.chop
   end
 end
 

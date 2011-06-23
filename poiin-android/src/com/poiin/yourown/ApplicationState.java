@@ -41,6 +41,16 @@ public class ApplicationState extends Application{
 	public JSONObject getMe() {
 		return this.me;
 	}
+	
+	public Long getMyId() {
+		try {
+			return this.me.getLong("id");
+		} catch (JSONException e) {
+			//TODO: Fix this
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public void setMapView(MapView mapView) {
 		this.mapView=mapView;
