@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:gravity="center_horizontal" android:padding="10px" android:orientation="vertical">
-	<EditText android:layout_width="fill_parent" android:id="@+id/messageReceivedText"
-            android:layout_height="wrap_content" android:gravity="top|left"
-            android:singleLine="false" android:lines="5"
-            android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
-            />
+	
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/receivedMessagesLayout"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:gravity="center_horizontal" android:padding="10px" android:orientation="vertical">
+	 <!-- This is filled in code on messages received -->
+	</LinearLayout>	
+    
     <EditText android:layout_width="fill_parent" android:id="@+id/responseMessageText"
             android:layout_height="wrap_content" android:gravity="top|left"
-            android:singleLine="false" android:lines="5"
+            android:singleLine="false" android:lines="3"
             android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
             />
-	<Button android:id="@+id/sendResponseMessageButton" android:layout_width="wrap_content" android:text="Send"
+	<Button android:id="@+id/sendResponseMessageButton" android:layout_width="wrap_content" android:text="Reply"
             android:layout_height="wrap_content"/>
 		
 </LinearLayout>

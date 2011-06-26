@@ -23,7 +23,7 @@ public class FacebookAuthentication extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.facebook_login);
-        facebook.authorize(this, new DialogListener() {
+        facebook.authorize(this,new String[] { "email", "read_stream","user_interests","user_status","manage_friendlists","user_photos" }, new DialogListener() {
 			
 			public void onFacebookError(FacebookError e) {
 				// TODO Auto-generated method stub

@@ -16,17 +16,17 @@ class PoiinController < ApplicationController
     render :json  => {code: "ok"}
   end
 
-  def build_return_object(poiins)
-    poiins.map do |poiin|
-      {:poiin => poiin, :user=>User.find(poiin.user_id)}
-    end
-  end
-
   def index
     user = User.find(params['user_id'].to_i)
     poiins = Poiin.where(:categories => user.categories).all
     to_return = build_return_object(poiins)
     render :json => to_return.to_json
+  end
+
+  def build_return_object(poiins)
+    poiins.map do |poiin|
+      {:poiin => poiin, :user=>User.find(poiin.user_id)}
+    end
   end
 
   private :save_user_if_needed, :build_return_object

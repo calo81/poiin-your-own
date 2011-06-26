@@ -17,4 +17,9 @@ class User
     @messages << message
     save!
   end
+
+  def remove_message(id)
+    messages.delete_if {|message| id == message["id"].to_s}
+    save!
+  end
 end

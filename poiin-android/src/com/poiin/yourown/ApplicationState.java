@@ -6,20 +6,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
-import android.content.ContextWrapper;
 
 import com.facebook.android.Facebook;
 import com.google.android.maps.MapView;
 import com.poiin.yourown.people.Person;
-import com.poiin.yourown.people.message.UserMessageListener;
-import com.poiin.yourown.ui.PoiinPoller;
+import com.poiin.yourown.people.message.ServerMessageListener;
 
 public class ApplicationState extends Application{
 	private Facebook facebook;
 	private JSONObject me;
 	private volatile MapView mapView;
-	private PoiinPoller poiinPoller;
-	private UserMessageListener userMessageListener;
+	private ServerMessageListener userMessageListener;
 	private List<Person> people;
 
 	public Facebook getFacebook() {
@@ -60,13 +57,6 @@ public class ApplicationState extends Application{
 		return mapView;
 	}
 
-	public PoiinPoller getPoiinPoller(ContextWrapper context) {
-		if(poiinPoller==null){
-			return PoiinPoller.getInstance(context);
-		}
-		return poiinPoller;
-	}
-
 	public List<Person> getLastPeopleReturned() {
 		return this.people;
 	}
@@ -75,9 +65,9 @@ public class ApplicationState extends Application{
 		this.people=people;
 	}
 
-	public UserMessageListener getUserMessageListener(ContextWrapper context) {
+	public ServerMessageListener getUserMessageListener() {
 		if(userMessageListener==null){
-			return UserMessageListener.getInstance(context);
+			return ServerMessageListener.getInstance(this);
 		}
 		return userMessageListener;
 	}

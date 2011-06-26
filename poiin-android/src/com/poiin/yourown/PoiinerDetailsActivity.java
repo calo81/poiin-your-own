@@ -7,6 +7,8 @@ import java.net.URLConnection;
 
 import org.json.JSONException;
 
+import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,12 +40,11 @@ public class PoiinerDetailsActivity extends Activity {
 
 	@Override
 	public void onStart() {
-		super.onStart();
-		startImageRetrieval();
+		super.onStart();		
 		poiinerId = getIntent().getData().getPath().substring(1);
 		poiinerName = getIntent().getData().getQueryParameter("name");
 		userIdView.setText(poiinerName);
-
+		startImageRetrieval();
 	}
 
 	@Override
@@ -67,30 +68,8 @@ public class PoiinerDetailsActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void startImageRetrieval() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				loadImageHandler.sendEmptyMessage(0);
-			}
-		}).start();
+	private void startImageRetrieval() {		
+		new ProfilePictureRetriever(poiinerPicture, poiinerId).retrieve();
 	}
-
-	private Handler loadImageHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			try {
-				URL url = new URL(imageLink.replace("{ID}", poiinerId));
-				URLConnection conn = url.openConnection();
-				conn.connect();
-				BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-				Bitmap bm = BitmapFactory.decodeStream(bis);
-				bis.close();
-				poiinerPicture.setImageBitmap(bm);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	};
 
 }

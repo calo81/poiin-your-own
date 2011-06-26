@@ -13,6 +13,7 @@ public class UserMessage implements Serializable,JsonStringSupport{
 	private String content;
 	private String from;
 	private String to;
+	private String id;
 	
 	public UserMessage(String content){
 		this.content=content;
@@ -37,6 +38,15 @@ public class UserMessage implements Serializable,JsonStringSupport{
 
 	public void setTo(String to) {
 		this.to = to;
+	}
+	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	@Override

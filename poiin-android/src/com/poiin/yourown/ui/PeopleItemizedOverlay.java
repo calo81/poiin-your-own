@@ -3,7 +3,6 @@ package com.poiin.yourown.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -12,9 +11,6 @@ import android.net.Uri;
 
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
-import com.google.android.maps.OverlayItem;
-import com.poiin.yourown.PoiinerDetailsActivity;
-import com.poiin.yourown.people.People;
 import com.poiin.yourown.people.Person;
 
 public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
@@ -22,12 +18,12 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	private List<PersonOverlayItem> people;
 	private Context context;
 
-	public PeopleItemizedOverlay(final People people,
+	public PeopleItemizedOverlay(final List<Person> people,
 			final Drawable defaultMarker, Context context) {
 		super(defaultMarker);
 		this.context = context;
 		this.people = new ArrayList<PersonOverlayItem>();
-		for (Person person : people.iterate()) {
+		for (Person person : people) {
 			PersonOverlayItem item = new PersonOverlayItem(person);
 			this.people.add(item);
 		}

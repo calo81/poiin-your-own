@@ -14,4 +14,6 @@ public interface RestClientService {
 
 	void sendUserMessage(UserMessage message);
 
+	public void acknowledgeMessage(String id,String userId);
+
 }
