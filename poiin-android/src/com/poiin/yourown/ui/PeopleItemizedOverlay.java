@@ -20,7 +20,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 
 	public PeopleItemizedOverlay(final List<Person> people,
 			final Drawable defaultMarker, Context context) {
-		super(defaultMarker);
+		super(PeopleItemizedOverlay.boundCenterBottom(defaultMarker));
 		this.context = context;
 		this.people = new ArrayList<PersonOverlayItem>();
 		for (Person person : people) {

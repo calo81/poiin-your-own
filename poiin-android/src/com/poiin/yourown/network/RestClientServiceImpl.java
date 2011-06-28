@@ -1,9 +1,11 @@
 package com.poiin.yourown.network;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpVersion;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -36,6 +38,7 @@ public class RestClientServiceImpl implements RestClientService {
 	private static final String SERVER_HOST = "http://192.168.0.5:3000/";
 	private static final String HTTP_POIIN_ENDPOINT = SERVER_HOST+"poiin";
 	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST+"message";
+	private static final String HTTP_USER_ENDPOINT = SERVER_HOST+"user";
 	private HttpClient httpClient;
 
 	public RestClientServiceImpl(){
@@ -48,14 +51,14 @@ public class RestClientServiceImpl implements RestClientService {
 		Log.i("RestClient", poiin.toString());
 		HttpPost post = new HttpPost(HTTP_POIIN_ENDPOINT);
 		setPostJsonString(poiin, post);
-		sendRequest(post);
+		sendRequestAndGetJSONArray(post);
 	}
 
 	@Override
 	public JSONArray getPoiins(JSONObject user) {
 		Log.i("RestClient", user.toString());
 		HttpGet get = getUrlWithQueryString(user);
-		return sendRequest(get);
+		return sendRequestAndGetJSONArray(get);
 	}
 	
 	@Override
@@ -63,13 +66,19 @@ public class RestClientServiceImpl implements RestClientService {
 		Log.i("RestClient", message.toString());
 		HttpPost post = new HttpPost(HTTP_MESSAGE_ENDPOINT);
 		setPostJsonString(message, post);
-		sendRequest(post);
+		sendRequestAndGetJSONArray(post);
 	}
 	
 	@Override
 	public void acknowledgeMessage(String id,String userId) {
 		HttpDelete delete =new HttpDelete(HTTP_MESSAGE_ENDPOINT + "/"+id+"?user_id="+userId);
-		sendRequest(delete);
+		sendRequestAndGetJSONArray(delete);
+	}
+	
+	@Override
+	public JSONObject isUserRegistered(String userId) {
+		HttpGet get = new HttpGet(HTTP_USER_ENDPOINT + "/"+userId);
+		return sendRequestAndGetJSONObject(get);
 	}
 
 	private HttpGet getUrlWithQueryString(JSONObject user) {
@@ -80,15 +89,31 @@ public class RestClientServiceImpl implements RestClientService {
 		}
 	}
 
-	private JSONArray sendRequest(HttpRequestBase request) {
+	private JSONArray sendRequestAndGetJSONArray(HttpRequestBase request) {
 		try {
-			HttpEntity entity = httpClient.execute(request).getEntity();
-			String responseAsString = EntityUtils.toString(entity);
+			String responseAsString = doRequestAndGetString(request);
 			return new JSONArray(responseAsString);
 		} catch (Exception e) {
 			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
 			return new JSONArray();
 		}
+	}
+	
+	private JSONObject sendRequestAndGetJSONObject(HttpRequestBase request) {
+		try {
+			String responseAsString = doRequestAndGetString(request);
+			return new JSONObject(responseAsString);
+		} catch (Exception e) {
+			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
+			return new JSONObject();
+		}
+	}
+
+
+	private String doRequestAndGetString(HttpRequestBase request) throws IOException, ClientProtocolException {
+		HttpEntity entity = httpClient.execute(request).getEntity();
+		String responseAsString = EntityUtils.toString(entity);
+		return responseAsString;
 	}
 
 	private void setPostJsonString(JsonStringSupport jsonString, HttpPost post) {

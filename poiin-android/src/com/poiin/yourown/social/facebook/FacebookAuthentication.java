@@ -13,15 +13,20 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.facebook.android.R;
 import com.poiin.yourown.ApplicationState;
+import com.poiin.yourown.FirstTimeProfileActivity;
 import com.poiin.yourown.Main;
+import com.poiin.yourown.people.PeopleService;
+import com.poiin.yourown.people.PeopleServiceImpl;
 
 public class FacebookAuthentication extends Activity {
 
     private Facebook facebook = new Facebook("149212958485869");
     private ProgressDialog progressDialog;
+    private PeopleService peopleService;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        peopleService = new PeopleServiceImpl((ApplicationState)this.getApplication());
         setContentView(R.layout.facebook_login);
         facebook.authorize(this,new String[] { "email", "read_stream","user_interests","user_status","manage_friendlists","user_photos" }, new DialogListener() {
 			
@@ -45,15 +50,19 @@ public class FacebookAuthentication extends Activity {
 				new Thread(new Runnable() {					
 					public void run() {				
 						((ApplicationState)getApplication()).setMe(getMyFacebookProfile());	
-						handler.sendEmptyMessage(1);
+						boolean isUserAlreadyInSystem = peopleService.isUserRegistered();
+						Message message= new Message();
+						Bundle bundle = new Bundle();
+						bundle.putBoolean("userRegistered", isUserAlreadyInSystem);
+						message.setData(bundle);
+						handler.sendMessage(message);
 					}
 				}).start();
 				
 			}
 
 			private String getMyFacebookProfile(){
-				try {
-					
+				try {				
 					return facebook.request("me");
 				} catch (Exception e) {
 					throw new RuntimeException(e);
@@ -78,7 +87,11 @@ public class FacebookAuthentication extends Activity {
         @Override
         public void handleMessage(final Message msg) {
         	progressDialog.dismiss();
-        	startActivity(new Intent(FacebookAuthentication.this, Main.class));
+        	if(msg.getData().getBoolean("userRegistered")){
+        		startActivity(new Intent(FacebookAuthentication.this.getApplicationContext(), Main.class));
+        	}else{
+        		startActivity(new Intent(FacebookAuthentication.this.getApplicationContext(), FirstTimeProfileActivity.class));
+        	}
             finish();
         }
     };
