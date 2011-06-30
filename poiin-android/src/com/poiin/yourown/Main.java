@@ -17,9 +17,11 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.poiin.yourown.location.LocationHelper;
+import com.poiin.yourown.people.Person;
 import com.poiin.yourown.poiin.Poiin;
 import com.poiin.yourown.poiin.PoiinService;
 import com.poiin.yourown.poiin.PoiinServiceImpl;
+import com.poiin.yourown.ui.ExtendedGeoPoint;
 
 public class Main extends MapActivity {
 
@@ -51,6 +53,21 @@ public class Main extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	
+
+	@Override
+	public void onNewIntent(Intent newIntent) {
+		centerMapInLastPoiin(newIntent);
+		
+	}
+
+	private void centerMapInLastPoiin(Intent newIntent) {
+		super.onNewIntent(newIntent);
+		Person lastPoiin = ((ApplicationState)getApplication()).getLastPoiinPerson();
+		GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(), lastPoiin.getLongitude());
+		mapController.animateTo(point);
 	}
 
 	@Override

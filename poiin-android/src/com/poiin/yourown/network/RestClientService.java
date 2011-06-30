@@ -1,6 +1,5 @@
 package com.poiin.yourown.network;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.poiin.yourown.people.message.UserMessage;
@@ -10,12 +9,12 @@ public interface RestClientService {
 
 	void sendPoiin(Poiin poiin);
 
-	JSONArray getPoiins(JSONObject user);
-
 	void sendUserMessage(UserMessage message);
 
 	void acknowledgeMessage(String id,String userId);
 	
 	JSONObject isUserRegistered(String userId);
+
+	void registerUser(JSONObject me);
 
 }

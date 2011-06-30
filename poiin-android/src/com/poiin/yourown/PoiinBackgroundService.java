@@ -70,6 +70,7 @@ public class PoiinBackgroundService extends Service {
 			PeopleItemizedOverlay peopleOverlay = new PeopleItemizedOverlay(people, marker,PoiinBackgroundService.this.getApplicationContext());
 			ApplicationState appState=(ApplicationState)PoiinBackgroundService.this.getApplication();
 			appState.getMapView().getOverlays().add(peopleOverlay);
+			appState.setLastPoiinPerson(people.get(people.size()-1));
 		}		
 	};
 	

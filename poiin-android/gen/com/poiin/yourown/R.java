@@ -20,20 +20,21 @@ public final class R {
     public static final class id {
         public static final int categoriesSelected=0x7f050001;
         public static final int categoryList=0x7f050000;
+        public static final int lastWallMessage=0x7f05000b;
         public static final int map_view=0x7f050003;
         public static final int messageText=0x7f050007;
         public static final int poiinerImage=0x7f050009;
         public static final int poiinerName=0x7f05000a;
-        public static final int profileCategory=0x7f05000e;
-        public static final int profileLastName=0x7f05000d;
-        public static final int profileName=0x7f05000c;
-        public static final int profilePicture=0x7f05000b;
+        public static final int profileCategory=0x7f05000f;
+        public static final int profileLastName=0x7f05000e;
+        public static final int profileName=0x7f05000d;
+        public static final int profilePicture=0x7f05000c;
         public static final int receivedMessagesLayout=0x7f050004;
         public static final int responseMessageText=0x7f050005;
         public static final int saveCategoriesButton=0x7f050002;
         public static final int sendMessageButton=0x7f050008;
         public static final int sendResponseMessageButton=0x7f050006;
-        public static final int splash=0x7f05000f;
+        public static final int splash=0x7f050010;
     }
     public static final class layout {
         public static final int facebook_login=0x7f030000;

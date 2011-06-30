@@ -1,32 +1,31 @@
 package com.poiin.yourown;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.MalformedURLException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-
-import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
 
 public class PoiinerDetailsActivity extends Activity {
 
 	private static final int POIIN_MESSAGE_MENU = 2;
 	private TextView userIdView;
 	private ImageView poiinerPicture;
-	private String imageLink = "http://graph.facebook.com/{ID}/picture";
+	private TextView lastWallText;
 	private String poiinerId;
 	private String poiinerName;
 
@@ -36,15 +35,17 @@ public class PoiinerDetailsActivity extends Activity {
 		setContentView(R.layout.poiiner_details);
 		userIdView = (TextView) findViewById(R.id.poiinerName);
 		poiinerPicture = (ImageView) findViewById(R.id.poiinerImage);
+		lastWallText = (TextView) findViewById(R.id.lastWallMessage);
 	}
 
 	@Override
 	public void onStart() {
-		super.onStart();		
+		super.onStart();
 		poiinerId = getIntent().getData().getPath().substring(1);
 		poiinerName = getIntent().getData().getQueryParameter("name");
 		userIdView.setText(poiinerName);
 		startImageRetrieval();
+		startWallRetrieval();
 	}
 
 	@Override
@@ -68,7 +69,50 @@ public class PoiinerDetailsActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void startImageRetrieval() {		
+	private void startWallRetrieval() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				ApplicationState applicationState = (ApplicationState) getApplication();
+				try {
+					String wall = applicationState.getFacebook().request(poiinerId + "/feed");
+					JSONObject wallJson = new JSONObject(wall);
+					JSONArray array = wallJson.getJSONArray("data");
+					findLastFeedWithMessageAndAddToProfile(array);
+				} catch (Exception e) {
+					// TODO: No Handling again?
+					e.printStackTrace();
+				}
+			}
+
+			private void findLastFeedWithMessageAndAddToProfile(JSONArray array) throws JSONException {
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject lastWallEntry = array.getJSONObject(i);
+					String lastMessage = null;
+					try{
+						lastMessage =  lastWallEntry.getString("message");
+					}catch(Exception e){
+						continue;
+					}
+					Message msg = new Message();
+					Bundle bundle = new Bundle();
+					bundle.putString("wallEntry", lastMessage);
+					msg.setData(bundle);
+					wallReceivedHandler.sendMessage(msg);
+					break;
+				}
+			}
+		}).start();
+	}
+
+	private Handler wallReceivedHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			lastWallText.setText(msg.getData().getString("wallEntry"));
+		}
+	};
+
+	private void startImageRetrieval() {
 		new ProfilePictureRetriever(poiinerPicture, poiinerId).retrieve();
 	}
 

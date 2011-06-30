@@ -1,5 +1,6 @@
 package com.poiin.yourown.people;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,8 +28,21 @@ public class PeopleServiceImpl implements PeopleService {
 		}
 	}
 	@Override
-	public void registerUser(Handler registrationHandler) {
-		// TODO Auto-generated method stub
-		
+	public void registerUser(final Person person,final Handler registrationHandler) {		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					JSONArray categories = new JSONArray(person.getSelectedCategories());
+					applicationState.getMe().put("categories", categories);
+					restClientService.registerUser(applicationState.getMe());
+					registrationHandler.sendEmptyMessage(0);
+				} catch (JSONException e) {
+					//TODO: Does this need Handling??
+					throw new RuntimeException(e);
+				}
+			}
+		}).start();	
 	}
 }

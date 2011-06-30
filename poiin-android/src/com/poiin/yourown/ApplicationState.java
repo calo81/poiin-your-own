@@ -18,6 +18,7 @@ public class ApplicationState extends Application{
 	private volatile MapView mapView;
 	private ServerMessageListener userMessageListener;
 	private List<Person> people;
+	private Person lastPoiinPerson;
 
 	public Facebook getFacebook() {
 		return facebook;
@@ -70,6 +71,14 @@ public class ApplicationState extends Application{
 			return ServerMessageListener.getInstance(this);
 		}
 		return userMessageListener;
+	}
+
+	public void setLastPoiinPerson(Person person) {
+		this.lastPoiinPerson=person;
+	}
+
+	public Person getLastPoiinPerson() {
+		return lastPoiinPerson;
 	}
 	
 }

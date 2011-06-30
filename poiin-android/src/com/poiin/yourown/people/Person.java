@@ -1,10 +1,13 @@
 package com.poiin.yourown.people;
 
+import java.util.List;
+
 public class Person {
 	private double longitude;
 	private double latitude;
 	private String name;
 	private String id;
+	private List<String> selectedCategories;
 	
 	
 	public double getLongitude() {
@@ -30,6 +33,13 @@ public class Person {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public List<String> getSelectedCategories() {
+		return selectedCategories;
+	}
+	public void setSelectedCategories(List<String> selectedCategories) {
+		this.selectedCategories = selectedCategories;
 	}
 	
 }
