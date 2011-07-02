@@ -8,14 +8,16 @@ require 'net/http'
 module Server
   USER_MESSAGE_TYPE = 0
   POIIN_MESSAGE_TYPE = 1
-
+  
   def post_init
     puts "Received a new connection"
-    EM::PeriodicTimer.new(5) do
+    
+     
+    @message_timer = EM::PeriodicTimer.new(5) do
       poll_for_messages
     end
 
-    EM::PeriodicTimer.new(30) do
+    @poiin_timer = EM::PeriodicTimer.new(30) do
       poll_for_poiins
     end
 
@@ -47,6 +49,8 @@ module Server
 
   def unbind
     puts " Connection terminated "
+    @message_timer.cancel
+    @poiin_timer.cancel
   end
 
   def receive_data(received)
@@ -55,6 +59,8 @@ module Server
     case operation_data[0]
       when "USER_ID"
         @user_id = operation_data[1].chop
+      when "HEART_BEAT"
+         puts "HeartBeat received .."
       else
         puts "Unrecognized client request"
     end

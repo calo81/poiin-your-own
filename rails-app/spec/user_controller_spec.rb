@@ -20,7 +20,7 @@ describe "UserController" do
   end
 
   it "should allo creation of users with their categories" do
-    @controller.params={"id"=>111,"categories"=>["cat1","cat2"],"user_name"=>"carlo"}
+    @controller.params={"id"=>111,"categories"=>["cat1","cat2"],"name"=>"carlo"}
     user=mock("user")
     User.should_receive(:new).with({"_id"=>111,"categories"=>["cat1","cat2"],"user_name"=>"carlo"}).and_return(user)
     user.should_receive(:save)

@@ -46,23 +46,7 @@ public class ServerMessageListener {
 
 					@Override
 					public void receivePoiins(List<Person> people) {
-						//TODO: This condition needs to change to somethign that reflects the real new poiins....
-						if(returnedPoiinsAreNew(people)){
 							messageReceivedHandler.sendMessage(createMessageBundle((Serializable)people,"POIIN"));
-						}
-					}
-					
-					//TODO: This condition method needs to change to somethign that reflects the real new poiins....
-					private boolean returnedPoiinsAreNew(List<Person> people) {
-						if(((ApplicationState)context.getApplicationContext()).getLastPeopleReturned()==null){
-							((ApplicationState)context.getApplicationContext()).setLastPeopleReturned(people);
-							return true;
-						}else if(((ApplicationState)context.getApplicationContext()).getLastPeopleReturned().size()!=people.size()){
-							((ApplicationState)context.getApplicationContext()).setLastPeopleReturned(people);
-							return true;
-						}else{
-							return false;
-						}
 					}
 					
 					private void sendMessageAcknowledge(final List<UserMessage> messages) {
