@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="#AA000000">
+	<EditText android:hint="Say to the world" android:id="@+id/poiinText"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:gravity="top|left" android:singleLine="false" android:lines="5"
+		android:layout_marginLeft="10dip" android:layout_marginRight="10dip" />
+	<Button android:id="@+id/sendPoiinButton" android:text="Poiin"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+</LinearLayout>

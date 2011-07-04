@@ -142,6 +142,7 @@ public class SocketClient {
 				person.setId(poiin.getJSONObject("user").getString("id"));
 				person.setLatitude(poiin.getJSONObject("poiin").getDouble("latitude"));
 				person.setLongitude(poiin.getJSONObject("poiin").getDouble("longitude"));
+				person.setPoiinText(poiin.getJSONObject("poiin").getString("text"));
 				people.add(person);
 			}
 			return people;

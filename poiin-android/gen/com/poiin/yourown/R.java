@@ -23,18 +23,20 @@ public final class R {
         public static final int lastWallMessage=0x7f05000b;
         public static final int map_view=0x7f050003;
         public static final int messageText=0x7f050007;
+        public static final int poiinText=0x7f05000c;
         public static final int poiinerImage=0x7f050009;
         public static final int poiinerName=0x7f05000a;
-        public static final int profileCategory=0x7f05000f;
-        public static final int profileLastName=0x7f05000e;
-        public static final int profileName=0x7f05000d;
-        public static final int profilePicture=0x7f05000c;
+        public static final int profileCategory=0x7f050010;
+        public static final int profileLastName=0x7f05000f;
+        public static final int profileName=0x7f05000e;
+        public static final int profilePicture=0x7f05000d;
         public static final int receivedMessagesLayout=0x7f050004;
         public static final int responseMessageText=0x7f050005;
         public static final int saveCategoriesButton=0x7f050002;
         public static final int sendMessageButton=0x7f050008;
+        public static final int sendPoiinButton=0x7f050011;
         public static final int sendResponseMessageButton=0x7f050006;
-        public static final int splash=0x7f050010;
+        public static final int splash=0x7f050012;
     }
     public static final class layout {
         public static final int facebook_login=0x7f030000;
@@ -44,7 +46,8 @@ public final class R {
         public static final int new_message=0x7f030004;
         public static final int poiiner_details=0x7f030005;
         public static final int profile=0x7f030006;
-        public static final int start_activity=0x7f030007;
+        public static final int send_poiin_popup=0x7f030007;
+        public static final int start_activity=0x7f030008;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

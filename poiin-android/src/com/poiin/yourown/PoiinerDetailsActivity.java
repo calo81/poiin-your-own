@@ -15,6 +15,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,8 +27,10 @@ public class PoiinerDetailsActivity extends Activity {
 	private TextView userIdView;
 	private ImageView poiinerPicture;
 	private TextView lastWallText;
+	private TextView poiinTextView;
 	private String poiinerId;
 	private String poiinerName;
+	private String poiinText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class PoiinerDetailsActivity extends Activity {
 		userIdView = (TextView) findViewById(R.id.poiinerName);
 		poiinerPicture = (ImageView) findViewById(R.id.poiinerImage);
 		lastWallText = (TextView) findViewById(R.id.lastWallMessage);
+		poiinTextView = (TextView)findViewById(R.id.poiinText);
 	}
 
 	@Override
@@ -43,7 +47,9 @@ public class PoiinerDetailsActivity extends Activity {
 		super.onStart();
 		poiinerId = getIntent().getData().getPath().substring(1);
 		poiinerName = getIntent().getData().getQueryParameter("name");
+		poiinText = getIntent().getData().getQueryParameter("poiinText");
 		userIdView.setText(poiinerName);
+		poiinTextView.setText(poiinText);
 		startImageRetrieval();
 		startWallRetrieval();
 	}

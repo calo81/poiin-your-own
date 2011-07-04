@@ -10,7 +10,7 @@ class PoiinController < ApplicationController
   def create
     save_user_if_needed()
     user = User.find(params['user_id'])
-    poiin = Poiin.new "user_id"=>params["user_id"], "longitude"=>params["longitude"],"latitude"=>params["latitude"], "date" => Time.new.to_i
+    poiin = Poiin.new "user_id"=>params["user_id"], "text"=>params["text"], "longitude"=>params["longitude"],"latitude"=>params["latitude"], "date" => Time.new.to_i
     poiin.categories = user.categories
     poiin.save
     render :json  => {code: "ok"}

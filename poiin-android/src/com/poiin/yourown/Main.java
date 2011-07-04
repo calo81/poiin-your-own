@@ -7,8 +7,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -34,6 +41,9 @@ public class Main extends MapActivity {
 	private MapView mapView;
 	private MyLocationOverlay myLocationOverlay;
 	private PoiinService poiinService;
+	private EditText popupText;
+	private Button popupButton;
+	private PopupWindow popUp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,10 +83,10 @@ public class Main extends MapActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, POIIN_MENU_ID, 0, "Poiin").setIcon(android.R.drawable.ic_menu_more);
-		menu.add(0, PROFILE, 0, "Profile").setIcon(android.R.drawable.ic_menu_more);
+		menu.add(0, POIIN_MENU_ID, 0, "Poiin").setIcon(android.R.drawable.ic_menu_mylocation);
+		menu.add(0, PROFILE, 0, "Profile").setIcon(android.R.drawable.ic_menu_preferences);
 		menu.add(0, 2, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
-		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(android.R.drawable.ic_menu_more);
+		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(android.R.drawable.ic_menu_directions);
 		return true;
 	}
 
@@ -144,9 +154,32 @@ public class Main extends MapActivity {
 	}
 
 	private void poiin() {
-		ApplicationState application = (ApplicationState)getApplication();
-		Poiin poiin = new Poiin(getLastKnownPoint(),application.getMe());
-		poiinService.sendPoiin(poiin);
+		 configureAndShowPopUp(); 
+		 popupButton.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				ApplicationState application = (ApplicationState)getApplication();
+				Poiin poiin = new Poiin(getLastKnownPoint(),application.getMe());
+				String poiinText = popupText.getText().toString()!=null?popupText.getText().toString():"";
+				poiin.setText(poiinText);
+				poiinService.sendPoiin(poiin);
+				popUp.dismiss();
+			}
+		});
+	}
+
+	private void configureAndShowPopUp() {
+		LayoutInflater inflater = (LayoutInflater)
+	       this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		popUp = new PopupWindow(
+			       inflater.inflate(R.layout.send_poiin_popup, null, false), 
+			       300, 
+			       500, 
+			       true);
+		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.CENTER, 0, 0);
+		
+		popupButton = (Button)popUp.getContentView().findViewById(R.id.sendPoiinButton);
+		popupText=(EditText)popUp.getContentView().findViewById(R.id.poiinText);
 	}
 
 	private GeoPoint getLastKnownPoint() {

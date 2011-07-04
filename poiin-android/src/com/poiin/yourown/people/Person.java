@@ -7,6 +7,7 @@ public class Person {
 	private double latitude;
 	private String name;
 	private String id;
+	private String poiinText;
 	private List<String> selectedCategories;
 	
 	
@@ -41,5 +42,12 @@ public class Person {
 	public void setSelectedCategories(List<String> selectedCategories) {
 		this.selectedCategories = selectedCategories;
 	}
+	public String getPoiinText() {
+		return poiinText;
+	}
+	public void setPoiinText(String poiinText) {
+		this.poiinText = poiinText;
+	}
+	
 	
 }

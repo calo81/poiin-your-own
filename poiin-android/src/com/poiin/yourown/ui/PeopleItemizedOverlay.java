@@ -55,7 +55,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	@Override
 	protected boolean onTap(int index) {
 		PersonOverlayItem item = people.get(index);
-		Intent i = new Intent(Intent.ACTION_VIEW,Uri.parse("poiin://poiin.yourown/"+item.getPerson().getId()+"?name="+item.getPerson().getName()));
+		Intent i = new Intent(Intent.ACTION_VIEW,Uri.parse("poiin://poiin.yourown/"+item.getPerson().getId()+"?name="+item.getPerson().getName()+"&poiinText="+item.getPerson().getPoiinText()));
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);		
 		return true;
