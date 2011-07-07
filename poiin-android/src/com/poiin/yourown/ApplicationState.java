@@ -5,6 +5,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.android.Facebook;
@@ -19,6 +20,7 @@ public class ApplicationState extends Application{
 	private ServerMessageListener userMessageListener;
 	private List<Person> people;
 	private Person lastPoiinPerson;
+	private Class<? extends Activity> foregroundActivity;
 
 	public Facebook getFacebook() {
 		return facebook;
@@ -79,6 +81,14 @@ public class ApplicationState extends Application{
 
 	public Person getLastPoiinPerson() {
 		return lastPoiinPerson;
+	}
+
+	public void setForegroundActivity(Class<? extends Activity> activeActivityClass) {
+		foregroundActivity=activeActivityClass;
+	}
+
+	public Class<? extends Activity> getForegroundActivity() {
+		return foregroundActivity;
 	}
 	
 }

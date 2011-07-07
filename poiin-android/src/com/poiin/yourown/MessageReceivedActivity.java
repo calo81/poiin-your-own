@@ -1,5 +1,10 @@
 package com.poiin.yourown;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.people.message.UserMessageSender;
 import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
@@ -23,6 +28,7 @@ public class MessageReceivedActivity extends Activity{
 	private Button responseButton;
 	private UserMessageSender userMessageSender=new UserMessageSender();
 	private UserMessage lastReceivedMessage;
+	private Map<String, List<UserMessage>> mapOfUsersAndTheirMessages;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +37,48 @@ public class MessageReceivedActivity extends Activity{
 		layoutOfMessagesReceived = (LinearLayout)findViewById(R.id.receivedMessagesLayout);
 		textOfResponseMessage = (EditText)findViewById(R.id.responseMessageText);
 		responseButton = (Button)findViewById(R.id.sendResponseMessageButton);
-
+		mapOfUsersAndTheirMessages=new HashMap<String,  List<UserMessage>>();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		UserMessage message = (UserMessage)getIntent().getExtras().getSerializable("userMessage");
-		layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(message));
+		UserMessage message = (UserMessage)getIntent().getExtras().getSerializable("userMessage");	
+		addMessageToUserMap(message);
+		addAllUserMessages(message);
 		addSendButtonListener();
+	}
+
+	
+	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		assertThatThisActivityIsInForeground();
+	}
+	
+	@Override
+	protected void onPause(){
+		super.onPause();
+		assertThatThisActivityIsNotForeground();
+	}
+
+	private void assertThatThisActivityIsNotForeground() {
+		ApplicationState app = (ApplicationState) getApplication();
+		app.setForegroundActivity(null);
+	}
+
+	private void assertThatThisActivityIsInForeground() {
+		ApplicationState app = (ApplicationState) getApplication();
+		app.setForegroundActivity(MessageReceivedActivity.class);
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		UserMessage message = (UserMessage)intent.getExtras().getSerializable("userMessage");
-		layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(message));
+		addMessageToUserMap(message);
+		addAllUserMessages(message);
 	}
 	
 	private View createTextViewWithMessageAndCacheLastMessage(UserMessage message) {
@@ -62,8 +94,27 @@ public class MessageReceivedActivity extends Activity{
 		return linearLayout;
 	}
 	
+	private void addMessageToUserMap(UserMessage message) {
+		List<UserMessage> messageList;
+		if(mapOfUsersAndTheirMessages.get(message.getFrom())==null){
+			messageList = new ArrayList<UserMessage>();
+			mapOfUsersAndTheirMessages.put(message.getFrom(), messageList);
+		}else{
+			messageList = mapOfUsersAndTheirMessages.get(message.getFrom());
+		}
+		messageList.add(message);		
+	}
+
+	
 	private void cacheLastReceivedMessage(UserMessage message) {
 		lastReceivedMessage =message;
+	}
+	
+	private void addAllUserMessages(UserMessage message) {
+		layoutOfMessagesReceived.removeAllViews();
+		for(UserMessage msg: mapOfUsersAndTheirMessages.get(message.getFrom())){
+			layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(msg));
+		}
 	}
 
 	private void addSendButtonListener() {
