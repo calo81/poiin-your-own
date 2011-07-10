@@ -49,7 +49,7 @@ public class Main extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		initMap();	
+		initMap();
 		startService(new Intent(this, PoiinBackgroundService.class));
 		poiinService = new PoiinServiceImpl();
 	}
@@ -64,20 +64,20 @@ public class Main extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-	
-	
 
 	@Override
 	public void onNewIntent(Intent newIntent) {
 		centerMapInLastPoiin(newIntent);
-		
+
 	}
 
 	private void centerMapInLastPoiin(Intent newIntent) {
 		super.onNewIntent(newIntent);
-		Person lastPoiin = ((ApplicationState)getApplication()).getLastPoiinPerson();
-		GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(), lastPoiin.getLongitude());
-		mapController.animateTo(point);
+		Person lastPoiin = ((ApplicationState) getApplication()).getLastPoiinPerson();
+		if (lastPoiin != null) {
+			GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(), lastPoiin.getLongitude());
+			mapController.animateTo(point);
+		}
 	}
 
 	@Override
@@ -105,14 +105,13 @@ public class Main extends MapActivity {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
-	
+
 	@Override
-	public void onPause(){
-	    super.onPause();
-	    this.locationManager.removeUpdates(locationListenerRecenterMap);
-	    myLocationOverlay.disableMyLocation();
+	public void onPause() {
+		super.onPause();
+		this.locationManager.removeUpdates(locationListenerRecenterMap);
+		myLocationOverlay.disableMyLocation();
 	}
-	    
 
 	private void locateMap() {
 		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -122,7 +121,6 @@ public class Main extends MapActivity {
 		establishMyOwnLocationAndMarker();
 		listenOnLocationChange();
 	}
-
 
 	private void establishMyOwnLocationAndMarker() {
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
@@ -150,17 +148,17 @@ public class Main extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapView.displayZoomControls(true);
-		((ApplicationState)getApplication()).setMapView(mapView);
+		((ApplicationState) getApplication()).setMapView(mapView);
 	}
 
 	private void poiin() {
-		 configureAndShowPopUp(); 
-		 popupButton.setOnClickListener(new OnClickListener() {			
+		configureAndShowPopUp();
+		popupButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ApplicationState application = (ApplicationState)getApplication();
-				Poiin poiin = new Poiin(getLastKnownPoint(),application.getMe());
-				String poiinText = popupText.getText().toString()!=null?popupText.getText().toString():"";
+				ApplicationState application = (ApplicationState) getApplication();
+				Poiin poiin = new Poiin(getLastKnownPoint(), application.getMe());
+				String poiinText = popupText.getText().toString() != null ? popupText.getText().toString() : "";
 				poiin.setText(poiinText);
 				poiinService.sendPoiin(poiin);
 				popUp.dismiss();
@@ -169,17 +167,12 @@ public class Main extends MapActivity {
 	}
 
 	private void configureAndShowPopUp() {
-		LayoutInflater inflater = (LayoutInflater)
-	       this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		popUp = new PopupWindow(
-			       inflater.inflate(R.layout.send_poiin_popup, null, false), 
-			       300, 
-			       500, 
-			       true);
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		popUp = new PopupWindow(inflater.inflate(R.layout.send_poiin_popup, null, false), 300, 500, true);
 		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.CENTER, 0, 0);
-		
-		popupButton = (Button)popUp.getContentView().findViewById(R.id.sendPoiinButton);
-		popupText=(EditText)popUp.getContentView().findViewById(R.id.poiinText);
+
+		popupButton = (Button) popUp.getContentView().findViewById(R.id.sendPoiinButton);
+		popupText = (EditText) popUp.getContentView().findViewById(R.id.poiinText);
 	}
 
 	private GeoPoint getLastKnownPoint() {

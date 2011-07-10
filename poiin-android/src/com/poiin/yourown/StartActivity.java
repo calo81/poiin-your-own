@@ -1,7 +1,5 @@
 package com.poiin.yourown;
 
-import com.poiin.yourown.social.facebook.FacebookAuthentication;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-/**
- * Splash screen startup Activity.
- * 
- * @author charliecollins
- * 
- */
+
 public class StartActivity extends Activity {
 
     private static final String CLASSTAG = StartActivity.class.getSimpleName();
@@ -23,7 +16,7 @@ public class StartActivity extends Activity {
 
         @Override
         public void handleMessage(final Message msg) {
-            startActivity(new Intent(StartActivity.this, FacebookAuthentication.class));
+            startActivity(new Intent(StartActivity.this, LoginSelectionActivity.class));
             finish();
         }
     };

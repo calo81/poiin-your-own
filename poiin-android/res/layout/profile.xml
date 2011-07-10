@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:gravity="center_horizontal" android:padding="10px">
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@android:id/tabhost" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<ImageView android:id="@+id/profilePicture" android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
-		<TextView android:hint="Name" android:id="@+id/profileName" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<TextView android:hint="Last Name" android:id="@+id/profileLastName" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText android:hint="Category" android:id="@+id/profileCategory" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
+		<TabWidget android:id="@android:id/tabs"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		<FrameLayout android:id="@android:id/tabcontent"
+			android:layout_width="fill_parent" android:layout_height="fill_parent">
+			<LinearLayout android:orientation="vertical" android:id="@+id/personalViewLayout"
+				android:layout_width="fill_parent" android:layout_height="fill_parent">
+				<ImageView android:id="@+id/profilePicture"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" />
+				<TextView android:hint="Name" android:id="@+id/profileName"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+				<TextView android:hint="Last Name" android:id="@+id/profileLastName"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:id="@+id/socialViewLayout"
+				android:layout_width="fill_parent" android:layout_height="fill_parent">
+				<TextView android:hint="Twitter Username" android:id="@+id/twitterName"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+				<TextView android:hint="Twitter Password" android:id="@+id/twitterPassword"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+			</LinearLayout>
+		</FrameLayout>
 	</LinearLayout>
-</RelativeLayout>
+</TabHost>

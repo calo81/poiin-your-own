@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
@@ -31,6 +32,7 @@ public class PoiinerDetailsActivity extends Activity {
 	private String poiinerId;
 	private String poiinerName;
 	private String poiinText;
+	private TextView categoriesList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class PoiinerDetailsActivity extends Activity {
 		poiinerPicture = (ImageView) findViewById(R.id.poiinerImage);
 		lastWallText = (TextView) findViewById(R.id.lastWallMessage);
 		poiinTextView = (TextView)findViewById(R.id.poiinText);
+		categoriesList = (TextView)findViewById(R.id.poiinerCategoriesList);
 	}
 
 	@Override
@@ -50,9 +53,11 @@ public class PoiinerDetailsActivity extends Activity {
 		poiinText = getIntent().getData().getQueryParameter("poiinText");
 		userIdView.setText(poiinerName);
 		poiinTextView.setText(poiinText);
+		categoriesList.setText(getIntent().getData().getQueryParameter("categories"));
 		startImageRetrieval();
 		startWallRetrieval();
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

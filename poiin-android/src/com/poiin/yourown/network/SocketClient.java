@@ -143,6 +143,7 @@ public class SocketClient {
 				person.setLatitude(poiin.getJSONObject("poiin").getDouble("latitude"));
 				person.setLongitude(poiin.getJSONObject("poiin").getDouble("longitude"));
 				person.setPoiinText(poiin.getJSONObject("poiin").getString("text"));
+				person.setSelectedCategories(extractCategories(poiin));
 				people.add(person);
 			}
 			return people;
@@ -151,6 +152,15 @@ public class SocketClient {
 			Log.e(this.getClass().getName(), "Error parsing incoming Message " + poiins, e);
 			return null;
 		}
+	}
+
+	private List<String> extractCategories(JSONObject poiin) throws JSONException {
+		JSONArray jsonArray = poiin.getJSONObject("user").getJSONArray("categories");
+		List<String> categories = new ArrayList<String>();
+		for(int i=0;i<jsonArray.length();i++){
+			categories.add(jsonArray.getString(i));
+		}
+		return categories;
 	}
 
 	private List<UserMessage> createUserMessageFromJsonMessage(String messages) {

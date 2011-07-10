@@ -8,22 +8,29 @@ import java.net.URLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.app.TabActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.TabContentFactory;
 import android.widget.TextView;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends TabActivity {
 	
 	private String imageLink= "http://graph.facebook.com/{ID}/picture";
 	private ImageView profilePicture;
 	private TextView nameTextView;
 	private TextView lastNameTextView;
+	private TabHost tabHost;
 	private JSONObject me;
+	private LinearLayout personalViewLayout;
+	private LinearLayout socialViewLayout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,34 @@ public class ProfileActivity extends Activity {
 			(ImageView) findViewById(R.id.profilePicture);	
 		this.nameTextView=(TextView)findViewById(R.id.profileName);
 		this.lastNameTextView=(TextView)findViewById(R.id.profileLastName);
+		personalViewLayout = (LinearLayout)findViewById(R.id.personalViewLayout);
+		socialViewLayout = (LinearLayout)findViewById(R.id.socialViewLayout);
+		tabHost = getTabHost();
+		setupTabs();
+	}
+
+	private void setupTabs() {
+		// add views to tab host
+		tabHost.addTab(tabHost.newTabSpec("Personal").setIndicator("Personal").setContent(new TabContentFactory() {
+			
+			@Override
+			public View createTabContent(String tag) {
+				// TODO Auto-generated method stub
+				return personalViewLayout;
+			}
+		}));
+		
+		tabHost.addTab(tabHost.newTabSpec("Social").setIndicator("Social").setContent(new TabContentFactory() {
+			public View createTabContent(String arg0) {
+				return socialViewLayout;
+			}
+		}));
+		
+		tabHost.addTab(tabHost.newTabSpec("Privacy").setIndicator("Privacy").setContent(new TabContentFactory() {
+			public View createTabContent(String arg0) {
+				return socialViewLayout;
+			}
+		}));
 	}
 
 	@Override

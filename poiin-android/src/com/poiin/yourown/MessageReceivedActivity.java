@@ -29,6 +29,7 @@ public class MessageReceivedActivity extends Activity{
 	private UserMessageSender userMessageSender=new UserMessageSender();
 	private UserMessage lastReceivedMessage;
 	private Map<String, List<UserMessage>> mapOfUsersAndTheirMessages;
+	private ApplicationState applicationState;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MessageReceivedActivity extends Activity{
 		textOfResponseMessage = (EditText)findViewById(R.id.responseMessageText);
 		responseButton = (Button)findViewById(R.id.sendResponseMessageButton);
 		mapOfUsersAndTheirMessages=new HashMap<String,  List<UserMessage>>();
+		applicationState = (ApplicationState) getApplication();
 	}
 
 	@Override
@@ -47,6 +49,7 @@ public class MessageReceivedActivity extends Activity{
 		addMessageToUserMap(message);
 		addAllUserMessages(message);
 		addSendButtonListener();
+		applicationState.setCurrentMessenger(message.getFrom());
 	}
 
 	
@@ -79,6 +82,7 @@ public class MessageReceivedActivity extends Activity{
 		UserMessage message = (UserMessage)intent.getExtras().getSerializable("userMessage");
 		addMessageToUserMap(message);
 		addAllUserMessages(message);
+		applicationState.setCurrentMessenger(message.getFrom());
 	}
 	
 	private View createTextViewWithMessageAndCacheLastMessage(UserMessage message) {

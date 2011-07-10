@@ -50,14 +50,9 @@ public class ServerMessageListener {
 					}
 					
 					private void sendMessageAcknowledge(final List<UserMessage> messages) {
-						new Thread(new Runnable() {
-							@Override
-							public void run() {
 								for (UserMessage message : messages) {
 									restClient.acknowledgeMessage(message.getId(),context.getMyId().toString());
-								}
-							}
-						}).start();
+								}						
 					}
 
 					private Message createMessageBundle(Serializable data,String type) {

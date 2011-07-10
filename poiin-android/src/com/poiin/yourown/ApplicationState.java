@@ -5,6 +5,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import twitter4j.Twitter;
+
 import android.app.Activity;
 import android.app.Application;
 
@@ -21,6 +23,8 @@ public class ApplicationState extends Application{
 	private List<Person> people;
 	private Person lastPoiinPerson;
 	private Class<? extends Activity> foregroundActivity;
+	private String currentMessenger;
+	private Twitter twitter;
 
 	public Facebook getFacebook() {
 		return facebook;
@@ -36,6 +40,10 @@ public class ApplicationState extends Application{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setMe(JSONObject me) {
+		this.me=me;
 	}
 
 	public JSONObject getMe() {
@@ -90,5 +98,20 @@ public class ApplicationState extends Application{
 	public Class<? extends Activity> getForegroundActivity() {
 		return foregroundActivity;
 	}
-	
+
+	public String getCurrentMessenger() {
+		return this.currentMessenger;
+	}
+
+	public void setCurrentMessenger(String currentMessenger) {
+		this.currentMessenger = currentMessenger;
+	}
+
+	public Twitter getTwitter() {
+		return twitter;
+	}
+
+	public void setTwitter(Twitter twitter) {
+		this.twitter = twitter;
+	}
 }

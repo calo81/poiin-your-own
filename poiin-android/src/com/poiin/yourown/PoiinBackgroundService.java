@@ -100,10 +100,9 @@ public class PoiinBackgroundService extends Service {
 
 		@Override
 		public void handleMessage(final Message msg) {
-			ApplicationState appState = (ApplicationState) getApplication();
 			List<UserMessage> messages = (List<UserMessage>) msg.getData().getSerializable("messages");
 			for (UserMessage message : messages) {
-				if(messageActivityAlreadyOpen(appState)){
+				if(messageActivityForMessengerAlreadyOpen(message)){
 					sendMessageDirectly(message);
 				}else{
 					sendNotification(message);
@@ -119,8 +118,9 @@ public class PoiinBackgroundService extends Service {
 			startActivity(notificationIntent);
 		}
 
-		private boolean messageActivityAlreadyOpen(ApplicationState appState) {
-			return appState.getForegroundActivity() == MessageReceivedActivity.class;
+		private boolean messageActivityForMessengerAlreadyOpen(UserMessage message) {
+			ApplicationState appState = (ApplicationState) getApplication();
+			return appState.getForegroundActivity() == MessageReceivedActivity.class && message.getFrom().equals(appState.getCurrentMessenger());
 		}
 
 		private void sendNotification(UserMessage message) {

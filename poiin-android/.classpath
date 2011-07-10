@@ -5,5 +5,8 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="com_facebook_android_src"/>
 	<classpathentry kind="src" path="facebook-android_src"/>
+	<classpathentry kind="lib" path="assets/signpost-commonshttp4-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="assets/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="assets/twitter4j-core-android-2.2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
