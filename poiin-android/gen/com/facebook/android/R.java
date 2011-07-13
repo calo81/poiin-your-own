@@ -12,21 +12,26 @@ public final class R {
     }
     public static final class drawable {
         public static final int buoy=0x7f020000;
-        public static final int facebook_icon=0x7f020001;
-        public static final int facebooklogo=0x7f020002;
-        public static final int icon=0x7f020003;
-        public static final int redpin=0x7f020004;
-        public static final int splash=0x7f020005;
-        public static final int twitterlogo=0x7f020006;
+        public static final int enable=0x7f020001;
+        public static final int facebook_icon=0x7f020002;
+        public static final int facebooklogo=0x7f020003;
+        public static final int frame=0x7f020004;
+        public static final int icon=0x7f020005;
+        public static final int marker=0x7f020006;
+        public static final int redpin=0x7f020007;
+        public static final int splash=0x7f020008;
+        public static final int twitterlogo=0x7f020009;
     }
     public static final class id {
         public static final int categoriesSelected=0x7f050001;
         public static final int categoryList=0x7f050000;
         public static final int facebookLogin=0x7f050003;
+        public static final int frame=0x7f05001a;
         public static final int lastWallMessage=0x7f05000d;
         public static final int map_view=0x7f050005;
         public static final int messageText=0x7f050009;
         public static final int personalViewLayout=0x7f050010;
+        public static final int photo=0x7f050019;
         public static final int poiinText=0x7f05000e;
         public static final int poiinerCategoriesList=0x7f05000f;
         public static final int poiinerImage=0x7f05000b;
