@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -33,7 +34,6 @@ import com.poiin.yourown.ui.ExtendedGeoPoint;
 public class Main extends MapActivity {
 
 	private static final int PROFILE = 1;
-	private static final int POIIN_MENU_ID = 0;
 	private static final int MY_LOCATION_MENU_ID = 3;
 	private MapController mapController;
 	private LocationManager locationManager;
@@ -44,11 +44,16 @@ public class Main extends MapActivity {
 	private EditText popupText;
 	private Button popupButton;
 	private PopupWindow popUp;
+	private Button poiinButton;
+	private ApplicationState appState;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		appState = ((ApplicationState) getApplication());
+		appState.setApplicationFullyStarted(true);
+		configurePoiinButton();
 		initMap();
 		startService(new Intent(this, PoiinBackgroundService.class));
 		poiinService = new PoiinServiceImpl();
@@ -57,6 +62,11 @@ public class Main extends MapActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 		locateMap();
 	}
 
@@ -68,14 +78,14 @@ public class Main extends MapActivity {
 	@Override
 	public void onNewIntent(Intent newIntent) {
 		centerMapInLastPoiin(newIntent);
-
 	}
 
 	private void centerMapInLastPoiin(Intent newIntent) {
 		super.onNewIntent(newIntent);
-		Person lastPoiin = ((ApplicationState) getApplication()).getLastPoiinPerson();
+		Person lastPoiin = appState.getLastPoiinPerson();
 		if (lastPoiin != null) {
-			GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(), lastPoiin.getLongitude());
+			GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(),
+					lastPoiin.getLongitude());
 			mapController.animateTo(point);
 		}
 	}
@@ -83,10 +93,10 @@ public class Main extends MapActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, POIIN_MENU_ID, 0, "Poiin").setIcon(android.R.drawable.ic_menu_mylocation);
-		menu.add(0, PROFILE, 0, "Profile").setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(0, PROFILE, 0, null).setIcon(R.drawable.boton_me);
 		menu.add(0, 2, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
-		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(android.R.drawable.ic_menu_directions);
+		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(
+				android.R.drawable.ic_menu_directions);
 		return true;
 	}
 
@@ -95,9 +105,6 @@ public class Main extends MapActivity {
 		switch (item.getItemId()) {
 		case MY_LOCATION_MENU_ID:
 			this.mapController.animateTo(getLastKnownPoint());
-			break;
-		case POIIN_MENU_ID:
-			poiin();
 			break;
 		case PROFILE:
 			startActivity(new Intent(this, ProfileActivity.class));
@@ -113,9 +120,22 @@ public class Main extends MapActivity {
 		myLocationOverlay.disableMyLocation();
 	}
 
+	private void configurePoiinButton() {
+		poiinButton = (Button) findViewById(R.id.buttonPoiin);
+		poiinButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				poiin();
+			}
+		});
+	}
+
 	private void locateMap() {
-		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		this.locationProvider = this.locationManager.getProvider(LocationManager.GPS_PROVIDER);
+		this.locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+		this.locationProvider = this.locationManager
+				.getProvider(LocationManager.GPS_PROVIDER);
 		this.mapController = this.mapView.getController();
 		this.mapController.setZoom(10);
 		establishMyOwnLocationAndMarker();
@@ -129,16 +149,21 @@ public class Main extends MapActivity {
 		myLocationOverlay.enableMyLocation();
 		myLocationOverlay.runOnFirstFix(new Runnable() {
 			public void run() {
-				mapController.animateTo(myLocationOverlay.getMyLocation());
+				if (myLocationOverlay.getMyLocation() != null) {
+					mapController.animateTo(myLocationOverlay.getMyLocation());
+				}
 			}
 		});
 	}
 
 	private void listenOnLocationChange() {
 		if (this.locationProvider != null) {
-			this.locationManager.requestLocationUpdates(this.locationProvider.getName(), 3000, 1000, this.locationListenerRecenterMap);
+			this.locationManager.requestLocationUpdates(
+					this.locationProvider.getName(), 3000, 1000,
+					this.locationListenerRecenterMap);
 		} else {
-			Toast.makeText(this, "Location Provider Not available.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Location Provider Not available.",
+					Toast.LENGTH_SHORT).show();
 			finish();
 		}
 	}
@@ -148,7 +173,7 @@ public class Main extends MapActivity {
 		mapView.setBuiltInZoomControls(true);
 		mapController = mapView.getController();
 		mapView.displayZoomControls(true);
-		((ApplicationState) getApplication()).setMapView(mapView);
+		appState.setMapView(mapView);
 	}
 
 	private void poiin() {
@@ -156,9 +181,11 @@ public class Main extends MapActivity {
 		popupButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ApplicationState application = (ApplicationState) getApplication();
-				Poiin poiin = new Poiin(getLastKnownPoint(), application.getMe());
-				String poiinText = popupText.getText().toString() != null ? popupText.getText().toString() : "";
+				ApplicationState application = appState;
+				Poiin poiin = new Poiin(getLastKnownPoint(), application
+						.getMe());
+				String poiinText = popupText.getText().toString() != null ? popupText
+						.getText().toString() : "";
 				poiin.setText(poiinText);
 				poiinService.sendPoiin(poiin);
 				popUp.dismiss();
@@ -167,19 +194,27 @@ public class Main extends MapActivity {
 	}
 
 	private void configureAndShowPopUp() {
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		popUp = new PopupWindow(inflater.inflate(R.layout.send_poiin_popup, null, false), 300, 500, true);
-		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.CENTER, 0, 0);
+		LayoutInflater inflater = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		popUp = new PopupWindow(inflater.inflate(R.layout.send_poiin_popup,
+				null, false), 300, 500, true);
+		popUp.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.background2));
+		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.CENTER,
+				0, 0);
 
-		popupButton = (Button) popUp.getContentView().findViewById(R.id.sendPoiinButton);
-		popupText = (EditText) popUp.getContentView().findViewById(R.id.poiinText);
+		popupButton = (Button) popUp.getContentView().findViewById(
+				R.id.sendPoiinButton);
+		popupText = (EditText) popUp.getContentView().findViewById(
+				R.id.poiinText);
 	}
 
 	private GeoPoint getLastKnownPoint() {
 		if (myLocationOverlay.getMyLocation() != null) {
 			return myLocationOverlay.getMyLocation();
 		}
-		Location lastKnownLocation = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Location lastKnownLocation = this.locationManager
+				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (lastKnownLocation != null) {
 			return LocationHelper.getGeoPoint(lastKnownLocation);
 		}

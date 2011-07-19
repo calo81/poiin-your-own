@@ -7,7 +7,8 @@ import java.util.Map;
 
 import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.people.message.UserMessageSender;
-import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
+import com.poiin.yourown.social.GenericProfilePictureRetriever;
+import com.poiin.yourown.social.facebook.FacebookProfilePictureRetriever;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -92,7 +93,7 @@ public class MessageReceivedActivity extends Activity{
 		TextView textView = new TextView(this);
 		textView.setText(message.getContent());
 		ImageView imageView = new ImageView(this);
-		new ProfilePictureRetriever(imageView, message.getFrom()).retrieve();
+		GenericProfilePictureRetriever.retrieveToImageView(this.getApplication(), imageView, message.getFromTwitterId(),message.getFromFacebookId());
 		linearLayout.addView(imageView);
 		linearLayout.addView(textView);
 		return linearLayout;

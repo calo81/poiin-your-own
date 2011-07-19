@@ -8,7 +8,7 @@ class UserController    < ApplicationController
   end
 
   def create
-    user = User.new "_id"=>params["id"].to_i, "categories"=>params["categories"], "user_name"=>params["name"]
+    user = User.new "_id"=>params["id"].to_i, "categories"=>params["categories"], "user_name"=>params["name"], "twitter_id"=>params["twitter_id"], "facebook_id" => params["facebook_id"]
     user.save
   end
 end

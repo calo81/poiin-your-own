@@ -1,5 +1,7 @@
 package com.poiin.yourown.social.facebook;
 
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -23,21 +25,22 @@ public class FacebookAuthentication extends Activity {
     private Facebook facebook = new Facebook("149212958485869");
     private ProgressDialog progressDialog;
     private PeopleService peopleService;
+    private ApplicationState appState;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         peopleService = new PeopleServiceImpl((ApplicationState)this.getApplication());
         setContentView(R.layout.facebook_login);
+        appState = (ApplicationState)getApplication();
         facebook.authorize(this,new String[] { "email", "read_stream","user_interests","user_status","manage_friendlists","user_photos" }, new DialogListener() {
 			
 			public void onFacebookError(FacebookError e) {
-				// TODO Auto-generated method stub
-				
+				e.printStackTrace();
 			}
 			
 			public void onError(DialogError e) {
-				// TODO Auto-generated method stub
-				
+				e.printStackTrace();
 			}
 			
 			public void onComplete(Bundle values) {
@@ -49,13 +52,24 @@ public class FacebookAuthentication extends Activity {
 				progressDialog = ProgressDialog.show(FacebookAuthentication.this, "Processing . . .", "Retrieving User Information ...", true, false);
 				new Thread(new Runnable() {					
 					public void run() {				
-						((ApplicationState)getApplication()).setMe(getMyFacebookProfile());	
+						setUserWithFacebookProfile();
 						boolean isUserAlreadyInSystem = peopleService.isUserRegistered();
 						Message message= new Message();
 						Bundle bundle = new Bundle();
 						bundle.putBoolean("userRegistered", isUserAlreadyInSystem);
 						message.setData(bundle);
 						handler.sendMessage(message);
+					}
+
+					
+					private void setUserWithFacebookProfile(){
+						appState.setMe(getMyFacebookProfile());
+						try {
+							appState.getMe().put("facebook_id", appState.getMe().get("id"));
+						} catch (JSONException e) {
+							// TODO Nothing to odo
+							e.printStackTrace();
+						}
 					}
 				}).start();
 				

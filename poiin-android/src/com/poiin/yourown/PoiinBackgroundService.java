@@ -67,7 +67,7 @@ public class PoiinBackgroundService extends Service {
 			Drawable marker = PoiinBackgroundService.this.getApplicationContext().getResources().getDrawable(R.drawable.buoy);
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 			List<Person> people = (List<Person>) msg.getData().getSerializable("messages");
-			PeopleItemizedOverlay peopleOverlay = new PeopleItemizedOverlay(people, marker,PoiinBackgroundService.this.getApplicationContext());
+			PeopleItemizedOverlay peopleOverlay = new PeopleItemizedOverlay(people, marker,PoiinBackgroundService.this.getApplication());
 			ApplicationState appState=(ApplicationState)PoiinBackgroundService.this.getApplication();
 			appState.getMapView().getOverlays().add(peopleOverlay);
 			appState.setLastPoiinPerson(people.get(people.size()-1));

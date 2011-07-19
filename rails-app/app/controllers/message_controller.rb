@@ -3,7 +3,7 @@ class MessageController   < ApplicationController
   require "bson"
   def create
     user_to = User.find(params["to"])
-    user_to.send_message :id=>BSON::ObjectId.new, :message => params["message"], :from=>params["from"]
+    user_to.send_message :id=>BSON::ObjectId.new, :message => params["message"], :from=>params["from"], :from_twitter_id => params["from_twitter_id"], :from_facebook_id => params["from_facebook_id"]
     render :json => {}
   end
 

@@ -88,6 +88,7 @@ public class TwitterAuthenticated extends Activity {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("id", twitter.getId());
 			jsonObject.put("name", twitter.getScreenName());
+			jsonObject.put("twitter_id", twitter.getId());
 			return jsonObject;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

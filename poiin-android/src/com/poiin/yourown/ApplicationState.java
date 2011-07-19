@@ -25,6 +25,7 @@ public class ApplicationState extends Application{
 	private Class<? extends Activity> foregroundActivity;
 	private String currentMessenger;
 	private Twitter twitter;
+	private boolean applicationFullyStarted;
 
 	public Facebook getFacebook() {
 		return facebook;
@@ -114,4 +115,13 @@ public class ApplicationState extends Application{
 	public void setTwitter(Twitter twitter) {
 		this.twitter = twitter;
 	}
+
+	public boolean isApplicationFullyStarted() {
+		return applicationFullyStarted;
+	}
+
+	public void setApplicationFullyStarted(boolean applicationFullyStarted) {
+		this.applicationFullyStarted = applicationFullyStarted;
+	}
+	
 }

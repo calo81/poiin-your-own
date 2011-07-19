@@ -123,6 +123,9 @@
     <orderEntry type="library" scope="PROVIDED" name="[gem] selenium-webdriver (v0.2.1, /var/lib/gems/1.9.1/gems/selenium-webdriver-0.2.1)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] json_pure (v1.5.3, /var/lib/gems/1.9.1/gems/json_pure-1.5.3)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] json_pure (v1.5.3, /var/lib/gems/1.9.1/gems/json_pure-1.5.3)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] activemodel (v3.0.8, /var/lib/gems/1.9.1/gems/activemodel-3.0.8)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] activesupport (v3.0.8, /var/lib/gems/1.9.1/gems/activesupport-3.0.8)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] activemodel (v3.0.8, /var/lib/gems/1.9.1/gems/activemodel-3.0.8)" level="application" />
   </component>
 </module>
 

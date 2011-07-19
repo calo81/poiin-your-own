@@ -27,7 +27,7 @@ import com.poiin.yourown.people.message.MessageReceivedHandler;
 
 public class SocketClient {
 	private static final int FIVE_MINUTES = 10000;
-	private static final String SERVER_URL_HOST = "192.168.0.5";
+	private static final String SERVER_URL_HOST = "192.168.1.133";
 	private static final String MESSAGE_URL_PORT = "3001";
 	private MessageReceivedHandler userMessageReceivedHandler;
 	private ContextWrapper context;
@@ -143,6 +143,8 @@ public class SocketClient {
 				person.setLatitude(poiin.getJSONObject("poiin").getDouble("latitude"));
 				person.setLongitude(poiin.getJSONObject("poiin").getDouble("longitude"));
 				person.setPoiinText(poiin.getJSONObject("poiin").getString("text"));
+				person.setTwitterId(poiin.getJSONObject("user").getString("twitter_id"));
+				person.setFacebookId(poiin.getJSONObject("user").getString("facebook_id"));
 				person.setSelectedCategories(extractCategories(poiin));
 				people.add(person);
 			}
@@ -171,6 +173,8 @@ public class SocketClient {
 				JSONObject jsonMessage = jsonMessages.getJSONObject(i);
 				UserMessage userMessage = new UserMessage(jsonMessage.getString("message"));
 				userMessage.setFrom(jsonMessage.getString("from"));
+				userMessage.setFromFacebookId(jsonMessage.getString("from_facebook_id"));
+				userMessage.setFromTwitterId(jsonMessage.getString("from_twitter_id"));
 				userMessage.setId(jsonMessage.getString("id"));
 				userMessages.add(userMessage);
 			}

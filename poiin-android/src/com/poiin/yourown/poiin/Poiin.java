@@ -32,9 +32,18 @@ public class Poiin implements JsonStringSupport{
 	@Override
 	public String toJsonString() {
 		try {
-			return "{user_id:"+user.getLong("id")+",latitude:"+latitude+",longitude:"+longitude+",user_name:"+user.getString("name")+",text:"+text+"}";
+			return "{user_id:"+user.getLong("id")+",user_twitter_id:"+getJsonProperty("twitter_id")+",user_facebook_id:"+getJsonProperty("facebook_id")+",latitude:"+latitude+",longitude:"+longitude+",user_name:"+user.getString("name")+",text:"+text+"}";
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+
+	private String getJsonProperty(String propertyName){
+		try {
+			return String.valueOf(user.getLong(propertyName));
+		} catch (JSONException e) {
+			return "";
 		}
 	}
 }

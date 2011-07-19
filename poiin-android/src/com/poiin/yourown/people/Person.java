@@ -8,6 +8,8 @@ public class Person {
 	private String name;
 	private String id;
 	private String poiinText;
+	private String twitterId;
+	private String facebookId;
 	private List<String> selectedCategories;
 	
 	
@@ -48,6 +50,16 @@ public class Person {
 	public void setPoiinText(String poiinText) {
 		this.poiinText = poiinText;
 	}
-	
-	
+	public String getTwitterId() {
+		return twitterId;
+	}
+	public void setTwitterId(String twitterId) {
+		this.twitterId = twitterId;
+	}
+	public String getFacebookId() {
+		return facebookId;
+	}
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
+	}	
 }

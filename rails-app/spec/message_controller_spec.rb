@@ -9,7 +9,7 @@ describe "MessageController" do
     user_receiving=mock("user")
     User.should_receive(:find).with(999999).and_return(user_receiving)
     BSON::ObjectId.should_receive(:new).and_return 111
-    user_receiving.should_receive(:send_message).with({:id => 111,:message => "El mensaje", :from => 111111})
+    user_receiving.should_receive(:send_message).with({:id => 111,:message => "El mensaje", :from => 111111, :from_twitter_id=>nil, :from_facebook_id=>nil})
     @controller.should_receive(:render)
     @controller.create
   end

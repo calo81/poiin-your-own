@@ -25,7 +25,6 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
@@ -35,7 +34,7 @@ import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.poiin.Poiin;
 
 public class RestClientServiceImpl implements RestClientService {
-	private static final String SERVER_HOST = "http://192.168.0.5:3000/";
+	private static final String SERVER_HOST = "http://192.168.1.133:3000/";
 	private static final String HTTP_POIIN_ENDPOINT = SERVER_HOST+"poiin";
 	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST+"message";
 	private static final String HTTP_USER_ENDPOINT = SERVER_HOST+"user";
@@ -78,14 +77,6 @@ public class RestClientServiceImpl implements RestClientService {
 		HttpPost post = new HttpPost(HTTP_USER_ENDPOINT);
 		setPostJsonString(me.toString(), post);
 		sendRequestAndGetJSONArray(post);
-	}
-
-	private HttpGet getUrlWithQueryString(JSONObject user) {
-		try {
-			return new HttpGet(HTTP_POIIN_ENDPOINT + "?user_id=" + user.getLong("id"));
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	private JSONArray sendRequestAndGetJSONArray(HttpRequestBase request) {

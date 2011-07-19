@@ -12,6 +12,8 @@ public class UserMessage implements Serializable,JsonStringSupport{
 	private static final long serialVersionUID = 1L;
 	private String content;
 	private String from;
+	private String fromFacebookId;
+	private String fromTwitterId;
 	private String to;
 	private String id;
 	
@@ -49,9 +51,25 @@ public class UserMessage implements Serializable,JsonStringSupport{
 		this.id = id;
 	}
 
+	public String getFromFacebookId() {
+		return fromFacebookId;
+	}
+
+	public void setFromFacebookId(String fromFacebookId) {
+		this.fromFacebookId = fromFacebookId;
+	}
+
+	public String getFromTwitterId() {
+		return fromTwitterId;
+	}
+
+	public void setFromTwitterId(String fromTwitterId) {
+		this.fromTwitterId = fromTwitterId;
+	}
+	
 	@Override
 	public String toJsonString() {
-		return "{message: "+content+",from:"+from+",to:"+to+"}";
+		return "{message: "+content+",from:"+from+",to:"+to+",from_twitter_id:"+fromTwitterId+",from_facebook_id:"+fromFacebookId+"}";
 	}
 	
 }

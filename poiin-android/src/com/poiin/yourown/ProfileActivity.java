@@ -8,12 +8,15 @@ import java.net.URLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.poiin.yourown.social.GenericProfilePictureRetriever;
+
 import android.app.TabActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +26,6 @@ import android.widget.TextView;
 
 public class ProfileActivity extends TabActivity {
 	
-	private String imageLink= "http://graph.facebook.com/{ID}/picture";
 	private ImageView profilePicture;
 	private TextView nameTextView;
 	private TextView lastNameTextView;
@@ -75,40 +77,19 @@ public class ProfileActivity extends TabActivity {
 	public void onStart(){
 		super.onStart();
 		startImageRetrieval();
-		nameTextView.setText(getMyFacebookProperty("name"));
-		lastNameTextView.setText(getMyFacebookProperty("last_name"));
+		nameTextView.setText(getPropertyValue("name"));
+		lastNameTextView.setText(getPropertyValue("last_name"));
 	}
 	private void startImageRetrieval() {
-		new Thread(new Runnable() {			
-			@Override
-			public void run() {
-				loadImageHandler.sendEmptyMessage(0);
-			}
-		}).start();
+		GenericProfilePictureRetriever.retrieveToImageView(this.getApplication(), profilePicture, getPropertyValue("twitter_id"),getPropertyValue("facebook_id"));
 	}
 
-	private String getMyFacebookProperty(String property) {
+	private String getPropertyValue(String property) {
 		try {
 			return me.getString(property);
 		} catch (JSONException e) {
-			throw new RuntimeException(e);
+			Log.w("ProfileActivity", "LA propiedad "+property+" no existe");
+			return "";
 		}
 	}
-	
-	private Handler loadImageHandler = new Handler() {
-		public void handleMessage(Message msg) {
-				try {
-					URL url = new URL(imageLink.replace("{ID}", getMyFacebookProperty("id")));
-					URLConnection conn = url.openConnection();
-					conn.connect();
-					BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-					Bitmap bm = BitmapFactory.decodeStream(bis);
-					bis.close();
-					profilePicture.setImageBitmap(bm);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-
-	};
 }

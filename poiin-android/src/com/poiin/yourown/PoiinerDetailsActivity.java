@@ -20,7 +20,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.poiin.yourown.social.facebook.ProfilePictureRetriever;
+import com.poiin.yourown.social.GenericProfilePictureRetriever;
+import com.poiin.yourown.social.facebook.FacebookProfilePictureRetriever;
+import com.poiin.yourown.social.twitter.TwitterProfilePictureRetriever;
+import com.poiin.yourown.storage.Data;
+import com.poiin.yourown.storage.Data.LoginOption;
+import com.poiin.yourown.storage.PreferencesBackedData;
 
 public class PoiinerDetailsActivity extends Activity {
 
@@ -30,6 +35,8 @@ public class PoiinerDetailsActivity extends Activity {
 	private TextView lastWallText;
 	private TextView poiinTextView;
 	private String poiinerId;
+	private String poiinerTwitterId;
+	private String poiinerFacebookId;
 	private String poiinerName;
 	private String poiinText;
 	private TextView categoriesList;
@@ -41,8 +48,8 @@ public class PoiinerDetailsActivity extends Activity {
 		userIdView = (TextView) findViewById(R.id.poiinerName);
 		poiinerPicture = (ImageView) findViewById(R.id.poiinerImage);
 		lastWallText = (TextView) findViewById(R.id.lastWallMessage);
-		poiinTextView = (TextView)findViewById(R.id.poiinText);
-		categoriesList = (TextView)findViewById(R.id.poiinerCategoriesList);
+		poiinTextView = (TextView) findViewById(R.id.poiinText);
+		categoriesList = (TextView) findViewById(R.id.poiinerCategoriesList);
 	}
 
 	@Override
@@ -51,20 +58,24 @@ public class PoiinerDetailsActivity extends Activity {
 		poiinerId = getIntent().getData().getPath().substring(1);
 		poiinerName = getIntent().getData().getQueryParameter("name");
 		poiinText = getIntent().getData().getQueryParameter("poiinText");
+		poiinerTwitterId=getIntent().getData().getQueryParameter("twitter_id");
+		poiinerFacebookId=getIntent().getData().getQueryParameter("facebook_id");
 		userIdView.setText(poiinerName);
 		poiinTextView.setText(poiinText);
-		categoriesList.setText(getIntent().getData().getQueryParameter("categories"));
+		categoriesList.setText(getIntent().getData().getQueryParameter(
+				"categories"));
 		startImageRetrieval();
 		startWallRetrieval();
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, 0, 0, "SMS").setIcon(android.R.drawable.ic_menu_send);
-		menu.add(0, 1, 0, "Write in Wall").setIcon(android.R.drawable.ic_menu_share);
-		menu.add(0, POIIN_MESSAGE_MENU, 0, "Poiin Message").setIcon(android.R.drawable.ic_menu_more);
+		menu.add(0, 1, 0, "Write in Wall").setIcon(
+				android.R.drawable.ic_menu_share);
+		menu.add(0, POIIN_MESSAGE_MENU, 0, "Poiin Message").setIcon(
+				android.R.drawable.ic_menu_more);
 		return true;
 	}
 
@@ -87,7 +98,8 @@ public class PoiinerDetailsActivity extends Activity {
 			public void run() {
 				ApplicationState applicationState = (ApplicationState) getApplication();
 				try {
-					String wall = applicationState.getFacebook().request(poiinerId + "/feed");
+					String wall = applicationState.getFacebook().request(
+							poiinerId + "/feed");
 					JSONObject wallJson = new JSONObject(wall);
 					JSONArray array = wallJson.getJSONArray("data");
 					findLastFeedWithMessageAndAddToProfile(array);
@@ -97,13 +109,14 @@ public class PoiinerDetailsActivity extends Activity {
 				}
 			}
 
-			private void findLastFeedWithMessageAndAddToProfile(JSONArray array) throws JSONException {
+			private void findLastFeedWithMessageAndAddToProfile(JSONArray array)
+					throws JSONException {
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject lastWallEntry = array.getJSONObject(i);
 					String lastMessage = null;
-					try{
-						lastMessage =  lastWallEntry.getString("message");
-					}catch(Exception e){
+					try {
+						lastMessage = lastWallEntry.getString("message");
+					} catch (Exception e) {
 						continue;
 					}
 					Message msg = new Message();
@@ -124,7 +137,7 @@ public class PoiinerDetailsActivity extends Activity {
 	};
 
 	private void startImageRetrieval() {
-		new ProfilePictureRetriever(poiinerPicture, poiinerId).retrieve();
+		GenericProfilePictureRetriever.retrieveToImageView(this.getApplication(), poiinerPicture, poiinerTwitterId,poiinerFacebookId);
 	}
 
 }

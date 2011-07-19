@@ -1,5 +1,7 @@
 package com.poiin.yourown;
 
+import org.json.JSONException;
+
 import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.people.message.UserMessageSender;
 
@@ -45,8 +47,28 @@ public class NewMessageActivity extends Activity {
 				UserMessage message = new UserMessage(messageText.getText().toString());
 				ApplicationState app = (ApplicationState) getApplication();
 				message.setFrom(app.getMyId().toString());
+				setTwitterIdIfExistent(message, app);
+				setFacebookIdIfExistent(message, app);
 				message.setTo(receiver);
 				userMessageSender.sendMessage(message);
+			}
+
+			private void setFacebookIdIfExistent(UserMessage message,
+					ApplicationState app) {
+				try {
+					message.setFromFacebookId(app.getMe().getString("facebook_id"));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+
+			private void setTwitterIdIfExistent(UserMessage message,
+					ApplicationState app) {
+				try {
+					message.setFromTwitterId(app.getMe().getString("twitter_id"));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
