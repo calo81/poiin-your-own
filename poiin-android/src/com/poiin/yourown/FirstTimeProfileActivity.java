@@ -42,20 +42,23 @@ public class FirstTimeProfileActivity extends Activity {
 	private Button sendProfileButton;
 	private ListView categoriesAddedList;
 	private BaseAdapter addedCategoriesListAdapter;
-	private List<String> selectedCategories=new ArrayList<String>();
+	private List<String> selectedCategories = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		peopleService = new PeopleServiceImpl((ApplicationState) this.getApplication());
+		peopleService = new PeopleServiceImpl(
+				(ApplicationState) this.getApplication());
 		listAdapter = new MyExpandableListAdapter();
 		setContentView(R.layout.initial_profile);
 		listView = (ExpandableListView) findViewById(R.id.categoryList);
 		listView.setOnChildClickListener((OnChildClickListener) listAdapter);
 		listView.setAdapter(listAdapter);
-		categoriesAddedList = (ListView)findViewById(R.id.categoriesSelected);
+		categoriesAddedList = (ListView) findViewById(R.id.categoriesSelected);
 		configureButtonListener();
-		addedCategoriesListAdapter=new CategoriesDeleteListViewAdapter(FirstTimeProfileActivity.this, selectedCategories, deleteSelectedCategoryHandler);
+		addedCategoriesListAdapter = new CategoriesDeleteListViewAdapter(
+				FirstTimeProfileActivity.this, selectedCategories,
+				deleteSelectedCategoryHandler);
 		categoriesAddedList.setAdapter(addedCategoriesListAdapter);
 	}
 
@@ -70,10 +73,12 @@ public class FirstTimeProfileActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				progressDialog = ProgressDialog.show(FirstTimeProfileActivity.this, "Processing . . .", "Saving User Information ...", true, false);
+				progressDialog = ProgressDialog.show(
+						FirstTimeProfileActivity.this, "Processing . . .",
+						"Saving User Information ...", true, false);
 				Person person = new Person();
 				person.setSelectedCategories(selectedCategories);
-				peopleService.registerUser(person,registrationHandler);
+				peopleService.registerUser(person, registrationHandler);
 			}
 		});
 	}
@@ -82,23 +87,27 @@ public class FirstTimeProfileActivity extends Activity {
 		@Override
 		public void handleMessage(final Message msg) {
 			progressDialog.dismiss();
-			startActivity(new Intent(FirstTimeProfileActivity.this.getApplicationContext(), Main.class));
+			startActivity(new Intent(
+					FirstTimeProfileActivity.this.getApplicationContext(),
+					Main.class));
 			finish();
 		}
 	};
-	
-	private Handler deleteSelectedCategoryHandler = new Handler(){
+
+	private Handler deleteSelectedCategoryHandler = new Handler() {
 		@Override
-		public void handleMessage(Message msg){
+		public void handleMessage(Message msg) {
 			String category = msg.getData().getString("category");
 			selectedCategories.remove(category);
 			addedCategoriesListAdapter.notifyDataSetChanged();
 		}
 	};
 
-	public class MyExpandableListAdapter extends BaseExpandableListAdapter implements OnChildClickListener {
+	public class MyExpandableListAdapter extends BaseExpandableListAdapter
+			implements OnChildClickListener {
 		private String[] groups = { "Country", "Profesion", "Misc" };
-		private String[][] children = { { "Venezuela", "England", "Spain" }, { "Programmer", "CEO" }, { "Gay", "Looking for couple" } };
+		private String[][] children = { { "Venezuela", "England", "Spain" },
+				{ "Programmer", "CEO" }, { "Gay", "Looking for couple" } };
 
 		public Object getChild(int groupPosition, int childPosition) {
 			return children[groupPosition][childPosition];
@@ -113,7 +122,8 @@ public class FirstTimeProfileActivity extends Activity {
 		}
 
 		public TextView getGenericView() {
-			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 64);
+			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+					ViewGroup.LayoutParams.MATCH_PARENT, 64);
 			TextView textView = new TextView(FirstTimeProfileActivity.this);
 			textView.setLayoutParams(lp);
 			textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
@@ -121,7 +131,8 @@ public class FirstTimeProfileActivity extends Activity {
 			return textView;
 		}
 
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		public View getChildView(int groupPosition, int childPosition,
+				boolean isLastChild, View convertView, ViewGroup parent) {
 			TextView textView = getGenericView();
 			textView.setText(getChild(groupPosition, childPosition).toString());
 			return textView;
@@ -139,7 +150,8 @@ public class FirstTimeProfileActivity extends Activity {
 			return groupPosition;
 		}
 
-		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+		public View getGroupView(int groupPosition, boolean isExpanded,
+				View convertView, ViewGroup parent) {
 			TextView textView = getGenericView();
 			textView.setText(getGroup(groupPosition).toString());
 			return textView;
@@ -154,12 +166,12 @@ public class FirstTimeProfileActivity extends Activity {
 		}
 
 		@Override
-		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-			selectedCategories.add(((TextView)v).getText().toString());
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+			selectedCategories.add(((TextView) v).getText().toString());
 			addedCategoriesListAdapter.notifyDataSetChanged();
 			return true;
 		}
-		
 
 	}
 

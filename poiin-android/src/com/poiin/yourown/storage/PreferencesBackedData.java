@@ -12,12 +12,14 @@ public class PreferencesBackedData implements Data {
 	private static final String TWITTER_ACCESS_SECRET_PREFERENCE = "twitterAccesSecret";
 
 	public PreferencesBackedData(Context context) {
-		preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+		preferences = context.getSharedPreferences(PREFERENCES_NAME,
+				Context.MODE_PRIVATE);
 	}
 
 	@Override
 	public LoginOption getLoginOption() {
-		String logOption = preferences.getString(LOGIN_OPTION_PREFERENCE, "UNSETTED");
+		String logOption = preferences.getString(LOGIN_OPTION_PREFERENCE,
+				"UNSETTED");
 		return LoginOption.valueOf(logOption);
 	}
 
@@ -39,9 +41,11 @@ public class PreferencesBackedData implements Data {
 	@Override
 	public String[] getTwitterDetails() {
 		String[] twitterDetails = new String[2];
-		twitterDetails[0] = preferences.getString(TWITTER_ACCESS_KEY_PREFERENCE,null);
-		twitterDetails[1] = preferences.getString(TWITTER_ACCESS_SECRET_PREFERENCE,null);
-		return twitterDetails[0]!=null?twitterDetails:null;
+		twitterDetails[0] = preferences.getString(
+				TWITTER_ACCESS_KEY_PREFERENCE, null);
+		twitterDetails[1] = preferences.getString(
+				TWITTER_ACCESS_SECRET_PREFERENCE, null);
+		return twitterDetails[0] != null ? twitterDetails : null;
 	}
 
 }

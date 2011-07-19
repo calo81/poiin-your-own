@@ -34,7 +34,9 @@ public class SocketClient {
 	private Socket socket;
 	private BufferedReader reader;
 
-	public void establishConnectionAndWaitForMessage(MessageReceivedHandler userMessageReceivedHandler, ContextWrapper context) {
+	public void establishConnectionAndWaitForMessage(
+			MessageReceivedHandler userMessageReceivedHandler,
+			ContextWrapper context) {
 		this.userMessageReceivedHandler = userMessageReceivedHandler;
 		this.context = context;
 		try {
@@ -45,7 +47,8 @@ public class SocketClient {
 	}
 
 	private void watchDogSocket() throws UnknownHostException, IOException {
-		final SocketAddress address = new InetSocketAddress(SERVER_URL_HOST, Integer.parseInt(MESSAGE_URL_PORT));		
+		final SocketAddress address = new InetSocketAddress(SERVER_URL_HOST,
+				Integer.parseInt(MESSAGE_URL_PORT));
 		TimerTask task = configureWatchDogTask(address);
 		Timer timer = new Timer();
 		timer.schedule(task, 0, FIVE_MINUTES);
@@ -62,16 +65,20 @@ public class SocketClient {
 					try {
 						connectSocket(address);
 						sendUserIdToSocket(socket, context);
-						reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-						readMessagesFromSocketAndHandle(userMessageReceivedHandler, reader);
+						reader = new BufferedReader(new InputStreamReader(
+								socket.getInputStream()));
+						readMessagesFromSocketAndHandle(
+								userMessageReceivedHandler, reader);
 					} catch (Exception e) {
-						Log.e("SocketClient", "Problem in connection to socket.. will retry in 5 minutes ..", e);
+						Log.e("SocketClient",
+								"Problem in connection to socket.. will retry in 5 minutes ..",
+								e);
 					}
 				}
 			}
 
-			private boolean isSocketAlive(){
-				return socket!=null && canWriteToSocket();
+			private boolean isSocketAlive() {
+				return socket != null && canWriteToSocket();
 			}
 
 			private boolean canWriteToSocket() {
@@ -82,35 +89,41 @@ public class SocketClient {
 					return false;
 				}
 			}
-			
-			private void connectSocket(final SocketAddress address) throws IOException{
-				if(socket!=null){
+
+			private void connectSocket(final SocketAddress address)
+					throws IOException {
+				if (socket != null) {
 					socket.close();
 				}
-				socket = new Socket(SERVER_URL_HOST, Integer.parseInt(MESSAGE_URL_PORT));
+				socket = new Socket(SERVER_URL_HOST,
+						Integer.parseInt(MESSAGE_URL_PORT));
 			}
 		};
 	}
 
-	private void writeToSocket(String string)throws IOException{
-			PrintWriter writer = new PrintWriter(socket.getOutputStream());
-			writer.println(string);
-			writer.flush();
-			if(writer.checkError()){
-				throw new IOException("Error in writing to socket.. socket unavailable ..");
-			}
+	private void writeToSocket(String string) throws IOException {
+		PrintWriter writer = new PrintWriter(socket.getOutputStream());
+		writer.println(string);
+		writer.flush();
+		if (writer.checkError()) {
+			throw new IOException(
+					"Error in writing to socket.. socket unavailable ..");
+		}
 	}
-	
+
 	private void sendUserIdToSocket(Socket socket, ContextWrapper context) {
-		try {	
-			long userId = ((ApplicationState) context.getApplicationContext()).getMe().getLong("id");
+		try {
+			long userId = ((ApplicationState) context.getApplicationContext())
+					.getMe().getLong("id");
 			writeToSocket("USER_ID|" + userId);
 		} catch (Exception e) {
 			Log.e("SocketClient", "Unable to write User Id to socket", e);
 		}
 	}
 
-	private void readMessagesFromSocketAndHandle(MessageReceivedHandler userMessageReceivedHandler, BufferedReader reader) throws IOException {
+	private void readMessagesFromSocketAndHandle(
+			MessageReceivedHandler userMessageReceivedHandler,
+			BufferedReader reader) throws IOException {
 		while (true && socket.isConnected() && !socket.isInputShutdown()) {
 			String message = reader.readLine();
 			Log.i(SocketClient.class.getName(), "Received Message " + message);
@@ -118,12 +131,17 @@ public class SocketClient {
 		}
 	}
 
-	private void handleMessage(MessageReceivedHandler userMessageReceivedHandler, String message) {
+	private void handleMessage(
+			MessageReceivedHandler userMessageReceivedHandler, String message) {
 		String messageType = message.split("\\|")[0];
 		if (messageIsType(messageType, MessageTypes.USER_MESSAGE)) {
-			userMessageReceivedHandler.receiveMessages(createUserMessageFromJsonMessage(message.split("\\|")[1]));
+			userMessageReceivedHandler
+					.receiveMessages(createUserMessageFromJsonMessage(message
+							.split("\\|")[1]));
 		} else if (messageIsType(messageType, MessageTypes.POIIN_MESSAGE)) {
-			userMessageReceivedHandler.receivePoiins(createPoiinMessageFromJsonMessage(message.split("\\|")[1]));
+			userMessageReceivedHandler
+					.receivePoiins(createPoiinMessageFromJsonMessage(message
+							.split("\\|")[1]));
 		}
 	}
 
@@ -138,28 +156,37 @@ public class SocketClient {
 			for (int i = 0; i < jsonMessages.length(); i++) {
 				JSONObject poiin = jsonMessages.getJSONObject(i);
 				Person person = new Person();
-				person.setName(poiin.getJSONObject("user").getString("user_name"));
+				person.setName(poiin.getJSONObject("user").getString(
+						"user_name"));
 				person.setId(poiin.getJSONObject("user").getString("id"));
-				person.setLatitude(poiin.getJSONObject("poiin").getDouble("latitude"));
-				person.setLongitude(poiin.getJSONObject("poiin").getDouble("longitude"));
-				person.setPoiinText(poiin.getJSONObject("poiin").getString("text"));
-				person.setTwitterId(poiin.getJSONObject("user").getString("twitter_id"));
-				person.setFacebookId(poiin.getJSONObject("user").getString("facebook_id"));
+				person.setLatitude(poiin.getJSONObject("poiin").getDouble(
+						"latitude"));
+				person.setLongitude(poiin.getJSONObject("poiin").getDouble(
+						"longitude"));
+				person.setPoiinText(poiin.getJSONObject("poiin").getString(
+						"text"));
+				person.setTwitterId(poiin.getJSONObject("user").getString(
+						"twitter_id"));
+				person.setFacebookId(poiin.getJSONObject("user").getString(
+						"facebook_id"));
 				person.setSelectedCategories(extractCategories(poiin));
 				people.add(person);
 			}
 			return people;
 		} catch (JSONException e) {
 			// TODO: Do we need to handle this???
-			Log.e(this.getClass().getName(), "Error parsing incoming Message " + poiins, e);
+			Log.e(this.getClass().getName(), "Error parsing incoming Message "
+					+ poiins, e);
 			return null;
 		}
 	}
 
-	private List<String> extractCategories(JSONObject poiin) throws JSONException {
-		JSONArray jsonArray = poiin.getJSONObject("user").getJSONArray("categories");
+	private List<String> extractCategories(JSONObject poiin)
+			throws JSONException {
+		JSONArray jsonArray = poiin.getJSONObject("user").getJSONArray(
+				"categories");
 		List<String> categories = new ArrayList<String>();
-		for(int i=0;i<jsonArray.length();i++){
+		for (int i = 0; i < jsonArray.length(); i++) {
 			categories.add(jsonArray.getString(i));
 		}
 		return categories;
@@ -171,17 +198,21 @@ public class SocketClient {
 			JSONArray jsonMessages = new JSONArray(messages);
 			for (int i = 0; i < jsonMessages.length(); i++) {
 				JSONObject jsonMessage = jsonMessages.getJSONObject(i);
-				UserMessage userMessage = new UserMessage(jsonMessage.getString("message"));
+				UserMessage userMessage = new UserMessage(
+						jsonMessage.getString("message"));
 				userMessage.setFrom(jsonMessage.getString("from"));
-				userMessage.setFromFacebookId(jsonMessage.getString("from_facebook_id"));
-				userMessage.setFromTwitterId(jsonMessage.getString("from_twitter_id"));
+				userMessage.setFromFacebookId(jsonMessage
+						.getString("from_facebook_id"));
+				userMessage.setFromTwitterId(jsonMessage
+						.getString("from_twitter_id"));
 				userMessage.setId(jsonMessage.getString("id"));
 				userMessages.add(userMessage);
 			}
 			return userMessages;
 		} catch (JSONException e) {
 			// TODO: Do we need to handle this???
-			Log.e(this.getClass().getName(), "Error parsing incoming Message " + messages, e);
+			Log.e(this.getClass().getName(), "Error parsing incoming Message "
+					+ messages, e);
 			return null;
 		}
 

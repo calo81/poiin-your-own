@@ -4,5 +4,6 @@ import android.graphics.Bitmap;
 
 public interface ProfilePictureRetriever {
 	Bitmap retrieveBitmap();
+
 	void retrieveToImageView();
 }

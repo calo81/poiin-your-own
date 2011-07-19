@@ -46,35 +46,42 @@ public class PoiinBackgroundService extends Service {
 	}
 
 	private void startMessageListener() {
-		messageListener = ((ApplicationState) getApplication()).getUserMessageListener();
+		messageListener = ((ApplicationState) getApplication())
+				.getUserMessageListener();
 		messageListener.start(decisionHandler);
 	}
 
-	private final Handler decisionHandler = new Handler(){
+	private final Handler decisionHandler = new Handler() {
 		@Override
 		public void handleMessage(final Message msg) {
 			Message message = new Message();
 			message.copyFrom(msg);
-			if(msg.getData().getString("type").equals("POIIN")){
+			if (msg.getData().getString("type").equals("POIIN")) {
 				drawPoiins(msg);
 				notificatorNewPoiiners.sendMessage(message);
-			}else if(msg.getData().getString("type").equals("USER_MESSAGE")){
-				messageReceivedHandler.sendMessage(message);	
+			} else if (msg.getData().getString("type").equals("USER_MESSAGE")) {
+				messageReceivedHandler.sendMessage(message);
 			}
 		}
 
 		private void drawPoiins(Message msg) {
-			Drawable marker = PoiinBackgroundService.this.getApplicationContext().getResources().getDrawable(R.drawable.buoy);
-			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			List<Person> people = (List<Person>) msg.getData().getSerializable("messages");
-			PeopleItemizedOverlay peopleOverlay = new PeopleItemizedOverlay(people, marker,PoiinBackgroundService.this.getApplication());
-			ApplicationState appState=(ApplicationState)PoiinBackgroundService.this.getApplication();
+			Drawable marker = PoiinBackgroundService.this
+					.getApplicationContext().getResources()
+					.getDrawable(R.drawable.buoy);
+			marker.setBounds(0, 0, marker.getIntrinsicWidth(),
+					marker.getIntrinsicHeight());
+			List<Person> people = (List<Person>) msg.getData().getSerializable(
+					"messages");
+			PeopleItemizedOverlay peopleOverlay = new PeopleItemizedOverlay(
+					people, marker,
+					PoiinBackgroundService.this.getApplication());
+			ApplicationState appState = (ApplicationState) PoiinBackgroundService.this
+					.getApplication();
 			appState.getMapView().getOverlays().add(peopleOverlay);
-			appState.setLastPoiinPerson(people.get(people.size()-1));
-		}		
+			appState.setLastPoiinPerson(people.get(people.size() - 1));
+		}
 	};
-	
-	
+
 	private final Handler notificatorNewPoiiners = new Handler() {
 
 		@Override
@@ -86,11 +93,15 @@ public class PoiinBackgroundService extends Service {
 			Context context = getApplicationContext();
 			CharSequence contentTitle = "New Poiin!!";
 			CharSequence contentText = "Hey there is somebody new around.. check out!";
-			Intent notificationIntent = new Intent(PoiinBackgroundService.this, Main.class);
+			Intent notificationIntent = new Intent(PoiinBackgroundService.this,
+					Main.class);
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+					notificationIntent, 0);
+			notification.setLatestEventInfo(context, contentTitle, contentText,
+					contentIntent);
+			notification.flags = Notification.DEFAULT_LIGHTS
+					| Notification.FLAG_AUTO_CANCEL;
 			mNotificationManager.notify(1, notification);
 
 		}
@@ -100,27 +111,33 @@ public class PoiinBackgroundService extends Service {
 
 		@Override
 		public void handleMessage(final Message msg) {
-			List<UserMessage> messages = (List<UserMessage>) msg.getData().getSerializable("messages");
+			List<UserMessage> messages = (List<UserMessage>) msg.getData()
+					.getSerializable("messages");
 			for (UserMessage message : messages) {
-				if(messageActivityForMessengerAlreadyOpen(message)){
+				if (messageActivityForMessengerAlreadyOpen(message)) {
 					sendMessageDirectly(message);
-				}else{
+				} else {
 					sendNotification(message);
 				}
-				
+
 			}
 		}
 
 		private void sendMessageDirectly(UserMessage message) {
-			Intent notificationIntent = new Intent(getApplicationContext(), MessageReceivedActivity.class);
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			Intent notificationIntent = new Intent(getApplicationContext(),
+					MessageReceivedActivity.class);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+					| Intent.FLAG_ACTIVITY_SINGLE_TOP
+					| Intent.FLAG_ACTIVITY_NEW_TASK);
 			notificationIntent.putExtra("userMessage", message);
 			startActivity(notificationIntent);
 		}
 
-		private boolean messageActivityForMessengerAlreadyOpen(UserMessage message) {
+		private boolean messageActivityForMessengerAlreadyOpen(
+				UserMessage message) {
 			ApplicationState appState = (ApplicationState) getApplication();
-			return appState.getForegroundActivity() == MessageReceivedActivity.class && message.getFrom().equals(appState.getCurrentMessenger());
+			return appState.getForegroundActivity() == MessageReceivedActivity.class
+					&& message.getFrom().equals(appState.getCurrentMessenger());
 		}
 
 		private void sendNotification(UserMessage message) {
@@ -131,12 +148,18 @@ public class PoiinBackgroundService extends Service {
 			Context context = getApplicationContext();
 			CharSequence contentTitle = "Poiin!! Message";
 			CharSequence contentText = "";
-			Intent notificationIntent = new Intent(context, MessageReceivedActivity.class);
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			Intent notificationIntent = new Intent(context,
+					MessageReceivedActivity.class);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+					| Intent.FLAG_ACTIVITY_SINGLE_TOP
+					| Intent.FLAG_ACTIVITY_NEW_TASK);
 			notificationIntent.putExtra("userMessage", message);
-			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+					notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			notification.setLatestEventInfo(context, contentTitle, contentText,
+					contentIntent);
+			notification.flags = Notification.DEFAULT_LIGHTS
+					| Notification.FLAG_AUTO_CANCEL;
 			mNotificationManager.notify(2, notification);
 		}
 	};

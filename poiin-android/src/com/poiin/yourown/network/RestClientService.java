@@ -11,8 +11,8 @@ public interface RestClientService {
 
 	void sendUserMessage(UserMessage message);
 
-	void acknowledgeMessage(String id,String userId);
-	
+	void acknowledgeMessage(String id, String userId);
+
 	JSONObject isUserRegistered(String userId);
 
 	void registerUser(JSONObject me);

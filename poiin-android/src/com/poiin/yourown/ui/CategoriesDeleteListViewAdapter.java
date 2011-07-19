@@ -20,10 +20,11 @@ public class CategoriesDeleteListViewAdapter extends BaseAdapter {
 	private final List<String> categories;
 	private Handler deleteSelectedCategoryHandler;
 
-	public CategoriesDeleteListViewAdapter(Context context, List<String> categories,Handler deleteSelectedCategoryHandler) {
+	public CategoriesDeleteListViewAdapter(Context context,
+			List<String> categories, Handler deleteSelectedCategoryHandler) {
 		this.context = context;
 		this.categories = categories;
-		this.deleteSelectedCategoryHandler=deleteSelectedCategoryHandler;
+		this.deleteSelectedCategoryHandler = deleteSelectedCategoryHandler;
 	}
 
 	@Override
@@ -54,7 +55,9 @@ public class CategoriesDeleteListViewAdapter extends BaseAdapter {
 		public CategoryListView(Context context, String name) {
 			super(context);
 			setOrientation(LinearLayout.HORIZONTAL);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT);
 			params.setMargins(5, 3, 5, 0);
 			this.name = new TextView(context);
 			this.name.setText(name);
@@ -62,20 +65,23 @@ public class CategoriesDeleteListViewAdapter extends BaseAdapter {
 			this.name.setTextColor(Color.WHITE);
 			this.addView(this.name, params);
 			this.deleteIcon = new ImageView(context);
-			this.deleteIcon.setImageResource(android.R.drawable.ic_input_delete);
+			this.deleteIcon
+					.setImageResource(android.R.drawable.ic_input_delete);
 			configureDeleteButton();
 			this.addView(this.deleteIcon);
 		}
 
 		private void configureDeleteButton() {
-			this.deleteIcon.setOnClickListener(new OnClickListener() {		
+			this.deleteIcon.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Message msg = new Message();
 					Bundle data = new Bundle();
-					data.putString("category", CategoryListView.this.name.getText().toString());
+					data.putString("category", CategoryListView.this.name
+							.getText().toString());
 					msg.setData(data);
-					CategoriesDeleteListViewAdapter.this.deleteSelectedCategoryHandler.sendMessage(msg);
+					CategoriesDeleteListViewAdapter.this.deleteSelectedCategoryHandler
+							.sendMessage(msg);
 				}
 			});
 		}

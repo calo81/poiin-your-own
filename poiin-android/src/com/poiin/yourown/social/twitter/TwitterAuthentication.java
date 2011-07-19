@@ -29,8 +29,10 @@ public class TwitterAuthentication extends Activity {
 	private static final String AUTH_URL = "http://twitter.com/oauth/authorize";
 	static final String CALLBACK_URL = "OauthTwitter://twitt";
 
-	static CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-	static CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL);
+	static CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
+			CONSUMER_KEY, CONSUMER_SECRET);
+	static CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(
+			REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL);
 
 	static Data dataAccess;
 
@@ -39,24 +41,26 @@ public class TwitterAuthentication extends Activity {
 		super.onCreate(savedInstance);
 		dataAccess = new PreferencesBackedData(this);
 		setContentView(R.layout.twitter_login);
-		if(!twitterData()){
+		if (!twitterData()) {
 			goToTwitterForAuthentication();
-		}else{
+		} else {
 			authenticateWithSavedData();
 		}
 	}
 
 	private void authenticateWithSavedData() {
-		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(CALLBACK_URL+"?oauth_verifier=from_saved")));
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(CALLBACK_URL
+				+ "?oauth_verifier=from_saved")));
 	}
 
 	private boolean twitterData() {
-		return dataAccess.getTwitterDetails()!=null;
+		return dataAccess.getTwitterDetails() != null;
 	}
 
 	private void goToTwitterForAuthentication() {
 		try {
-			String authURL = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+			String authURL = provider.retrieveRequestToken(consumer,
+					CALLBACK_URL);
 			Log.d("OAuthTwitter", authURL);
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authURL)));
 		} catch (OAuthMessageSignerException e) {

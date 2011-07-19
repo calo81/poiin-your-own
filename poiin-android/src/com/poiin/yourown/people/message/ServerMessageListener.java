@@ -37,34 +37,45 @@ public class ServerMessageListener {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				socketClient.establishConnectionAndWaitForMessage(new MessageReceivedHandler() {
-					@Override
-					public void receiveMessages(List<UserMessage> messages) {
-						sendMessageAcknowledge(messages);
-						messageReceivedHandler.sendMessage(createMessageBundle((Serializable)messages,"USER_MESSAGE"));
-					}
+				socketClient.establishConnectionAndWaitForMessage(
+						new MessageReceivedHandler() {
+							@Override
+							public void receiveMessages(
+									List<UserMessage> messages) {
+								sendMessageAcknowledge(messages);
+								messageReceivedHandler
+										.sendMessage(createMessageBundle(
+												(Serializable) messages,
+												"USER_MESSAGE"));
+							}
 
-					@Override
-					public void receivePoiins(List<Person> people) {
-							messageReceivedHandler.sendMessage(createMessageBundle((Serializable)people,"POIIN"));
-					}
-					
-					private void sendMessageAcknowledge(final List<UserMessage> messages) {
+							@Override
+							public void receivePoiins(List<Person> people) {
+								messageReceivedHandler
+										.sendMessage(createMessageBundle(
+												(Serializable) people, "POIIN"));
+							}
+
+							private void sendMessageAcknowledge(
+									final List<UserMessage> messages) {
 								for (UserMessage message : messages) {
-									restClient.acknowledgeMessage(message.getId(),context.getMyId().toString());
-								}						
-					}
+									restClient.acknowledgeMessage(message
+											.getId(), context.getMyId()
+											.toString());
+								}
+							}
 
-					private Message createMessageBundle(Serializable data,String type) {
-						Message message = new Message();
-						Bundle bundle = new Bundle();
-						bundle.putSerializable("messages", data);
-						bundle.putString("type", type);
-						message.setData(bundle);
-						return message;
-					}
-					
-				}, context);
+							private Message createMessageBundle(
+									Serializable data, String type) {
+								Message message = new Message();
+								Bundle bundle = new Bundle();
+								bundle.putSerializable("messages", data);
+								bundle.putString("type", type);
+								message.setData(bundle);
+								return message;
+							}
+
+						}, context);
 			}
 		}).start();
 	}

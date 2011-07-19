@@ -19,35 +19,33 @@ public class TwitterProfilePictureRetriever implements ProfilePictureRetriever {
 	private ImageView imageView;
 	private String twitterScreenName;
 
-	public TwitterProfilePictureRetriever(ApplicationState appState,String twitterId) {
+	public TwitterProfilePictureRetriever(ApplicationState appState, String twitterId) {
 		this.appState = appState;
 		setScreenNameToLookup(twitterId);
 	}
 
-	public TwitterProfilePictureRetriever(ApplicationState appState,ImageView imageView,String twitterId){
-		this.imageView=imageView;
-		this.appState=appState;
+	public TwitterProfilePictureRetriever(ApplicationState appState, ImageView imageView, String twitterId) {
+		this.imageView = imageView;
+		this.appState = appState;
 		setScreenNameToLookup(twitterId);
-		
+
 	}
 
 	private void setScreenNameToLookup(String twitterId) {
 		try {
-			User twitterUser = appState.getTwitter().lookupUsers(new long[] {Long.parseLong(twitterId)}).get(0);
-			this.twitterScreenName=twitterUser.getScreenName();
+			User twitterUser = appState.getGenericTwitter().lookupUsers(new long[] { Long.parseLong(twitterId) }).get(0);
+			this.twitterScreenName = twitterUser.getScreenName();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	public Bitmap retrieveBitmap() {
-		Twitter twitter = appState.getTwitter();
+		Twitter twitter = appState.getGenericTwitter();
 		try {
-			ProfileImage image = twitter.getProfileImage(
-					twitterScreenName, ProfileImage.MINI);
-			return UrlBasedImageRetrieverHelper.retrieveBitmapFromUrl(image
-					.getURL());
+			ProfileImage image = twitter.getProfileImage(twitterScreenName, ProfileImage.MINI);
+			return UrlBasedImageRetrieverHelper.retrieveBitmapFromUrl(image.getURL());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,7 +61,7 @@ public class TwitterProfilePictureRetriever implements ProfilePictureRetriever {
 			}
 		}).start();
 	}
-	
+
 	private Handler loadImageHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			imageView.setImageBitmap(retrieveBitmap());

@@ -4,14 +4,15 @@ import com.poiin.yourown.network.RestClientService;
 import com.poiin.yourown.network.RestClientServiceImpl;
 
 public class UserMessageSender {
-	private RestClientService restService=new RestClientServiceImpl();
-	public void sendMessage(final UserMessage message){
-		new Thread(new Runnable() {		
+	private RestClientService restService = new RestClientServiceImpl();
+
+	public void sendMessage(final UserMessage message) {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				restService.sendUserMessage(message);
 			}
 		}).start();
-		
+
 	}
 }

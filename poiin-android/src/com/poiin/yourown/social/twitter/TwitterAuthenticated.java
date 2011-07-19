@@ -46,11 +46,13 @@ public class TwitterAuthenticated extends Activity {
 	public void onStart() {
 		super.onStart();
 		Uri uri = this.getIntent().getData();
-		if (uri != null && uri.toString().startsWith(TwitterAuthentication.CALLBACK_URL)) {
+		if (uri != null
+				&& uri.toString()
+						.startsWith(TwitterAuthentication.CALLBACK_URL)) {
 			String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-			if(verifier.equals("from_saved")){
+			if (verifier.equals("from_saved")) {
 				configureFromSaved();
-			}else{
+			} else {
 				doKeyAndSecretRetrieval(verifier);
 			}
 		}
@@ -65,10 +67,12 @@ public class TwitterAuthenticated extends Activity {
 
 	private void doKeyAndSecretRetrieval(String verifier) {
 		try {
-			TwitterAuthentication.provider.retrieveAccessToken(TwitterAuthentication.consumer, verifier);
+			TwitterAuthentication.provider.retrieveAccessToken(
+					TwitterAuthentication.consumer, verifier);
 			ACCESS_KEY = TwitterAuthentication.consumer.getToken();
 			ACCESS_SECRET = TwitterAuthentication.consumer.getTokenSecret();
-			TwitterAuthentication.dataAccess.storeTwitterDetails(ACCESS_KEY, ACCESS_SECRET);
+			TwitterAuthentication.dataAccess.storeTwitterDetails(ACCESS_KEY,
+					ACCESS_SECRET);
 			configureApplicationTwitter();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,9 +80,12 @@ public class TwitterAuthenticated extends Activity {
 	}
 
 	private void configureApplicationTwitter() {
-		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(TwitterAuthentication.CONSUMER_KEY)
-				.setOAuthConsumerSecret(TwitterAuthentication.CONSUMER_SECRET).build();
-		Twitter twitter = new TwitterFactory(conf).getInstance(new AccessToken(ACCESS_KEY, ACCESS_SECRET));
+		Configuration conf = new ConfigurationBuilder()
+				.setOAuthConsumerKey(TwitterAuthentication.CONSUMER_KEY)
+				.setOAuthConsumerSecret(TwitterAuthentication.CONSUMER_SECRET)
+				.build();
+		Twitter twitter = new TwitterFactory(conf).getInstance(new AccessToken(
+				ACCESS_KEY, ACCESS_SECRET));
 		appState.setTwitter(twitter);
 		loginToPoiin(twitter);
 	}
@@ -95,34 +102,41 @@ public class TwitterAuthenticated extends Activity {
 		}
 	}
 
-	private void loginToPoiin(final Twitter twitter) {		
-		progressDialog = ProgressDialog.show(TwitterAuthenticated.this, "Processing . . .", "Retrieving User Information ...", true, false);
-		new Thread(new Runnable() {					
-			public void run() {	
-				JSONObject jsonObject =createPersonFromTwitter(twitter);
-				((ApplicationState)getApplication()).setMe(jsonObject);	
-				boolean isUserAlreadyInSystem = peopleService.isUserRegistered();
-				Message message= new Message();
+	private void loginToPoiin(final Twitter twitter) {
+		progressDialog = ProgressDialog.show(TwitterAuthenticated.this,
+				"Processing . . .", "Retrieving User Information ...", true,
+				false);
+		new Thread(new Runnable() {
+			public void run() {
+				JSONObject jsonObject = createPersonFromTwitter(twitter);
+				((ApplicationState) getApplication()).setMe(jsonObject);
+				boolean isUserAlreadyInSystem = peopleService
+						.isUserRegistered();
+				Message message = new Message();
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("userRegistered", isUserAlreadyInSystem);
 				message.setData(bundle);
 				handler.sendMessage(message);
 			}
 		}).start();
-		
-	}
-	
-	  private final Handler handler = new Handler() {
 
-	        @Override
-	        public void handleMessage(final Message msg) {
-	        	progressDialog.dismiss();
-	        	if(msg.getData().getBoolean("userRegistered")){
-	        		startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), Main.class));
-	        	}else{
-	        		startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), FirstTimeProfileActivity.class));
-	        	}
-	            finish();
-	        }
-	    };
+	}
+
+	private final Handler handler = new Handler() {
+
+		@Override
+		public void handleMessage(final Message msg) {
+			progressDialog.dismiss();
+			if (msg.getData().getBoolean("userRegistered")) {
+				startActivity(new Intent(
+						TwitterAuthenticated.this.getApplicationContext(),
+						Main.class));
+			} else {
+				startActivity(new Intent(
+						TwitterAuthenticated.this.getApplicationContext(),
+						FirstTimeProfileActivity.class));
+			}
+			finish();
+		}
+	};
 }

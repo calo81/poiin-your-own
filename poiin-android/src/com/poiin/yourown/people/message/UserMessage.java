@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import com.poiin.yourown.model.JsonStringSupport;
 
-public class UserMessage implements Serializable,JsonStringSupport{
-	
+public class UserMessage implements Serializable, JsonStringSupport {
+
 	/**
 	 * 
 	 */
@@ -16,15 +16,14 @@ public class UserMessage implements Serializable,JsonStringSupport{
 	private String fromTwitterId;
 	private String to;
 	private String id;
-	
-	public UserMessage(String content){
-		this.content=content;
+
+	public UserMessage(String content) {
+		this.content = content;
 	}
 
 	public String getContent() {
 		return content;
 	}
-	
 
 	public String getFrom() {
 		return from;
@@ -41,7 +40,6 @@ public class UserMessage implements Serializable,JsonStringSupport{
 	public void setTo(String to) {
 		this.to = to;
 	}
-	
 
 	public String getId() {
 		return id;
@@ -66,10 +64,12 @@ public class UserMessage implements Serializable,JsonStringSupport{
 	public void setFromTwitterId(String fromTwitterId) {
 		this.fromTwitterId = fromTwitterId;
 	}
-	
+
 	@Override
 	public String toJsonString() {
-		return "{message: "+content+",from:"+from+",to:"+to+",from_twitter_id:"+fromTwitterId+",from_facebook_id:"+fromFacebookId+"}";
+		return "{message: " + content + ",from:" + from + ",to:" + to
+				+ ",from_twitter_id:" + fromTwitterId + ",from_facebook_id:"
+				+ fromFacebookId + "}";
 	}
-	
+
 }

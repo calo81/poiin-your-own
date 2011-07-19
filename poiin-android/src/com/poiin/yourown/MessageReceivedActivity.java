@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+
 import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.people.message.UserMessageSender;
 import com.poiin.yourown.social.GenericProfilePictureRetriever;
@@ -22,47 +24,46 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MessageReceivedActivity extends Activity{
+public class MessageReceivedActivity extends Activity {
 
 	private LinearLayout layoutOfMessagesReceived;
 	private EditText textOfResponseMessage;
 	private Button responseButton;
-	private UserMessageSender userMessageSender=new UserMessageSender();
+	private UserMessageSender userMessageSender = new UserMessageSender();
 	private UserMessage lastReceivedMessage;
 	private Map<String, List<UserMessage>> mapOfUsersAndTheirMessages;
 	private ApplicationState applicationState;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.message_received);
-		layoutOfMessagesReceived = (LinearLayout)findViewById(R.id.receivedMessagesLayout);
-		textOfResponseMessage = (EditText)findViewById(R.id.responseMessageText);
-		responseButton = (Button)findViewById(R.id.sendResponseMessageButton);
-		mapOfUsersAndTheirMessages=new HashMap<String,  List<UserMessage>>();
+		layoutOfMessagesReceived = (LinearLayout) findViewById(R.id.receivedMessagesLayout);
+		textOfResponseMessage = (EditText) findViewById(R.id.responseMessageText);
+		responseButton = (Button) findViewById(R.id.sendResponseMessageButton);
+		mapOfUsersAndTheirMessages = new HashMap<String, List<UserMessage>>();
 		applicationState = (ApplicationState) getApplication();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		UserMessage message = (UserMessage)getIntent().getExtras().getSerializable("userMessage");	
+		UserMessage message = (UserMessage) getIntent().getExtras()
+				.getSerializable("userMessage");
 		addMessageToUserMap(message);
 		addAllUserMessages(message);
 		addSendButtonListener();
 		applicationState.setCurrentMessenger(message.getFrom());
 	}
 
-	
-	
 	@Override
-	protected void onResume(){
+	protected void onResume() {
 		super.onResume();
 		assertThatThisActivityIsInForeground();
 	}
-	
+
 	@Override
-	protected void onPause(){
+	protected void onPause() {
 		super.onPause();
 		assertThatThisActivityIsNotForeground();
 	}
@@ -80,59 +81,82 @@ public class MessageReceivedActivity extends Activity{
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		UserMessage message = (UserMessage)intent.getExtras().getSerializable("userMessage");
+		UserMessage message = (UserMessage) intent.getExtras().getSerializable(
+				"userMessage");
 		addMessageToUserMap(message);
 		addAllUserMessages(message);
 		applicationState.setCurrentMessenger(message.getFrom());
 	}
-	
-	private View createTextViewWithMessageAndCacheLastMessage(UserMessage message) {
+
+	private View createTextViewWithMessageAndCacheLastMessage(
+			UserMessage message) {
 		cacheLastReceivedMessage(message);
 		LinearLayout linearLayout = new LinearLayout(this);
 		linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 		TextView textView = new TextView(this);
 		textView.setText(message.getContent());
 		ImageView imageView = new ImageView(this);
-		GenericProfilePictureRetriever.retrieveToImageView(this.getApplication(), imageView, message.getFromTwitterId(),message.getFromFacebookId());
+		GenericProfilePictureRetriever.retrieveToImageView(
+				this.getApplication(), imageView, message.getFromTwitterId(),
+				message.getFromFacebookId());
 		linearLayout.addView(imageView);
 		linearLayout.addView(textView);
 		return linearLayout;
 	}
-	
+
 	private void addMessageToUserMap(UserMessage message) {
 		List<UserMessage> messageList;
-		if(mapOfUsersAndTheirMessages.get(message.getFrom())==null){
+		if (mapOfUsersAndTheirMessages.get(message.getFrom()) == null) {
 			messageList = new ArrayList<UserMessage>();
 			mapOfUsersAndTheirMessages.put(message.getFrom(), messageList);
-		}else{
+		} else {
 			messageList = mapOfUsersAndTheirMessages.get(message.getFrom());
 		}
-		messageList.add(message);		
+		messageList.add(message);
 	}
 
-	
 	private void cacheLastReceivedMessage(UserMessage message) {
-		lastReceivedMessage =message;
+		lastReceivedMessage = message;
 	}
-	
+
 	private void addAllUserMessages(UserMessage message) {
 		layoutOfMessagesReceived.removeAllViews();
-		for(UserMessage msg: mapOfUsersAndTheirMessages.get(message.getFrom())){
-			layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(msg));
+		for (UserMessage msg : mapOfUsersAndTheirMessages
+				.get(message.getFrom())) {
+			layoutOfMessagesReceived
+					.addView(createTextViewWithMessageAndCacheLastMessage(msg));
 		}
 	}
 
 	private void addSendButtonListener() {
-		responseButton.setOnClickListener(new OnClickListener() {		
+		responseButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				UserMessage message = new UserMessage(textOfResponseMessage.getText().toString());
+				UserMessage message = new UserMessage(textOfResponseMessage
+						.getText().toString());
 				ApplicationState app = (ApplicationState) getApplication();
 				message.setFrom(app.getMyId().toString());
+				message.setFromFacebookId(getMyJsonProperty(app,"facebook_id"));
+				message.setFromTwitterId(getMyJsonProperty(app,"twitter_id"));
 				message.setTo(lastReceivedMessage.getFrom());
 				userMessageSender.sendMessage(message);
+				textOfResponseMessage.setText("");
+				addMyMessageToView(message);
+			}
+
+
+			private String getMyJsonProperty(ApplicationState app,String property){
+				try {
+					return app.getMe().getString(property);
+				} catch (JSONException e) {
+					return null;
+				}
 			}
 		});
+	}
+	
+	private void addMyMessageToView(UserMessage message) {
+		layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(message));
 	}
 
 }

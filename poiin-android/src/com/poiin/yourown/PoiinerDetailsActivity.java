@@ -58,8 +58,10 @@ public class PoiinerDetailsActivity extends Activity {
 		poiinerId = getIntent().getData().getPath().substring(1);
 		poiinerName = getIntent().getData().getQueryParameter("name");
 		poiinText = getIntent().getData().getQueryParameter("poiinText");
-		poiinerTwitterId=getIntent().getData().getQueryParameter("twitter_id");
-		poiinerFacebookId=getIntent().getData().getQueryParameter("facebook_id");
+		poiinerTwitterId = getIntent().getData()
+				.getQueryParameter("twitter_id");
+		poiinerFacebookId = getIntent().getData().getQueryParameter(
+				"facebook_id");
 		userIdView.setText(poiinerName);
 		poiinTextView.setText(poiinText);
 		categoriesList.setText(getIntent().getData().getQueryParameter(
@@ -137,7 +139,9 @@ public class PoiinerDetailsActivity extends Activity {
 	};
 
 	private void startImageRetrieval() {
-		GenericProfilePictureRetriever.retrieveToImageView(this.getApplication(), poiinerPicture, poiinerTwitterId,poiinerFacebookId);
+		GenericProfilePictureRetriever.retrieveToImageView(
+				this.getApplication(), poiinerPicture, poiinerTwitterId,
+				poiinerFacebookId);
 	}
 
 }

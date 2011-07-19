@@ -35,16 +35,15 @@ import com.poiin.yourown.poiin.Poiin;
 
 public class RestClientServiceImpl implements RestClientService {
 	private static final String SERVER_HOST = "http://192.168.1.133:3000/";
-	private static final String HTTP_POIIN_ENDPOINT = SERVER_HOST+"poiin";
-	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST+"message";
-	private static final String HTTP_USER_ENDPOINT = SERVER_HOST+"user";
+	private static final String HTTP_POIIN_ENDPOINT = SERVER_HOST + "poiin";
+	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST + "message";
+	private static final String HTTP_USER_ENDPOINT = SERVER_HOST + "user";
 	private HttpClient httpClient;
 
-	public RestClientServiceImpl(){
+	public RestClientServiceImpl() {
 		configureHttpClient();
 	}
 
-	
 	@Override
 	public void sendPoiin(Poiin poiin) {
 		Log.i("RestClient", poiin.toString());
@@ -60,18 +59,20 @@ public class RestClientServiceImpl implements RestClientService {
 		setPostJsonString(message, post);
 		sendRequestAndGetJSONArray(post);
 	}
-	
+
 	@Override
-	public void acknowledgeMessage(String id,String userId) {
-		HttpDelete delete =new HttpDelete(HTTP_MESSAGE_ENDPOINT + "/"+id+"?user_id="+userId);
+	public void acknowledgeMessage(String id, String userId) {
+		HttpDelete delete = new HttpDelete(HTTP_MESSAGE_ENDPOINT + "/" + id
+				+ "?user_id=" + userId);
 		sendRequestAndGetJSONArray(delete);
 	}
-	
+
 	@Override
 	public JSONObject isUserRegistered(String userId) {
-		HttpGet get = new HttpGet(HTTP_USER_ENDPOINT + "/"+userId);
+		HttpGet get = new HttpGet(HTTP_USER_ENDPOINT + "/" + userId);
 		return sendRequestAndGetJSONObject(get);
 	}
+
 	@Override
 	public void registerUser(JSONObject me) {
 		HttpPost post = new HttpPost(HTTP_USER_ENDPOINT);
@@ -84,23 +85,27 @@ public class RestClientServiceImpl implements RestClientService {
 			String responseAsString = doRequestAndGetString(request);
 			return new JSONArray(responseAsString);
 		} catch (Exception e) {
-			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
+			Log.e("RestClient",
+					"Error in sending request or parsing response, but continuing..",
+					e);
 			return new JSONArray();
 		}
 	}
-	
+
 	private JSONObject sendRequestAndGetJSONObject(HttpRequestBase request) {
 		try {
 			String responseAsString = doRequestAndGetString(request);
 			return new JSONObject(responseAsString);
 		} catch (Exception e) {
-			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
+			Log.e("RestClient",
+					"Error in sending request or parsing response, but continuing..",
+					e);
 			return new JSONObject();
 		}
 	}
 
-
-	private String doRequestAndGetString(HttpRequestBase request) throws IOException, ClientProtocolException {
+	private String doRequestAndGetString(HttpRequestBase request)
+			throws IOException, ClientProtocolException {
 		HttpEntity entity = httpClient.execute(request).getEntity();
 		String responseAsString = EntityUtils.toString(entity);
 		return responseAsString;
@@ -109,7 +114,6 @@ public class RestClientServiceImpl implements RestClientService {
 	private void setPostJsonString(JsonStringSupport jsonString, HttpPost post) {
 		setPostJsonString(jsonString.toJsonString(), post);
 	}
-
 
 	private void setPostJsonString(String jsonString, HttpPost post) {
 		try {
@@ -121,19 +125,23 @@ public class RestClientServiceImpl implements RestClientService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void configureHttpClient() {
 		HttpParams params = new BasicHttpParams();
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-		HttpProtocolParams.setContentCharset(params, HTTP.DEFAULT_CONTENT_CHARSET);
+		HttpProtocolParams.setContentCharset(params,
+				HTTP.DEFAULT_CONTENT_CHARSET);
 		HttpProtocolParams.setUseExpectContinue(params, true);
 
 		SchemeRegistry registry = new SchemeRegistry();
-		registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-		registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+		registry.register(new Scheme("http", PlainSocketFactory
+				.getSocketFactory(), 80));
+		registry.register(new Scheme("https", SSLSocketFactory
+				.getSocketFactory(), 443));
 
-		ClientConnectionManager connman = new ThreadSafeClientConnManager(params,registry);
-		httpClient = new DefaultHttpClient(connman,params);
+		ClientConnectionManager connman = new ThreadSafeClientConnManager(
+				params, registry);
+		httpClient = new DefaultHttpClient(connman, params);
 	}
 
 }

@@ -6,6 +6,6 @@ public interface PeopleService {
 
 	boolean isUserRegistered();
 
-	void registerUser(Person person,Handler registrationHandler);
+	void registerUser(Person person, Handler registrationHandler);
 
 }

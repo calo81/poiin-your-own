@@ -6,6 +6,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 
 import android.app.Activity;
 import android.app.Application;
@@ -14,8 +18,9 @@ import com.facebook.android.Facebook;
 import com.google.android.maps.MapView;
 import com.poiin.yourown.people.Person;
 import com.poiin.yourown.people.message.ServerMessageListener;
+import com.poiin.yourown.social.twitter.TwitterAuthentication;
 
-public class ApplicationState extends Application{
+public class ApplicationState extends Application {
 	private Facebook facebook;
 	private JSONObject me;
 	private volatile MapView mapView;
@@ -26,6 +31,7 @@ public class ApplicationState extends Application{
 	private String currentMessenger;
 	private Twitter twitter;
 	private boolean applicationFullyStarted;
+	private Twitter genericTwitter;
 
 	public Facebook getFacebook() {
 		return facebook;
@@ -37,32 +43,32 @@ public class ApplicationState extends Application{
 
 	public void setMe(String me) {
 		try {
-			this.me=new JSONObject(me);
+			this.me = new JSONObject(me);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setMe(JSONObject me) {
-		this.me=me;
+		this.me = me;
 	}
 
 	public JSONObject getMe() {
 		return this.me;
 	}
-	
+
 	public Long getMyId() {
 		try {
 			return this.me.getLong("id");
 		} catch (JSONException e) {
-			//TODO: Fix this
+			// TODO: Fix this
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	public void setMapView(MapView mapView) {
-		this.mapView=mapView;
+		this.mapView = mapView;
 	}
 
 	public MapView getMapView() {
@@ -74,18 +80,18 @@ public class ApplicationState extends Application{
 	}
 
 	public void setLastPeopleReturned(List<Person> people) {
-		this.people=people;
+		this.people = people;
 	}
 
 	public ServerMessageListener getUserMessageListener() {
-		if(userMessageListener==null){
+		if (userMessageListener == null) {
 			return ServerMessageListener.getInstance(this);
 		}
 		return userMessageListener;
 	}
 
 	public void setLastPoiinPerson(Person person) {
-		this.lastPoiinPerson=person;
+		this.lastPoiinPerson = person;
 	}
 
 	public Person getLastPoiinPerson() {
@@ -93,7 +99,7 @@ public class ApplicationState extends Application{
 	}
 
 	public void setForegroundActivity(Class<? extends Activity> activeActivityClass) {
-		foregroundActivity=activeActivityClass;
+		foregroundActivity = activeActivityClass;
 	}
 
 	public Class<? extends Activity> getForegroundActivity() {
@@ -123,5 +129,17 @@ public class ApplicationState extends Application{
 	public void setApplicationFullyStarted(boolean applicationFullyStarted) {
 		this.applicationFullyStarted = applicationFullyStarted;
 	}
-	
+
+	/**
+	 * 
+	 * @return configured twitter not related to logged user
+	 */
+	public Twitter getGenericTwitter() {
+		if (genericTwitter == null) {
+			Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(TwitterAuthentication.CONSUMER_KEY).setOAuthConsumerSecret(TwitterAuthentication.CONSUMER_SECRET).build();
+			genericTwitter = new TwitterFactory(conf).getInstance(new AccessToken("87712886-hOCQxighhB0MEXt4HkYPUaKivN5CpJjRLx4oIidbe", "EVsOBuu1TTTKGSdS0b2JpKPX66dtkJPUWnn6SwqPA"));
+		}
+		return genericTwitter;
+	}
+
 }

@@ -13,36 +13,42 @@ import com.poiin.yourown.network.RestClientServiceImpl;
 public class PeopleServiceImpl implements PeopleService {
 	private ApplicationState applicationState;
 	private RestClientService restClientService = new RestClientServiceImpl();
-	
+
 	public PeopleServiceImpl(ApplicationState application) {
-		this.applicationState=application;
+		this.applicationState = application;
 	}
+
 	@Override
 	public boolean isUserRegistered() {
-		JSONObject json = restClientService.isUserRegistered(applicationState.getMyId().toString());
+		JSONObject json = restClientService.isUserRegistered(applicationState
+				.getMyId().toString());
 		try {
 			return json.getString("registered").equals("true");
 		} catch (JSONException e) {
-			//TODO: Does this need Handling??
+			// TODO: Does this need Handling??
 			throw new RuntimeException(e);
 		}
 	}
+
+	
 	@Override
-	public void registerUser(final Person person,final Handler registrationHandler) {		
+	public void registerUser(final Person person,
+			final Handler registrationHandler) {
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				try {
-					JSONArray categories = new JSONArray(person.getSelectedCategories());
+					JSONArray categories = new JSONArray(
+							person.getSelectedCategories());
 					applicationState.getMe().put("categories", categories);
 					restClientService.registerUser(applicationState.getMe());
 					registrationHandler.sendEmptyMessage(0);
 				} catch (JSONException e) {
-					//TODO: Does this need Handling??
+					// TODO: Does this need Handling??
 					throw new RuntimeException(e);
 				}
 			}
-		}).start();	
+		}).start();
 	}
 }

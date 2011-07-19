@@ -14,11 +14,13 @@ describe "MessageController" do
     @controller.create
   end
 
-  it "should return all messages saved" do
+  it "should return all messages saved and remove them after (maybe we should just mark them and wait for aknowledge)" do
     @controller.params = {"user_id" => 999999}
     user_receiving=mock("user")
     User.should_receive(:find).with(999999).and_return(user_receiving)
     user_receiving.should_receive(:messages).and_return([{"from"=> "me","message"=>"hola"}])
+    user_receiving.should_receive(:messages=).with([])
+    user_receiving.should_receive(:save)
     @controller.should_receive(:render)
     @controller.index
   end

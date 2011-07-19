@@ -18,13 +18,14 @@ public class NewMessageActivity extends Activity {
 	private Button sendMessageButton;
 	private EditText messageText;
 	private String receiver;
-	private UserMessageSender userMessageSender=new UserMessageSender();
+	private UserMessageSender userMessageSender = new UserMessageSender();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_message);
-		sendMessageButton=(Button)findViewById(R.id.sendMessageButton);
-		messageText=(EditText)findViewById(R.id.messageText);
+		sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
+		messageText = (EditText) findViewById(R.id.messageText);
 	}
 
 	@Override
@@ -39,12 +40,13 @@ public class NewMessageActivity extends Activity {
 		super.onNewIntent(intent);
 		receiver = intent.getExtras().getString("messageReceiver");
 	}
-	
+
 	private void addSendButtonListener() {
-		sendMessageButton.setOnClickListener(new OnClickListener() {		
+		sendMessageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				UserMessage message = new UserMessage(messageText.getText().toString());
+				UserMessage message = new UserMessage(messageText.getText()
+						.toString());
 				ApplicationState app = (ApplicationState) getApplication();
 				message.setFrom(app.getMyId().toString());
 				setTwitterIdIfExistent(message, app);
@@ -56,7 +58,8 @@ public class NewMessageActivity extends Activity {
 			private void setFacebookIdIfExistent(UserMessage message,
 					ApplicationState app) {
 				try {
-					message.setFromFacebookId(app.getMe().getString("facebook_id"));
+					message.setFromFacebookId(app.getMe().getString(
+							"facebook_id"));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -65,7 +68,8 @@ public class NewMessageActivity extends Activity {
 			private void setTwitterIdIfExistent(UserMessage message,
 					ApplicationState app) {
 				try {
-					message.setFromTwitterId(app.getMe().getString("twitter_id"));
+					message.setFromTwitterId(app.getMe()
+							.getString("twitter_id"));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}

@@ -34,10 +34,12 @@ public class LoginSelectionActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		if (data.getLoginOption() == Data.LoginOption.FACEBOOK) {
-			startActivity(new Intent(LoginSelectionActivity.this, FacebookAuthentication.class));
+			startActivity(new Intent(LoginSelectionActivity.this,
+					FacebookAuthentication.class));
 			finish();
 		} else if (data.getLoginOption() == Data.LoginOption.TWITTER) {
-			startActivity(new Intent(LoginSelectionActivity.this, TwitterAuthentication.class));
+			startActivity(new Intent(LoginSelectionActivity.this,
+					TwitterAuthentication.class));
 			finish();
 		}
 	}
@@ -48,7 +50,8 @@ public class LoginSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				data.setLoginOption(Data.LoginOption.FACEBOOK);
-				startActivity(new Intent(LoginSelectionActivity.this, FacebookAuthentication.class));
+				startActivity(new Intent(LoginSelectionActivity.this,
+						FacebookAuthentication.class));
 				finish();
 			}
 		});
@@ -59,7 +62,8 @@ public class LoginSelectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				data.setLoginOption(Data.LoginOption.TWITTER);
-				startActivity(new Intent(LoginSelectionActivity.this, TwitterAuthentication.class));
+				startActivity(new Intent(LoginSelectionActivity.this,
+						TwitterAuthentication.class));
 				finish();
 			}
 		});

@@ -9,7 +9,10 @@ class MessageController   < ApplicationController
 
   def index
     user = User.find(params["user_id"].to_i)
-    render :json => user.messages
+    messages = user.messages
+    user.messages = []
+    user.save
+    render :json => messages
   end
 
   def destroy

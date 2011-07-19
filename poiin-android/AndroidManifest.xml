@@ -6,16 +6,16 @@
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:name="com.poiin.yourown.ApplicationState" android:debuggable="true">
-		<activity android:name="Main" android:launchMode="singleInstance"
+		<activity android:name="Main" android:launchMode="singleInstance" android:screenOrientation="portrait"
 			android:alwaysRetainTaskState="true" android:label="@string/app_name">
 		</activity>
-		<activity android:name=".social.facebook.FacebookAuthentication"
+		<activity android:name=".social.facebook.FacebookAuthentication" android:screenOrientation="portrait"
 			android:noHistory="true" android:label="@string/app_name">
 		</activity>
-		<activity android:name=".social.twitter.TwitterAuthentication"
+		<activity android:name=".social.twitter.TwitterAuthentication" android:screenOrientation="portrait"
 			android:noHistory="true" android:label="@string/app_name">
 		</activity>
-		<activity android:name=".social.twitter.TwitterAuthenticated"
+		<activity android:name=".social.twitter.TwitterAuthenticated" android:screenOrientation="portrait"
 			android:noHistory="true" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
@@ -24,21 +24,21 @@
 				<data android:scheme="OauthTwitter" android:host="twitt" />
 			</intent-filter>
 		</activity>		
-		<activity android:name="ProfileActivity" android:label="@string/app_name">
+		<activity android:name="ProfileActivity" android:label="@string/app_name" android:screenOrientation="portrait">
 		</activity>
-		<activity android:name="LoginSelectionActivity"
+		<activity android:name="LoginSelectionActivity" android:screenOrientation="portrait"
 			android:label="@string/app_name">
 		</activity>
-		<activity android:name="NewMessageActivity" android:label="@string/app_name"
+		<activity android:name="NewMessageActivity" android:label="@string/app_name" android:screenOrientation="portrait"
 			android:noHistory="true">
 		</activity>
-		<activity android:name="MessageReceivedActivity"
+		<activity android:name="MessageReceivedActivity" android:screenOrientation="portrait"
 			android:label="@string/app_name" android:noHistory="true">
 		</activity>
-		<activity android:name="FirstTimeProfileActivity"
+		<activity android:name="FirstTimeProfileActivity" android:screenOrientation="portrait"
 			android:label="@string/app_name" android:noHistory="true">
 		</activity>
-		<activity android:name="PoiinerDetailsActivity"
+		<activity android:name="PoiinerDetailsActivity" android:screenOrientation="portrait"
 			android:noHistory="true" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
@@ -46,7 +46,7 @@
 				<data android:scheme="poiin" />
 			</intent-filter>
 		</activity>
-		<activity android:name="StartActivity" android:label="@string/app_name"
+		<activity android:name="StartActivity" android:label="@string/app_name" android:screenOrientation="portrait"
 			android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

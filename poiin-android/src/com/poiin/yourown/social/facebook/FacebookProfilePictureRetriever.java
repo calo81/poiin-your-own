@@ -43,7 +43,7 @@ public class FacebookProfilePictureRetriever implements ProfilePictureRetriever 
 	};
 
 	private Bitmap retrieveFacebookImage() {
-			return UrlBasedImageRetrieverHelper.retrieveBitmapFromUrl(imageLink
-					.replace("{ID}", facebookUserId));
+		return UrlBasedImageRetrieverHelper.retrieveBitmapFromUrl(imageLink
+				.replace("{ID}", facebookUserId));
 	}
 }

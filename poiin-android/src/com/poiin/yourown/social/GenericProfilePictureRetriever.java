@@ -12,26 +12,32 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 public class GenericProfilePictureRetriever {
-	
-	public static void retrieveToImageView(Context context,ImageView imageView, String twitterId,String facebookId){
-		if(isValueString(facebookId)){
-			new FacebookProfilePictureRetriever(imageView, facebookId).retrieveToImageView();
-		}else if(isValueString(twitterId)){
-			new TwitterProfilePictureRetriever((ApplicationState)context,imageView, twitterId).retrieveToImageView();
+
+	public static void retrieveToImageView(Context context,
+			ImageView imageView, String twitterId, String facebookId) {
+		if (isValueString(facebookId)) {
+			new FacebookProfilePictureRetriever(imageView, facebookId)
+					.retrieveToImageView();
+		} else if (isValueString(twitterId)) {
+			new TwitterProfilePictureRetriever((ApplicationState) context,
+					imageView, twitterId).retrieveToImageView();
 		}
 	}
-	
-	public static Bitmap retrieveBitmap(Context context, String twitterId,String facebookId){
-		if(isValueString(facebookId)){
-			return new FacebookProfilePictureRetriever(facebookId).retrieveBitmap();
-		}else if(isValueString(twitterId)){
-			return new TwitterProfilePictureRetriever((ApplicationState)context, twitterId).retrieveBitmap();
-		}else{
+
+	public static Bitmap retrieveBitmap(Context context, String twitterId,
+			String facebookId) {
+		if (isValueString(facebookId)) {
+			return new FacebookProfilePictureRetriever(facebookId)
+					.retrieveBitmap();
+		} else if (isValueString(twitterId)) {
+			return new TwitterProfilePictureRetriever(
+					(ApplicationState) context, twitterId).retrieveBitmap();
+		} else {
 			return null;
 		}
 	}
-	
-	private static boolean isValueString(String string){
-		return string!=null && !string.equals("") && !string.equals("null");
+
+	private static boolean isValueString(String string) {
+		return string != null && !string.equals("") && !string.equals("null");
 	}
 }

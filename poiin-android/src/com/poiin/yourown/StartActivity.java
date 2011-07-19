@@ -35,8 +35,7 @@ public class StartActivity extends Activity {
 	public void onStart() {
 		super.onStart();
 		if (appState.isApplicationFullyStarted()) {
-			startActivity(new Intent(StartActivity.this,
-					Main.class));
+			startActivity(new Intent(StartActivity.this, Main.class));
 		} else {
 			startApplicationFresh();
 		}
