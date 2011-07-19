@@ -197,11 +197,9 @@ public class Main extends MapActivity {
 		LayoutInflater inflater = (LayoutInflater) this
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		popUp = new PopupWindow(inflater.inflate(R.layout.send_poiin_popup,
-				null, false), 300, 500, true);
-		popUp.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.background2));
-		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.CENTER,
-				0, 0);
+				null, false), 450, 450, true);
+		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.TOP|Gravity.LEFT,
+				20, 100);
 
 		popupButton = (Button) popUp.getContentView().findViewById(
 				R.id.sendPoiinButton);

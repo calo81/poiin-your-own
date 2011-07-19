@@ -12,24 +12,32 @@ public final class R {
     }
     public static final class drawable {
         public static final int background2=0x7f020000;
-        public static final int boton_me=0x7f020001;
-        public static final int boton_presionado=0x7f020002;
-        public static final int boton_seleccionado=0x7f020003;
-        public static final int boton_setup=0x7f020004;
-        public static final int boton_suelto=0x7f020005;
-        public static final int botonpoiin=0x7f020006;
-        public static final int buoy=0x7f020007;
-        public static final int enable=0x7f020008;
-        public static final int facebook_icon=0x7f020009;
-        public static final int facebooklogo=0x7f02000a;
-        public static final int frame=0x7f02000b;
-        public static final int icon=0x7f02000c;
-        public static final int loginscreen=0x7f02000d;
-        public static final int mapa_borde=0x7f02000e;
-        public static final int marker=0x7f02000f;
-        public static final int redpin=0x7f020010;
-        public static final int splash=0x7f020011;
-        public static final int twitterlogo=0x7f020012;
+        public static final int boton_facebook=0x7f020001;
+        public static final int boton_me=0x7f020002;
+        public static final int boton_presionado=0x7f020003;
+        public static final int boton_seleccionado=0x7f020004;
+        public static final int boton_setup=0x7f020005;
+        public static final int boton_suelto=0x7f020006;
+        public static final int boton_twitter=0x7f020007;
+        public static final int botonpoiin=0x7f020008;
+        public static final int buoy=0x7f020009;
+        public static final int enable=0x7f02000a;
+        public static final int facebook_icon=0x7f02000b;
+        public static final int facebook_presionado=0x7f02000c;
+        public static final int facebook_seleccionado=0x7f02000d;
+        public static final int facebooklogo=0x7f02000e;
+        public static final int fondo_popup_mensaje=0x7f02000f;
+        public static final int frame=0x7f020010;
+        public static final int icon=0x7f020011;
+        public static final int loginscreen=0x7f020012;
+        public static final int mapa_borde=0x7f020013;
+        public static final int marker=0x7f020014;
+        public static final int redpin=0x7f020015;
+        public static final int splash=0x7f020016;
+        public static final int twitter=0x7f020017;
+        public static final int twitter_presionado=0x7f020018;
+        public static final int twitter_seleccionado=0x7f020019;
+        public static final int twitterlogo=0x7f02001a;
     }
     public static final class id {
         public static final int buttonPoiin=0x7f050008;

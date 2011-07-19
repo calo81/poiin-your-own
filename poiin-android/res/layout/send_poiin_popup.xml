@@ -2,11 +2,19 @@
 <LinearLayout android:orientation="vertical"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="#AA000000">
-	<EditText android:hint="Say to the world" android:id="@+id/poiinText"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:gravity="top|left" android:singleLine="false" android:lines="5"
-		android:layout_marginLeft="10dip" android:layout_marginRight="10dip" />
-	<Button android:id="@+id/sendPoiinButton" android:text="Poiin"
-		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	android:layout_gravity="center" android:layout_marginTop="15dip">
+	<LinearLayout android:layout_width="300dip"
+		android:background="@drawable/fondo_popup_mensaje" android:id="@+id/linearLayout1"
+		android:layout_height="300dip" android:orientation="vertical">
+		<EditText android:layout_width="180dip"
+			android:layout_height="wrap_content" android:hint="Say to the world"
+			android:id="@+id/poiinText" android:gravity="center|left|top"
+			android:lines="5" android:singleLine="false" android:paddingRight="20dip"
+			android:layout_gravity="center_vertical|center_horizontal|center"
+			android:layout_marginTop="70dip"></EditText>
+		<Button android:id="@+id/sendPoiinButton" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Poiin"
+			android:gravity="center_vertical|center_horizontal"
+			android:layout_gravity="center|center_vertical"></Button>
+	</LinearLayout>
 </LinearLayout>

@@ -10,12 +10,12 @@
 	<LinearLayout android:orientation="vertical" android:id="@+id/linearLayout1"
 		android:layout_width="match_parent" android:gravity="center_vertical" android:paddingTop="130dip" android:layout_height="400dip">
 
-		<ImageView android:src="@drawable/facebooklogo"
+		<ImageView android:src="@drawable/boton_facebook"
 			android:layout_gravity="center" android:id="@+id/facebookLogin"
 			android:padding="0dip" android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:paddingBottom="30dip"></ImageView>
 
-		<ImageView android:src="@drawable/twitterlogo"
+		<ImageView android:src="@drawable/boton_twitter"
 			android:layout_gravity="center_vertical|center_horizontal"
 			android:id="@+id/twitterLogin" android:padding="10dip"
 			android:layout_height="wrap_content" android:paddingTop="110dip"

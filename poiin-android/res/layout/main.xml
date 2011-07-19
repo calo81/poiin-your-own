@@ -20,12 +20,12 @@
 	</FrameLayout>
 
 	<LinearLayout android:layout_width="fill_parent"
-		android:layout_margin="10dip" android:background="@drawable/mapa_borde"
-		android:layout_gravity="center|top" android:layout_height="346dp">
+		android:layout_margin="10dip"
+		android:layout_gravity="center|top" android:layout_height="395dip">
 		<com.google.android.maps.MapView
 			android:id="@+id/map_view" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:enabled="true"
-			android:clickable="true" android:apiKey="0YNirIfPWIR7nfGQUu_UnygWYUc8UMwK44rsZUw" />
+			android:clickable="true" android:apiKey="0PTd08ub4DKOOQaSm4YVvPIFvGGSNoCfRWsVU3w" />
 	</LinearLayout>
 
 </FrameLayout>
