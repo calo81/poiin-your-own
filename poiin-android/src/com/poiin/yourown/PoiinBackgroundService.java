@@ -100,8 +100,8 @@ public class PoiinBackgroundService extends Service {
 					notificationIntent, 0);
 			notification.setLatestEventInfo(context, contentTitle, contentText,
 					contentIntent);
-			notification.flags = Notification.DEFAULT_LIGHTS
-					| Notification.FLAG_AUTO_CANCEL;
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			notification.defaults =  Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
 			mNotificationManager.notify(1, notification);
 
 		}
@@ -158,8 +158,8 @@ public class PoiinBackgroundService extends Service {
 					notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			notification.setLatestEventInfo(context, contentTitle, contentText,
 					contentIntent);
-			notification.flags = Notification.DEFAULT_LIGHTS
-					| Notification.FLAG_AUTO_CANCEL;
+			notification.flags =  Notification.FLAG_AUTO_CANCEL;
+			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
 			mNotificationManager.notify(2, notification);
 		}
 	};
