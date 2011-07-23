@@ -30,8 +30,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	private List<PersonOverlayItem> people;
 	private Context context;
 
-	public PeopleItemizedOverlay(final List<Person> people,
-			final Drawable defaultMarker, Context context) {
+	public PeopleItemizedOverlay(final List<Person> people, final Drawable defaultMarker, Context context) {
 		super(PeopleItemizedOverlay.boundCenterBottom(defaultMarker));
 		this.context = context;
 		this.people = new ArrayList<PersonOverlayItem>();
@@ -42,8 +41,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 		populate();
 	}
 
-	public PeopleItemizedOverlay(final List<PersonOverlayItem> people,
-			final Drawable defaultMarker) {
+	public PeopleItemizedOverlay(final List<PersonOverlayItem> people, final Drawable defaultMarker) {
 		super(defaultMarker);
 		this.people = people;
 		populate();
@@ -53,14 +51,12 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	protected PersonOverlayItem createItem(int i) {
 		final PersonOverlayItem result = this.people.get(i);
 
-		final LayerDrawable marker = (LayerDrawable) context.getResources()
-				.getDrawable(R.drawable.marker);
+		final LayerDrawable marker = (LayerDrawable) context.getResources().getDrawable(R.drawable.marker);
 		final Drawable photo = new BitmapDrawable(configurePictureImage(result));
-		photo.setBounds(4, 4, 40, 40);
+		photo.setBounds(0, 0, photo.getIntrinsicWidth(), photo.getIntrinsicHeight());
 		if (photo != null) {
 			marker.setDrawableByLayerId(R.id.photo, photo);
-			marker.setDrawableByLayerId(R.id.frame, context.getResources()
-					.getDrawable(R.drawable.frame));
+			marker.setDrawableByLayerId(R.id.frame, context.getResources().getDrawable(R.drawable.frame));
 			// marker.setLayerInset(0, 4, 4, 40, 40);
 		}
 		result.setMarker(boundCenterBottom(marker));
@@ -68,9 +64,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	}
 
 	private Bitmap configurePictureImage(final PersonOverlayItem result) {
-		return GenericProfilePictureRetriever
-				.retrieveBitmap(context, result.getPerson().getTwitterId(),
-						result.getPerson().getFacebookId());
+		return GenericProfilePictureRetriever.retrieveBitmap(context, result.getPerson().getTwitterId(), result.getPerson().getFacebookId());
 	}
 
 	@Override
@@ -86,13 +80,9 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 	@Override
 	protected boolean onTap(int index) {
 		PersonOverlayItem item = people.get(index);
-		Intent i = new Intent(Intent.ACTION_VIEW,
-				Uri.parse("poiin://poiin.yourown/" + item.getPerson().getId()
-						+ "?name=" + item.getPerson().getName() + "&poiinText="
-						+ item.getPerson().getPoiinText() + "&twitter_id="
-						+ item.getPerson().getTwitterId() + "&facebook_id="
-						+ item.getPerson().getFacebookId() + "&categories="
-						+ item.getPerson().getSelectedCategories().toString()));
+		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("poiin://poiin.yourown/" + item.getPerson().getId() + "?name=" + item.getPerson().getName() + "&poiinText="
+				+ item.getPerson().getPoiinText() + "&twitter_id=" + item.getPerson().getTwitterId() + "&facebook_id=" + item.getPerson().getFacebookId() + "&categories="
+				+ item.getPerson().getSelectedCategories().toString()));
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(i);
 		return true;
