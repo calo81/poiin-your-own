@@ -73,11 +73,17 @@ public class PoiinerDetailsActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, 0, 0, "SMS").setIcon(android.R.drawable.ic_menu_send);
-		menu.add(0, 1, 0, "Write in Wall").setIcon(
+		menu.add(0, 0, 0, "His/Her Twitts").setIcon(android.R.drawable.ic_menu_send);
+		menu.add(0, 1, 0, "Follow in Twitter").setIcon(
 				android.R.drawable.ic_menu_share);
 		menu.add(0, POIIN_MESSAGE_MENU, 0, "Poiin Message").setIcon(
 				android.R.drawable.ic_menu_more);
+		menu.add(0, 3, 0, "Follow in Poiin").setIcon(
+				android.R.drawable.ic_menu_share);
+		menu.add(0, 4, 0, "Send a gift").setIcon(
+				android.R.drawable.ic_menu_share);
+		menu.add(0, 5, 0, "Invite a drink").setIcon(
+				android.R.drawable.ic_menu_share);
 		return true;
 	}
 

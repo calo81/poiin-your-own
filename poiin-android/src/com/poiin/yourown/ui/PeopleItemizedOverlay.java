@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.util.TypedValue;
+import android.view.Gravity;
 
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
@@ -52,19 +53,19 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 		final PersonOverlayItem result = this.people.get(i);
 
 		final LayerDrawable marker = (LayerDrawable) context.getResources().getDrawable(R.drawable.marker);
-		final Drawable photo = new BitmapDrawable(configurePictureImage(result));
-		photo.setBounds(0, 0, photo.getIntrinsicWidth(), photo.getIntrinsicHeight());
+		final BitmapDrawable photo = new BitmapDrawable(configurePictureImage(result));
 		if (photo != null) {
+			photo.setGravity(Gravity.TOP | Gravity.LEFT);
 			marker.setDrawableByLayerId(R.id.photo, photo);
 			marker.setDrawableByLayerId(R.id.frame, context.getResources().getDrawable(R.drawable.frame));
-			// marker.setLayerInset(0, 4, 4, 40, 40);
 		}
 		result.setMarker(boundCenterBottom(marker));
 		return result;
 	}
 
 	private Bitmap configurePictureImage(final PersonOverlayItem result) {
-		return GenericProfilePictureRetriever.retrieveBitmap(context, result.getPerson().getTwitterId(), result.getPerson().getFacebookId());
+		Bitmap bitmap = GenericProfilePictureRetriever.retrieveBitmap(context, result.getPerson().getTwitterId(), result.getPerson().getFacebookId());
+		return Bitmap.createScaledBitmap(bitmap, 54, 54, true);
 	}
 
 	@Override
