@@ -14,6 +14,7 @@ import com.poiin.yourown.social.facebook.FacebookProfilePictureRetriever;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 public class MessageReceivedActivity extends Activity {
 
@@ -84,7 +86,7 @@ public class MessageReceivedActivity extends Activity {
 		UserMessage message = (UserMessage) intent.getExtras().getSerializable(
 				"userMessage");
 		addMessageToUserMap(message);
-		addAllUserMessages(message);
+		layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(message));
 		applicationState.setCurrentMessenger(message.getFrom());
 	}
 
@@ -96,11 +98,15 @@ public class MessageReceivedActivity extends Activity {
 		TextView textView = new TextView(this);
 		textView.setText(message.getContent());
 		ImageView imageView = new ImageView(this);
+		imageView.setScaleType(ScaleType.FIT_XY);
+		imageView.setMinimumHeight(50);
+		imageView.setMinimumWidth(50);
 		GenericProfilePictureRetriever.retrieveToImageView(
 				this.getApplication(), imageView, message.getFromTwitterId(),
 				message.getFromFacebookId());
 		linearLayout.addView(imageView);
 		linearLayout.addView(textView);
+		linearLayout.setBackgroundColor(ColorSwapper.getNextColor());
 		return linearLayout;
 	}
 
@@ -157,6 +163,18 @@ public class MessageReceivedActivity extends Activity {
 	
 	private void addMyMessageToView(UserMessage message) {
 		layoutOfMessagesReceived.addView(createTextViewWithMessageAndCacheLastMessage(message));
+	}
+	
+	private static class ColorSwapper{
+		private static int nextColor = Color.LTGRAY;
+		public static int getNextColor(){
+			if(nextColor == Color.LTGRAY){
+				nextColor = Color.WHITE;
+			}else{
+				nextColor = Color.LTGRAY;
+			}
+			return nextColor;
+		}
 	}
 
 }

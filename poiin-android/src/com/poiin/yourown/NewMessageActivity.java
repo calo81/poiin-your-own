@@ -4,8 +4,10 @@ import org.json.JSONException;
 
 import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.people.message.UserMessageSender;
+import com.poiin.yourown.social.facebook.FacebookAuthentication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -45,6 +47,7 @@ public class NewMessageActivity extends Activity {
 		sendMessageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				ProgressDialog progressDialog = ProgressDialog.show(NewMessageActivity.this, "Processing . . .", "Sending message ...", true, false);
 				UserMessage message = new UserMessage(messageText.getText()
 						.toString());
 				ApplicationState app = (ApplicationState) getApplication();
@@ -53,6 +56,8 @@ public class NewMessageActivity extends Activity {
 				setFacebookIdIfExistent(message, app);
 				message.setTo(receiver);
 				userMessageSender.sendMessage(message);
+				progressDialog.dismiss();
+				finish();
 			}
 
 			private void setFacebookIdIfExistent(UserMessage message,
