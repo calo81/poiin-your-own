@@ -13,8 +13,8 @@
 			android:layout_gravity="center_vertical|center_horizontal|center"
 			android:layout_marginTop="70dip"></EditText>
 		<Button android:id="@+id/sendPoiinButton" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Poiin"
+			android:layout_height="wrap_content"
 			android:gravity="center_vertical|center_horizontal"
-			android:layout_gravity="center|center_vertical"></Button>
+			android:layout_gravity="center|center_vertical" android:background="@drawable/boton_send" android:paddingTop="20dip"></Button>
 	</LinearLayout>
 </LinearLayout>
