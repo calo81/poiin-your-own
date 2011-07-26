@@ -1,6 +1,8 @@
 package com.poiin.yourown;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,7 @@ import com.facebook.android.Facebook;
 import com.google.android.maps.MapView;
 import com.poiin.yourown.people.Person;
 import com.poiin.yourown.people.message.ServerMessageListener;
+import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.social.twitter.TwitterAuthentication;
 
 public class ApplicationState extends Application {
@@ -32,6 +35,7 @@ public class ApplicationState extends Application {
 	private Twitter twitter;
 	private boolean applicationFullyStarted;
 	private Twitter genericTwitter;
+	private Map<String, List<UserMessage>> mapOfUsersAndTheirMessages=new HashMap<String, List<UserMessage>>();
 
 	public Facebook getFacebook() {
 		return facebook;
@@ -140,6 +144,14 @@ public class ApplicationState extends Application {
 			genericTwitter = new TwitterFactory(conf).getInstance(new AccessToken("87712886-hOCQxighhB0MEXt4HkYPUaKivN5CpJjRLx4oIidbe", "EVsOBuu1TTTKGSdS0b2JpKPX66dtkJPUWnn6SwqPA"));
 		}
 		return genericTwitter;
+	}
+
+	public Map<String, List<UserMessage>> getMapOfUsersAndTheirMessages() {
+		return mapOfUsersAndTheirMessages;
+	}
+
+	public void setMapOfUsersAndTheirMessages(Map<String, List<UserMessage>> mapOfUsersAndTheirMessages) {
+		this.mapOfUsersAndTheirMessages = mapOfUsersAndTheirMessages;
 	}
 
 }

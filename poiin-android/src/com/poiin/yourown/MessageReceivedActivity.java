@@ -33,7 +33,7 @@ public class MessageReceivedActivity extends Activity {
 	private Button responseButton;
 	private UserMessageSender userMessageSender = new UserMessageSender();
 	private UserMessage lastReceivedMessage;
-	private Map<String, List<UserMessage>> mapOfUsersAndTheirMessages;
+	
 	private ApplicationState applicationState;
 
 	@Override
@@ -43,7 +43,6 @@ public class MessageReceivedActivity extends Activity {
 		layoutOfMessagesReceived = (LinearLayout) findViewById(R.id.receivedMessagesLayout);
 		textOfResponseMessage = (EditText) findViewById(R.id.responseMessageText);
 		responseButton = (Button) findViewById(R.id.sendResponseMessageButton);
-		mapOfUsersAndTheirMessages = new HashMap<String, List<UserMessage>>();
 		applicationState = (ApplicationState) getApplication();
 	}
 
@@ -111,12 +110,16 @@ public class MessageReceivedActivity extends Activity {
 	}
 
 	private void addMessageToUserMap(UserMessage message) {
+		addMessageToUserMap(message.getFrom(), message);
+	}
+	
+	private void addMessageToUserMap(String userId, UserMessage message) {
 		List<UserMessage> messageList;
-		if (mapOfUsersAndTheirMessages.get(message.getFrom()) == null) {
+		if (applicationState.getMapOfUsersAndTheirMessages().get(userId) == null) {
 			messageList = new ArrayList<UserMessage>();
-			mapOfUsersAndTheirMessages.put(message.getFrom(), messageList);
+			applicationState.getMapOfUsersAndTheirMessages().put(userId, messageList);
 		} else {
-			messageList = mapOfUsersAndTheirMessages.get(message.getFrom());
+			messageList = applicationState.getMapOfUsersAndTheirMessages().get(userId);
 		}
 		messageList.add(message);
 	}
@@ -127,7 +130,7 @@ public class MessageReceivedActivity extends Activity {
 
 	private void addAllUserMessages(UserMessage message) {
 		layoutOfMessagesReceived.removeAllViews();
-		for (UserMessage msg : mapOfUsersAndTheirMessages
+		for (UserMessage msg : applicationState.getMapOfUsersAndTheirMessages()
 				.get(message.getFrom())) {
 			layoutOfMessagesReceived
 					.addView(createTextViewWithMessageAndCacheLastMessage(msg));
@@ -147,6 +150,7 @@ public class MessageReceivedActivity extends Activity {
 				message.setTo(lastReceivedMessage.getFrom());
 				userMessageSender.sendMessage(message);
 				textOfResponseMessage.setText("");
+				addMessageToUserMap(message.getTo(),message);
 				addMyMessageToView(message);
 			}
 
