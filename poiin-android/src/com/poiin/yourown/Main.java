@@ -47,6 +47,7 @@ public class Main extends MapActivity {
 	private PopupWindow popUp;
 	private Button poiinButton;
 	private ApplicationState appState;
+	private boolean comingFromNewIntent;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,11 @@ public class Main extends MapActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		locateMap();
+		listenOnLocationChange();
+		if (!comingFromNewIntent) {
+			locateMap();
+		}
+		comingFromNewIntent = false;
 	}
 
 	@Override
@@ -79,14 +84,14 @@ public class Main extends MapActivity {
 	@Override
 	public void onNewIntent(Intent newIntent) {
 		centerMapInLastPoiin(newIntent);
+		comingFromNewIntent = true;
 	}
 
 	private void centerMapInLastPoiin(Intent newIntent) {
 		super.onNewIntent(newIntent);
 		Person lastPoiin = appState.getLastPoiinPerson();
 		if (lastPoiin != null) {
-			GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(),
-					lastPoiin.getLongitude());
+			GeoPoint point = new ExtendedGeoPoint(lastPoiin.getLatitude(), lastPoiin.getLongitude());
 			mapController.animateTo(point);
 		}
 	}
@@ -96,8 +101,7 @@ public class Main extends MapActivity {
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, PROFILE_MENU_ID, 0, null).setIcon(R.drawable.boton_me);
 		menu.add(0, FRIENDS_MENU_ID, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
-		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(
-				android.R.drawable.ic_menu_directions);
+		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(android.R.drawable.ic_menu_directions);
 		return true;
 	}
 
@@ -136,14 +140,9 @@ public class Main extends MapActivity {
 	}
 
 	private void locateMap() {
-		this.locationManager = (LocationManager) this
-				.getSystemService(Context.LOCATION_SERVICE);
-		this.locationProvider = this.locationManager
-				.getProvider(LocationManager.GPS_PROVIDER);
 		this.mapController = this.mapView.getController();
 		this.mapController.setZoom(10);
 		establishMyOwnLocationAndMarker();
-		listenOnLocationChange();
 	}
 
 	private void establishMyOwnLocationAndMarker() {
@@ -161,13 +160,12 @@ public class Main extends MapActivity {
 	}
 
 	private void listenOnLocationChange() {
+		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		this.locationProvider = this.locationManager.getProvider(LocationManager.GPS_PROVIDER);
 		if (this.locationProvider != null) {
-			this.locationManager.requestLocationUpdates(
-					this.locationProvider.getName(), 3000, 1000,
-					this.locationListenerRecenterMap);
+			this.locationManager.requestLocationUpdates(this.locationProvider.getName(), 3000, 1000, this.locationListenerRecenterMap);
 		} else {
-			Toast.makeText(this, "Location Provider Not available.",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Location Provider Not available.", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 	}
@@ -186,10 +184,8 @@ public class Main extends MapActivity {
 			@Override
 			public void onClick(View v) {
 				ApplicationState application = appState;
-				Poiin poiin = new Poiin(getLastKnownPoint(), application
-						.getMe());
-				String poiinText = popupText.getText().toString() != null ? popupText
-						.getText().toString() : "";
+				Poiin poiin = new Poiin(getLastKnownPoint(), application.getMe());
+				String poiinText = popupText.getText().toString() != null ? popupText.getText().toString() : "";
 				poiin.setText(poiinText);
 				poiinService.sendPoiin(poiin);
 				popUp.dismiss();
@@ -198,25 +194,19 @@ public class Main extends MapActivity {
 	}
 
 	private void configureAndShowPopUp() {
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		popUp = new PopupWindow(inflater.inflate(R.layout.send_poiin_popup,
-				null, false), 450, 450, true);
-		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.TOP|Gravity.LEFT,
-				20, 100);
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		popUp = new PopupWindow(inflater.inflate(R.layout.send_poiin_popup, null, false), 450, 450, true);
+		popUp.showAtLocation(this.findViewById(R.id.map_view), Gravity.TOP | Gravity.LEFT, 20, 100);
 
-		popupButton = (Button) popUp.getContentView().findViewById(
-				R.id.sendPoiinButton);
-		popupText = (EditText) popUp.getContentView().findViewById(
-				R.id.poiinText);
+		popupButton = (Button) popUp.getContentView().findViewById(R.id.sendPoiinButton);
+		popupText = (EditText) popUp.getContentView().findViewById(R.id.poiinText);
 	}
 
 	private GeoPoint getLastKnownPoint() {
 		if (myLocationOverlay.getMyLocation() != null) {
 			return myLocationOverlay.getMyLocation();
 		}
-		Location lastKnownLocation = this.locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Location lastKnownLocation = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (lastKnownLocation != null) {
 			return LocationHelper.getGeoPoint(lastKnownLocation);
 		}
