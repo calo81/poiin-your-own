@@ -33,7 +33,8 @@ import com.poiin.yourown.ui.ExtendedGeoPoint;
 
 public class Main extends MapActivity {
 
-	private static final int PROFILE = 1;
+	private static final int FRIENDS_MENU_ID = 2;
+	private static final int PROFILE_MENU_ID = 1;
 	private static final int MY_LOCATION_MENU_ID = 3;
 	private MapController mapController;
 	private LocationManager locationManager;
@@ -93,8 +94,8 @@ public class Main extends MapActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, PROFILE, 0, null).setIcon(R.drawable.boton_me);
-		menu.add(0, 2, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
+		menu.add(0, PROFILE_MENU_ID, 0, null).setIcon(R.drawable.boton_me);
+		menu.add(0, FRIENDS_MENU_ID, 0, "Friends").setIcon(android.R.drawable.ic_menu_more);
 		menu.add(0, MY_LOCATION_MENU_ID, 0, "My Location").setIcon(
 				android.R.drawable.ic_menu_directions);
 		return true;
@@ -106,8 +107,11 @@ public class Main extends MapActivity {
 		case MY_LOCATION_MENU_ID:
 			this.mapController.animateTo(getLastKnownPoint());
 			break;
-		case PROFILE:
+		case PROFILE_MENU_ID:
 			startActivity(new Intent(this, ProfileActivity.class));
+			break;
+		case FRIENDS_MENU_ID:
+			startActivity(new Intent(this, MyFriendsActivity.class));
 			break;
 		}
 		return super.onMenuItemSelected(featureId, item);

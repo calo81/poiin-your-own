@@ -1,8 +1,10 @@
 package com.poiin.yourown.people;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Person {
+@SuppressWarnings("serial")
+public class Person implements Serializable{
 	private double longitude;
 	private double latitude;
 	private String name;
