@@ -70,6 +70,7 @@ public class Main extends MapActivity {
 	public void onResume() {
 		super.onResume();
 		listenOnLocationChange();
+		establishMyLocation();
 		if (!comingFromNewIntent) {
 			locateMap();
 		}
@@ -142,14 +143,10 @@ public class Main extends MapActivity {
 	private void locateMap() {
 		this.mapController = this.mapView.getController();
 		this.mapController.setZoom(10);
-		establishMyOwnLocationAndMarker();
+		goToMyLocation();
 	}
 
-	private void establishMyOwnLocationAndMarker() {
-		myLocationOverlay = new MyLocationOverlay(this, mapView);
-		mapView.getOverlays().add(myLocationOverlay);
-		myLocationOverlay.enableCompass();
-		myLocationOverlay.enableMyLocation();
+	private void goToMyLocation() {
 		myLocationOverlay.runOnFirstFix(new Runnable() {
 			public void run() {
 				if (myLocationOverlay.getMyLocation() != null) {
@@ -157,6 +154,13 @@ public class Main extends MapActivity {
 				}
 			}
 		});
+	}
+
+	private void establishMyLocation() {
+		myLocationOverlay = new MyLocationOverlay(this, mapView);
+		mapView.getOverlays().add(myLocationOverlay);
+		myLocationOverlay.enableCompass();
+		myLocationOverlay.enableMyLocation();
 	}
 
 	private void listenOnLocationChange() {
