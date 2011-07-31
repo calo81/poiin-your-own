@@ -45,7 +45,7 @@ public class MyFriendsActivity extends  ListActivity{
 		public void handleMessage(Message msg) {
 			@SuppressWarnings("unchecked")
 			List<Person> retrievedFriends = (List<Person>)msg.getData().getSerializable("friends");
-			friendsListAdapter = new FriendsListAdapter(MyFriendsActivity.this,retrievedFriends);
+			friendsListAdapter = new FriendsListAdapter(MyFriendsActivity.this.getApplication(),retrievedFriends);
 			MyFriendsActivity.this.setListAdapter(friendsListAdapter);
 			progressDialog.dismiss();
 		}

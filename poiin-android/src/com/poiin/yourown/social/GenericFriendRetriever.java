@@ -22,17 +22,22 @@ public class GenericFriendRetriever implements FriendRetriever {
 		facebookFriendRetriever=new FacebookFriendRetriever(appState);
 	}
 	@Override
-	public void retrieveFriends(Handler handler) {
-		List<Person> twitterFriends = twitterFriendRetriever.retrieveFriends();
-		List<Person> facebookFriends = facebookFriendRetriever.retrieveFriends();
-		List<Person> allFriends = new ArrayList<Person>(facebookFriends);
-		allFriends.addAll(twitterFriends);
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("friends", (Serializable) allFriends);
-		Message msg = new Message();
-		msg.setData(bundle);
-		handler.sendMessage(msg);
-		
+	public void retrieveFriends(final Handler handler) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				List<Person> twitterFriends = twitterFriendRetriever.retrieveFriends();
+				List<Person> facebookFriends = facebookFriendRetriever.retrieveFriends();
+				List<Person> allFriends = new ArrayList<Person>(facebookFriends);
+				allFriends.addAll(twitterFriends);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("friends", (Serializable) allFriends);
+				Message msg = new Message();
+				msg.setData(bundle);
+				handler.sendMessage(msg);
+			}
+		}).start();						
 	}
 
 }

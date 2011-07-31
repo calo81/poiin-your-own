@@ -13,6 +13,7 @@ public class Person implements Serializable{
 	private String twitterId;
 	private String facebookId;
 	private List<String> selectedCategories;
+	private String profilePictureUrl;
 
 	public double getLongitude() {
 		return longitude;
@@ -77,4 +78,13 @@ public class Person implements Serializable{
 	public void setFacebookId(String facebookId) {
 		this.facebookId = facebookId;
 	}
+
+	public String getProfilePictureUrl() {
+		return profilePictureUrl;
+	}
+
+	public void setProfilePictureUrl(String profilePictureUrl) {
+		this.profilePictureUrl = profilePictureUrl;
+	}
+	
 }

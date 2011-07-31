@@ -45,8 +45,11 @@ public class TwitterFriendRetriever implements SocialFriendRetriever{
 			for(Friendship friend:friends){
 				Person person = new Person();
 				person.setName(friend.getName());
+				person.setId(String.valueOf(friend.getId()));
+				person.setTwitterId(String.valueOf(friend.getId()));
 				people.add(person);
 			}
+			new TwitterProfilePictureRetriever(appState).fillPictureUrl(people);
 			return people;
 		} catch (Exception e) {
 			Log.e("TwitterFriendRetriever", "Error retrieveing friends",e);

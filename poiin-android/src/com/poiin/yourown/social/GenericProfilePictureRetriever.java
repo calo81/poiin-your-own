@@ -1,15 +1,12 @@
 package com.poiin.yourown.social;
 
-import com.poiin.yourown.ApplicationState;
-import com.poiin.yourown.social.facebook.FacebookProfilePictureRetriever;
-import com.poiin.yourown.social.twitter.TwitterProfilePictureRetriever;
-import com.poiin.yourown.storage.Data;
-import com.poiin.yourown.storage.Data.LoginOption;
-import com.poiin.yourown.storage.PreferencesBackedData;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+
+import com.poiin.yourown.ApplicationState;
+import com.poiin.yourown.social.facebook.FacebookProfilePictureRetriever;
+import com.poiin.yourown.social.twitter.TwitterProfilePictureRetriever;
 
 public class GenericProfilePictureRetriever {
 
@@ -36,6 +33,7 @@ public class GenericProfilePictureRetriever {
 			return null;
 		}
 	}
+	
 
 	private static boolean isValueString(String string) {
 		return string != null && !string.equals("") && !string.equals("null");
