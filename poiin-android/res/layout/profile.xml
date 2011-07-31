@@ -19,10 +19,8 @@
 			</LinearLayout>
 			<LinearLayout android:orientation="vertical" android:id="@+id/socialViewLayout"
 				android:layout_width="fill_parent" android:layout_height="fill_parent">
-				<TextView android:hint="Twitter Username" android:id="@+id/twitterName"
-					android:layout_width="fill_parent" android:layout_height="wrap_content" />
-				<TextView android:hint="Twitter Password" android:id="@+id/twitterPassword"
-					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+				<ImageView android:src="@drawable/facebooklogo" android:id="@+id/facebookLogoProfileButton" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+				<ImageView android:src="@drawable/twitterlogo" android:id="@+id/facebookLogoProfileButton" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 			</LinearLayout>
 		</FrameLayout>
 	</LinearLayout>
