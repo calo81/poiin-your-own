@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.poiin.yourown.social.GenericProfilePictureRetriever;
 import com.poiin.yourown.social.facebook.FacebookAuthenticator;
+import com.poiin.yourown.social.twitter.TwitterAuthentication;
 
 public class ProfileActivity extends TabActivity {
 
@@ -32,14 +34,12 @@ public class ProfileActivity extends TabActivity {
 	private LinearLayout personalViewLayout;
 	private LinearLayout socialViewLayout;
 	private ImageView facebookLogo;
+	private ImageView twitterLogo;
 	private Facebook facebook = new Facebook("149212958485869");
-	private ApplicationState appState;
-	private ProgressDialog progressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		appState = (ApplicationState) this.getApplication();
 		this.setContentView(R.layout.profile);
 		me = ((ApplicationState) getApplication()).getMe();
 		this.profilePicture = (ImageView) findViewById(R.id.profilePicture);
@@ -48,16 +48,18 @@ public class ProfileActivity extends TabActivity {
 		personalViewLayout = (LinearLayout) findViewById(R.id.personalViewLayout);
 		socialViewLayout = (LinearLayout) findViewById(R.id.socialViewLayout);
 		facebookLogo = (ImageView) findViewById(R.id.facebookLogoProfileButton);
+		twitterLogo = (ImageView) findViewById(R.id.twitterLogoProfileButton);
 		tabHost = getTabHost();
 		setupTabs();
 		setupInteractions();
 	}
 
 	private void setupInteractions() {
-		setupFacebookLogin();
+		setupFacebookAuthentication();
+		setupTwitterAuthentication();
 	}
 
-	private void setupFacebookLogin() {
+	private void setupFacebookAuthentication() {
 		facebookLogo.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -68,8 +70,30 @@ public class ProfileActivity extends TabActivity {
 
 	}
 
+	private void setupTwitterAuthentication() {
+		twitterLogo.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				authenticateToTwitter();
+			}
+		});
+
+	}
+
 	private void authenticateToFacebook() {
 		new FacebookAuthenticator(this, facebook).authenticate();
+	}
+
+	private void authenticateToTwitter() {
+		try {
+			String authURL = TwitterAuthentication.provider.retrieveRequestToken(TwitterAuthentication.consumer, TwitterAuthentication.CALLBACK_URL+"?fromProfile=true");
+			Log.d("OAuthTwitter", authURL);
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authURL)));
+		} catch (Exception e) {
+			// TODO: What to do?
+			e.printStackTrace();
+		}
 	}
 
 	private void setupTabs() {

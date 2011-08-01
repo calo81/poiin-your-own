@@ -27,11 +27,11 @@ public class TwitterAuthentication extends Activity {
 	private static final String REQUEST_URL = "http://twitter.com/oauth/request_token";
 	private static final String ACCESS_TOKEN_URL = "http://twitter.com/oauth/access_token";
 	private static final String AUTH_URL = "http://twitter.com/oauth/authorize";
-	static final String CALLBACK_URL = "OauthTwitter://twitt";
+	public static final String CALLBACK_URL = "OauthTwitter://twitt";
 
-	static CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
+	public static CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(
 			CONSUMER_KEY, CONSUMER_SECRET);
-	static CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(
+	public static CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(
 			REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL);
 
 	static Data dataAccess;

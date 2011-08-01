@@ -1,5 +1,6 @@
 package com.poiin.yourown.social.twitter;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.poiin.yourown.ApplicationState;
@@ -13,6 +14,7 @@ import com.poiin.yourown.storage.PreferencesBackedData;
 
 import oauth.signpost.OAuth;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
@@ -46,15 +48,33 @@ public class TwitterAuthenticated extends Activity {
 	public void onStart() {
 		super.onStart();
 		Uri uri = this.getIntent().getData();
-		if (uri != null
-				&& uri.toString()
-						.startsWith(TwitterAuthentication.CALLBACK_URL)) {
+		if (uri != null && uri.toString().startsWith(TwitterAuthentication.CALLBACK_URL)) {
 			String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
+			String fromProfile = uri.getQueryParameter("fromProfile");
 			if (verifier.equals("from_saved")) {
 				configureFromSaved();
 			} else {
-				doKeyAndSecretRetrieval(verifier);
+				configureFromTwitter(verifier, fromProfile);
 			}
+		}
+	}
+
+	private void configureFromTwitter(String verifier, String fromProfile) {
+		doKeyAndSecretRetrieval(verifier);
+		configureApplicationTwitter();
+		if (fromProfile == null) {
+			loginToPoiin(appState.getTwitter());
+		}else{
+			configureTwitterOnExistingUser(appState.getTwitter());
+		}
+	}
+
+	private void configureTwitterOnExistingUser(Twitter twitter) {
+		try {
+			appState.getMe().put("twitter_id", twitter.getId());
+		} catch (Exception e) {
+			// TODO Again. Anything to handle?
+			e.printStackTrace();
 		}
 	}
 
@@ -63,31 +83,25 @@ public class TwitterAuthenticated extends Activity {
 		ACCESS_KEY = twitterDetails[0];
 		ACCESS_SECRET = twitterDetails[1];
 		configureApplicationTwitter();
+		loginToPoiin(appState.getTwitter());
 	}
 
 	private void doKeyAndSecretRetrieval(String verifier) {
 		try {
-			TwitterAuthentication.provider.retrieveAccessToken(
-					TwitterAuthentication.consumer, verifier);
+			TwitterAuthentication.provider.retrieveAccessToken(TwitterAuthentication.consumer, verifier);
 			ACCESS_KEY = TwitterAuthentication.consumer.getToken();
 			ACCESS_SECRET = TwitterAuthentication.consumer.getTokenSecret();
-			TwitterAuthentication.dataAccess.storeTwitterDetails(ACCESS_KEY,
-					ACCESS_SECRET);
-			configureApplicationTwitter();
+			TwitterAuthentication.dataAccess.storeTwitterDetails(ACCESS_KEY, ACCESS_SECRET);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void configureApplicationTwitter() {
-		Configuration conf = new ConfigurationBuilder()
-				.setOAuthConsumerKey(TwitterAuthentication.CONSUMER_KEY)
-				.setOAuthConsumerSecret(TwitterAuthentication.CONSUMER_SECRET)
-				.build();
-		Twitter twitter = new TwitterFactory(conf).getInstance(new AccessToken(
-				ACCESS_KEY, ACCESS_SECRET));
+		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(TwitterAuthentication.CONSUMER_KEY)
+				.setOAuthConsumerSecret(TwitterAuthentication.CONSUMER_SECRET).build();
+		Twitter twitter = new TwitterFactory(conf).getInstance(new AccessToken(ACCESS_KEY, ACCESS_SECRET));
 		appState.setTwitter(twitter);
-		loginToPoiin(twitter);
 	}
 
 	private JSONObject createPersonFromTwitter(Twitter twitter) {
@@ -103,15 +117,12 @@ public class TwitterAuthenticated extends Activity {
 	}
 
 	private void loginToPoiin(final Twitter twitter) {
-		progressDialog = ProgressDialog.show(TwitterAuthenticated.this,
-				"Processing . . .", "Retrieving User Information ...", true,
-				false);
+		progressDialog = ProgressDialog.show(TwitterAuthenticated.this, "Processing . . .", "Retrieving User Information ...", true, false);
 		new Thread(new Runnable() {
 			public void run() {
 				JSONObject jsonObject = createPersonFromTwitter(twitter);
 				((ApplicationState) getApplication()).setMe(jsonObject);
-				boolean isUserAlreadyInSystem = peopleService
-						.isUserRegistered();
+				boolean isUserAlreadyInSystem = peopleService.isUserRegistered();
 				Message message = new Message();
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("userRegistered", isUserAlreadyInSystem);
@@ -128,13 +139,9 @@ public class TwitterAuthenticated extends Activity {
 		public void handleMessage(final Message msg) {
 			progressDialog.dismiss();
 			if (msg.getData().getBoolean("userRegistered")) {
-				startActivity(new Intent(
-						TwitterAuthenticated.this.getApplicationContext(),
-						Main.class));
+				startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), Main.class));
 			} else {
-				startActivity(new Intent(
-						TwitterAuthenticated.this.getApplicationContext(),
-						FirstTimeProfileActivity.class));
+				startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), FirstTimeProfileActivity.class));
 			}
 			finish();
 		}

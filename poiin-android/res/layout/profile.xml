@@ -20,7 +20,7 @@
 			<LinearLayout android:orientation="vertical" android:id="@+id/socialViewLayout"
 				android:layout_width="fill_parent" android:layout_height="fill_parent">
 				<ImageView android:src="@drawable/facebooklogo" android:id="@+id/facebookLogoProfileButton" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-				<ImageView android:src="@drawable/twitterlogo" android:id="@+id/facebookLogoProfileButton" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+				<ImageView android:src="@drawable/twitterlogo" android:id="@+id/twitterLogoProfileButton" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 			</LinearLayout>
 		</FrameLayout>
 	</LinearLayout>
