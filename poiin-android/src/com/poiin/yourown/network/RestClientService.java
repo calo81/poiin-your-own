@@ -17,4 +17,6 @@ public interface RestClientService {
 
 	void registerUser(JSONObject me);
 
+	void updateUser(JSONObject me);
+
 }

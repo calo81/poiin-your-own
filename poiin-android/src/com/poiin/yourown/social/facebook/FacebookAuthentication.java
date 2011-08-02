@@ -53,7 +53,7 @@ public class FacebookAuthentication extends Activity {
 				new Thread(new Runnable() {
 					public void run() {
 						setUserWithFacebookProfile();
-						boolean isUserAlreadyInSystem = peopleService.isUserRegistered();
+						boolean isUserAlreadyInSystem = peopleService.checkUserRegisteredAndUpdateSocialIds();
 						Message message = new Message();
 						Bundle bundle = new Bundle();
 						bundle.putBoolean("userRegistered", isUserAlreadyInSystem);

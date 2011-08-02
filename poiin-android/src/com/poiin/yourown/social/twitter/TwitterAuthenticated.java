@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.poiin.yourown.ApplicationState;
 import com.poiin.yourown.FirstTimeProfileActivity;
 import com.poiin.yourown.Main;
+import com.poiin.yourown.ProfileActivity;
 import com.poiin.yourown.people.PeopleService;
 import com.poiin.yourown.people.PeopleServiceImpl;
 import com.poiin.yourown.social.facebook.FacebookAuthentication;
@@ -66,12 +67,14 @@ public class TwitterAuthenticated extends Activity {
 			loginToPoiin(appState.getTwitter());
 		}else{
 			configureTwitterOnExistingUser(appState.getTwitter());
+			startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), ProfileActivity.class));
 		}
 	}
 
 	private void configureTwitterOnExistingUser(Twitter twitter) {
 		try {
 			appState.getMe().put("twitter_id", twitter.getId());
+			peopleService.updateUser();
 		} catch (Exception e) {
 			// TODO Again. Anything to handle?
 			e.printStackTrace();
@@ -122,7 +125,7 @@ public class TwitterAuthenticated extends Activity {
 			public void run() {
 				JSONObject jsonObject = createPersonFromTwitter(twitter);
 				((ApplicationState) getApplication()).setMe(jsonObject);
-				boolean isUserAlreadyInSystem = peopleService.isUserRegistered();
+				boolean isUserAlreadyInSystem = peopleService.checkUserRegisteredAndUpdateSocialIds();
 				Message message = new Message();
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("userRegistered", isUserAlreadyInSystem);

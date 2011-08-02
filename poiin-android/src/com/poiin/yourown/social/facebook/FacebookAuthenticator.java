@@ -11,16 +11,20 @@ import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.poiin.yourown.ApplicationState;
+import com.poiin.yourown.people.PeopleService;
+import com.poiin.yourown.people.PeopleServiceImpl;
 
 public class FacebookAuthenticator {
 	private Facebook facebook;
 	private Activity activity;
 	private ApplicationState appState;
+	private PeopleService peopleService;
 
 	public FacebookAuthenticator(Activity activity,Facebook facebook){
 		this.facebook=facebook;
 		this.activity=activity;
 		appState=(ApplicationState)activity.getApplication();
+		peopleService = new PeopleServiceImpl(appState);
 	}
 	
 	public void authenticate(){
@@ -49,6 +53,7 @@ public class FacebookAuthenticator {
 					private void setUserWithFacebookProfile() {
 						try {
 							appState.getMe().put("facebook_id", getMyFacebookProfile().get("id"));
+							peopleService.updateUser();
 						} catch (JSONException e) {
 							// TODO Nothing to odo
 							e.printStackTrace();

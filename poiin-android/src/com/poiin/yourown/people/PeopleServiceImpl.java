@@ -19,10 +19,11 @@ public class PeopleServiceImpl implements PeopleService {
 	}
 
 	@Override
-	public boolean isUserRegistered() {
-		JSONObject json = restClientService.isUserRegistered(applicationState
-				.getMyId().toString());
+	public boolean checkUserRegisteredAndUpdateSocialIds() {
+		JSONObject json = restClientService.isUserRegistered(applicationState.getMyId().toString());
 		try {
+			this.applicationState.getMe().put("twitter_id", json.getString("twitter_id"));
+			this.applicationState.getMe().put("facebook_id", json.getString("facebook_id"));
 			return json.getString("registered").equals("true");
 		} catch (JSONException e) {
 			// TODO: Does this need Handling??
@@ -30,17 +31,24 @@ public class PeopleServiceImpl implements PeopleService {
 		}
 	}
 
-	
 	@Override
-	public void registerUser(final Person person,
-			final Handler registrationHandler) {
+	public void updateUser() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				restClientService.updateUser(applicationState.getMe());
+			}
+		}).start();
+	}
+
+	@Override
+	public void registerUser(final Person person, final Handler registrationHandler) {
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					JSONArray categories = new JSONArray(
-							person.getSelectedCategories());
+					JSONArray categories = new JSONArray(person.getSelectedCategories());
 					applicationState.getMe().put("categories", categories);
 					restClientService.registerUser(applicationState.getMe());
 					registrationHandler.sendEmptyMessage(0);

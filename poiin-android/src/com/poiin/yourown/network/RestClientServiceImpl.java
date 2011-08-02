@@ -8,8 +8,10 @@ import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -25,6 +27,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
@@ -34,7 +37,7 @@ import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.poiin.Poiin;
 
 public class RestClientServiceImpl implements RestClientService {
-	private static final String SERVER_HOST = "http://82.165.139.7:3000/";
+	private static final String SERVER_HOST = "http://192.168.0.5:3000/";
 	private static final String HTTP_POIIN_ENDPOINT = SERVER_HOST + "poiin";
 	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST + "message";
 	private static final String HTTP_USER_ENDPOINT = SERVER_HOST + "user";
@@ -62,8 +65,7 @@ public class RestClientServiceImpl implements RestClientService {
 
 	@Override
 	public void acknowledgeMessage(String id, String userId) {
-		HttpDelete delete = new HttpDelete(HTTP_MESSAGE_ENDPOINT + "/" + id
-				+ "?user_id=" + userId);
+		HttpDelete delete = new HttpDelete(HTTP_MESSAGE_ENDPOINT + "/" + id + "?user_id=" + userId);
 		sendRequestAndGetJSONArray(delete);
 	}
 
@@ -80,14 +82,24 @@ public class RestClientServiceImpl implements RestClientService {
 		sendRequestAndGetJSONArray(post);
 	}
 
+	@Override
+	public void updateUser(JSONObject me) {
+		try {
+			HttpPut put = new HttpPut(HTTP_USER_ENDPOINT + "/" + me.getLong("id"));
+			setPostJsonString(me.toString(), put);
+			sendRequestAndGetJSONArray(put);
+		} catch (JSONException e) {
+			//TODO Again nothing to do... I guess
+			Log.e("RestClientServiceImpl", "Error getting id from my user", e);
+		}
+	}
+
 	private JSONArray sendRequestAndGetJSONArray(HttpRequestBase request) {
 		try {
 			String responseAsString = doRequestAndGetString(request);
 			return new JSONArray(responseAsString);
 		} catch (Exception e) {
-			Log.e("RestClient",
-					"Error in sending request or parsing response, but continuing..",
-					e);
+			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
 			return new JSONArray();
 		}
 	}
@@ -97,15 +109,12 @@ public class RestClientServiceImpl implements RestClientService {
 			String responseAsString = doRequestAndGetString(request);
 			return new JSONObject(responseAsString);
 		} catch (Exception e) {
-			Log.e("RestClient",
-					"Error in sending request or parsing response, but continuing..",
-					e);
+			Log.e("RestClient", "Error in sending request or parsing response, but continuing..", e);
 			return new JSONObject();
 		}
 	}
 
-	private String doRequestAndGetString(HttpRequestBase request)
-			throws IOException, ClientProtocolException {
+	private String doRequestAndGetString(HttpRequestBase request) throws IOException, ClientProtocolException {
 		HttpEntity entity = httpClient.execute(request).getEntity();
 		String responseAsString = EntityUtils.toString(entity);
 		return responseAsString;
@@ -115,7 +124,7 @@ public class RestClientServiceImpl implements RestClientService {
 		setPostJsonString(jsonString.toJsonString(), post);
 	}
 
-	private void setPostJsonString(String jsonString, HttpPost post) {
+	private void setPostJsonString(String jsonString, HttpEntityEnclosingRequestBase post) {
 		try {
 			StringEntity entity = new StringEntity(jsonString);
 			entity.setContentEncoding("UTF-8");
@@ -129,18 +138,14 @@ public class RestClientServiceImpl implements RestClientService {
 	private void configureHttpClient() {
 		HttpParams params = new BasicHttpParams();
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-		HttpProtocolParams.setContentCharset(params,
-				HTTP.DEFAULT_CONTENT_CHARSET);
+		HttpProtocolParams.setContentCharset(params, HTTP.DEFAULT_CONTENT_CHARSET);
 		HttpProtocolParams.setUseExpectContinue(params, true);
 
 		SchemeRegistry registry = new SchemeRegistry();
-		registry.register(new Scheme("http", PlainSocketFactory
-				.getSocketFactory(), 80));
-		registry.register(new Scheme("https", SSLSocketFactory
-				.getSocketFactory(), 443));
+		registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+		registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
-		ClientConnectionManager connman = new ThreadSafeClientConnManager(
-				params, registry);
+		ClientConnectionManager connman = new ThreadSafeClientConnManager(params, registry);
 		httpClient = new DefaultHttpClient(connman, params);
 	}
 
