@@ -30,7 +30,7 @@ public class FriendsListAdapter extends BaseAdapter {
 	public FriendsListAdapter(Context context, List<Person> retrievedFriends) {
 		this.context = context;
 		this.friendList = retrievedFriends;
-		pictureRetrieverExecutor = Executors.newSingleThreadExecutor();
+		pictureRetrieverExecutor = Executors.newFixedThreadPool(6);
 	}
 
 	@Override
@@ -53,12 +53,14 @@ public class FriendsListAdapter extends BaseAdapter {
 		return new FriendsListView(context, this.friendList.get(position));
 	}
 
-	private final class FriendsListView extends LinearLayout {
+	public final class FriendsListView extends LinearLayout {
 		private TextView name;
 		private ImageView image;
+		private Person person;
 
 		public FriendsListView(final Context context, final Person person) {
 			super(context);
+			this.person=person;
 			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			params.setMargins(5, 3, 5, 0);
 			this.name = new TextView(context);
@@ -70,6 +72,12 @@ public class FriendsListAdapter extends BaseAdapter {
 			this.addView(image, params);
 			this.addView(this.name, params);
 			loadActualImage(context, person);
+			addLongClickListener(person);
+		}
+
+		private void addLongClickListener(Person person) {
+			this.setLongClickable(true);
+			
 		}
 
 		private void loadActualImage(final Context context, final Person person) {
@@ -87,6 +95,12 @@ public class FriendsListAdapter extends BaseAdapter {
 				}
 			});
 		}
+
+		
+		public Person getPerson() {
+			return person;
+		}
+
 
 		private Handler actualImageLoadedHandler = new Handler() {
 

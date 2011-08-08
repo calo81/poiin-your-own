@@ -27,7 +27,7 @@ import com.poiin.yourown.people.message.MessageReceivedHandler;
 
 public class SocketClient {
 	private static final int FIVE_MINUTES = 10000;
-	private static final String SERVER_URL_HOST = "192.168.0.5";
+	private static final String SERVER_URL_HOST = "82.165.139.7";
 	private static final String MESSAGE_URL_PORT = "3001";
 	private MessageReceivedHandler userMessageReceivedHandler;
 	private ContextWrapper context;

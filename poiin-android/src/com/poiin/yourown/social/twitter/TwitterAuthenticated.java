@@ -67,7 +67,7 @@ public class TwitterAuthenticated extends Activity {
 			loginToPoiin(appState.getTwitter());
 		}else{
 			configureTwitterOnExistingUser(appState.getTwitter());
-			startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), ProfileActivity.class));
+			startActivity(new Intent(TwitterAuthenticated.this.getApplicationContext(), Main.class));
 		}
 	}
 
@@ -94,7 +94,7 @@ public class TwitterAuthenticated extends Activity {
 			TwitterAuthentication.provider.retrieveAccessToken(TwitterAuthentication.consumer, verifier);
 			ACCESS_KEY = TwitterAuthentication.consumer.getToken();
 			ACCESS_SECRET = TwitterAuthentication.consumer.getTokenSecret();
-			TwitterAuthentication.dataAccess.storeTwitterDetails(ACCESS_KEY, ACCESS_SECRET);
+			data.storeTwitterDetails(ACCESS_KEY, ACCESS_SECRET);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

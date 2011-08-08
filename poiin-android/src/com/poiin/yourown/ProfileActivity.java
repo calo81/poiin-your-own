@@ -60,8 +60,15 @@ public class ProfileActivity extends TabActivity {
 	}
 
 	private void setupFacebookAuthentication() {
+		try {
+			if(!(me.get("facebook_id")==null)){
+				facebookLogo.setVisibility(View.INVISIBLE);
+				return;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		facebookLogo.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				authenticateToFacebook();
@@ -71,6 +78,14 @@ public class ProfileActivity extends TabActivity {
 	}
 
 	private void setupTwitterAuthentication() {
+		try {
+			if(!(me.get("twitter_id")==null)){
+				twitterLogo.setVisibility(View.INVISIBLE);
+				return;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		twitterLogo.setOnClickListener(new View.OnClickListener() {
 
 			@Override

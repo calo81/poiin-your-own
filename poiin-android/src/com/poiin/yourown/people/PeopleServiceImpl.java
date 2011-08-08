@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.poiin.yourown.ApplicationState;
 import com.poiin.yourown.network.RestClientService;
@@ -22,8 +23,8 @@ public class PeopleServiceImpl implements PeopleService {
 	public boolean checkUserRegisteredAndUpdateSocialIds() {
 		JSONObject json = restClientService.isUserRegistered(applicationState.getMyId().toString());
 		try {
-			this.applicationState.getMe().put("twitter_id", json.getString("twitter_id"));
-			this.applicationState.getMe().put("facebook_id", json.getString("facebook_id"));
+			setId(json,"twitter_id");
+			setId(json,"facebook_id");
 			return json.getString("registered").equals("true");
 		} catch (JSONException e) {
 			// TODO: Does this need Handling??
@@ -58,5 +59,26 @@ public class PeopleServiceImpl implements PeopleService {
 				}
 			}
 		}).start();
+	}
+
+	@Override
+	public void inviteToPoiin(Person person) {
+		Log.i("PeopleServiceImpl", "inviting "+person+" to poiin");
+		
+	}
+
+	@Override
+	public void getUserInfo(Person person) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void setId(JSONObject json,String idProperty) {
+		try {
+			this.applicationState.getMe().put(idProperty, json.getString(idProperty));
+		} catch (JSONException e) {
+			// TODO Nothing to do
+			e.printStackTrace();
+		}
 	}
 }

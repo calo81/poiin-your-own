@@ -1,5 +1,7 @@
 package com.poiin.yourown;
 
+import org.json.JSONException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -11,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.facebook.android.Facebook;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -29,6 +33,10 @@ import com.poiin.yourown.people.Person;
 import com.poiin.yourown.poiin.Poiin;
 import com.poiin.yourown.poiin.PoiinService;
 import com.poiin.yourown.poiin.PoiinServiceImpl;
+import com.poiin.yourown.social.facebook.FacebookAuthenticator;
+import com.poiin.yourown.social.twitter.TwitterAuthenticatorHelper;
+import com.poiin.yourown.storage.Data;
+import com.poiin.yourown.storage.PreferencesBackedData;
 import com.poiin.yourown.ui.ExtendedGeoPoint;
 
 public class Main extends MapActivity {
@@ -48,6 +56,8 @@ public class Main extends MapActivity {
 	private Button poiinButton;
 	private ApplicationState appState;
 	private boolean comingFromNewIntent;
+	private Data data;
+	private Facebook facebook = new Facebook("149212958485869");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,9 @@ public class Main extends MapActivity {
 		initMap();
 		startService(new Intent(this, PoiinBackgroundService.class));
 		poiinService = new PoiinServiceImpl();
+		data = new PreferencesBackedData(this);
+		initTwitterIfExistentButLoggedWithFacebook();
+		initFacebookIfExistentButLoggedWithTwitter();
 	}
 
 	@Override
@@ -142,7 +155,7 @@ public class Main extends MapActivity {
 
 	private void locateMap() {
 		this.mapController = this.mapView.getController();
-		this.mapController.setZoom(10);
+		this.mapController.setZoom(16);
 		goToMyLocation();
 	}
 
@@ -176,10 +189,23 @@ public class Main extends MapActivity {
 
 	private void initMap() {
 		mapView = (MapView) findViewById(R.id.map_view);
-		mapView.setBuiltInZoomControls(true);
+		mapView.setBuiltInZoomControls(false);
 		mapController = mapView.getController();
-		mapView.displayZoomControls(true);
+		mapView.displayZoomControls(false);
+		setNotZoomable();
 		appState.setMapView(mapView);
+	}
+
+	private void setNotZoomable() {
+		mapView.setOnTouchListener(new View.OnTouchListener() {		
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+	            if(event.getPointerCount() > 1) {
+	                return true;
+	            }
+	            return false;
+	        }
+		});
 	}
 
 	private void poiin() {
@@ -216,7 +242,43 @@ public class Main extends MapActivity {
 		}
 		return null;
 	}
+	
+	private void initTwitterIfExistentButLoggedWithFacebook() {
+		if (data.getLoginOption() == Data.LoginOption.FACEBOOK) {
+			try {
+				if(appState.getMe().get("twitter_id")!=null){
+					new TwitterAuthenticatorHelper(this,appState).configureApplicationTwitter();
+				}
+			} catch (JSONException e) {
+				// TODO Nothing to do here
+				e.printStackTrace();
+			}
+		}
+	}
 
+	private void initFacebookIfExistentButLoggedWithTwitter() {
+		if (data.getLoginOption() == Data.LoginOption.TWITTER) {
+			try {
+				if(appState.getMe().get("facebook_id")!=null){
+					new FacebookAuthenticator(this, facebook).authenticate();
+				}
+			} catch (JSONException e) {
+				// TODO Nothing to do here
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
+	/**
+	 * Implemented for facebook requirements
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		facebook.authorizeCallback(requestCode, resultCode, data);
+	}
+	
 	private final LocationListener locationListenerRecenterMap = new LocationListener() {
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {

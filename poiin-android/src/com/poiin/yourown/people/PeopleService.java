@@ -10,4 +10,8 @@ public interface PeopleService {
 
 	void updateUser();
 
+	void inviteToPoiin(Person person);
+
+	void getUserInfo(Person person);
+
 }

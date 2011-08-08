@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:visible="true" android:title="Invite to Poiin"
+		android:numericShortcut="1" android:enabled="true"
+		android:titleCondensed="Invite" android:id="@+id/context_menu_send_invitation"
+		android:alphabeticShortcut="a"></item>
+	<item android:titleCondensed="Already in Poiin?. Where?"
+		android:title="Already Poiiner" android:visible="true"
+		android:enabled="true" android:numericShortcut="2"
+		android:alphabeticShortcut="e" android:id="@+id/context_menu_already_registered"></item>
+</menu>

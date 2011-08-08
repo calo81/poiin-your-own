@@ -37,7 +37,7 @@ import com.poiin.yourown.people.message.UserMessage;
 import com.poiin.yourown.poiin.Poiin;
 
 public class RestClientServiceImpl implements RestClientService {
-	private static final String SERVER_HOST = "http://192.168.0.5:3000/";
+	private static final String SERVER_HOST = "http://82.165.139.7:3000/";
 	private static final String HTTP_POIIN_ENDPOINT = SERVER_HOST + "poiin";
 	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST + "message";
 	private static final String HTTP_USER_ENDPOINT = SERVER_HOST + "user";

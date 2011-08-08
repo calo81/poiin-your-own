@@ -80,7 +80,7 @@ public class PoiinerDetailsActivity extends Activity {
 				android.R.drawable.ic_menu_more);
 		menu.add(0, 3, 0, "Follow in Poiin").setIcon(
 				android.R.drawable.ic_menu_share);
-		menu.add(0, 4, 0, "Send a gift").setIcon(
+		menu.add(0, 4, 0, "Fotos").setIcon(
 				android.R.drawable.ic_menu_share);
 		menu.add(0, 5, 0, "Invite a drink").setIcon(
 				android.R.drawable.ic_menu_share);
