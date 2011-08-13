@@ -56,8 +56,8 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 		final BitmapDrawable photo = new BitmapDrawable(configurePictureImage(result));
 		if (photo != null) {
 			photo.setGravity(Gravity.TOP | Gravity.LEFT);
-			marker.setDrawableByLayerId(R.id.photo, photo);
 			marker.setDrawableByLayerId(R.id.frame, context.getResources().getDrawable(R.drawable.frame));
+			marker.setDrawableByLayerId(R.id.photo, photo);
 		}
 		result.setMarker(boundCenterBottom(marker));
 		return result;
@@ -65,7 +65,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 
 	private Bitmap configurePictureImage(final PersonOverlayItem result) {
 		Bitmap bitmap = GenericProfilePictureRetriever.retrieveBitmap(context, result.getPerson().getTwitterId(), result.getPerson().getFacebookId());
-		return Bitmap.createScaledBitmap(bitmap, 54, 54, true);
+		return Bitmap.createScaledBitmap(bitmap, 49, 49, true);
 	}
 
 	@Override
