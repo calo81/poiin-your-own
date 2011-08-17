@@ -65,7 +65,7 @@ public class PeopleItemizedOverlay extends ItemizedOverlay<PersonOverlayItem> {
 
 	private Bitmap configurePictureImage(final PersonOverlayItem result) {
 		Bitmap bitmap = GenericProfilePictureRetriever.retrieveBitmap(context, result.getPerson().getTwitterId(), result.getPerson().getFacebookId());
-		return Bitmap.createScaledBitmap(bitmap, 49, 49, true);
+		return Bitmap.createScaledBitmap(bitmap, 50, 50, true);
 	}
 
 	@Override

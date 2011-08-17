@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:gravity="center_horizontal" android:padding="10px">
+	android:gravity="center_horizontal" >
 	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<ImageView android:id="@+id/poiinerImage"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/background_perfil">
+		<ImageView android:id="@+id/poiinerImage" 
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center|top" android:layout_marginTop="130dip"/>
 		<TextView android:id="@+id/poiinerName" android:layout_width="wrap_content"
+		    android:layout_gravity="center|top"
+		    android:textColor="#660033"
+		    android:textStyle="bold"
 			android:layout_height="wrap_content" />
 		<TextView android:id="@+id/lastWallMessage"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			android:layout_width="wrap_content"
+			android:layout_gravity="center|top"
+			android:textColor="#660033"
+			android:textStyle="bold" android:layout_height="wrap_content" />
 		<TextView android:id="@+id/poiinText" android:layout_width="wrap_content"
+		    android:layout_gravity="center|top"
+		    android:textColor="#660033"
+		    android:textStyle="bold"
 			android:layout_height="wrap_content" />
 		<TextView android:id="@+id/poiinerCategoriesList"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			android:layout_width="wrap_content"
+			android:layout_gravity="center|top"
+			android:textColor="#660033" 
+			android:textStyle="bold" android:layout_height="wrap_content" />
+		<LinearLayout android:layout_width="wrap_content" android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="50dip">
+			<Button android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/enviar_mensaje"></Button>
+		</LinearLayout>
 	</LinearLayout>
 </RelativeLayout>
