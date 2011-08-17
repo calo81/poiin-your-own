@@ -27,6 +27,7 @@
 			android:textColor="#660033" 
 			android:textStyle="bold" android:layout_height="wrap_content" />
 		<LinearLayout android:layout_width="wrap_content" android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="50dip">
+			<Button android:id="@+id/button2" android:layout_width="wrap_content" android:background="@drawable/lets_meet" android:layout_height="54dip" android:layout_marginRight="10dip"></Button>
 			<Button android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/enviar_mensaje"></Button>
 		</LinearLayout>
 	</LinearLayout>
