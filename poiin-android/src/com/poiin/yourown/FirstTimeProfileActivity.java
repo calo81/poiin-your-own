@@ -126,8 +126,10 @@ public class FirstTimeProfileActivity extends Activity {
 					ViewGroup.LayoutParams.MATCH_PARENT, 64);
 			TextView textView = new TextView(FirstTimeProfileActivity.this);
 			textView.setLayoutParams(lp);
+			textView.setTextSize(20);
+			textView.setTextColor(0xff660033);
 			textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-			textView.setPadding(36, 0, 0, 0);
+			textView.setPadding(60, 0, 0, 0);
 			return textView;
 		}
 

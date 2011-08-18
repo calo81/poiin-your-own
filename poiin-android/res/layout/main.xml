@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
+<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:background="@drawable/background2" android:gravity="bottom"
-	android:orientation="vertical">
+	android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
 
 
 
@@ -19,11 +18,12 @@
 		</RelativeLayout>
 	</FrameLayout>
 
-	<LinearLayout android:layout_width="fill_parent"
+	<LinearLayout android:layout_width="match_parent"
 		android:layout_margin="10dip" android:layout_gravity="center|top"
-		android:layout_height="395dip">
+		android:layout_height="395dip" >
 		<com.google.android.maps.MapView
-			android:id="@+id/map_view" android:layout_width="fill_parent"
+			android:id="@+id/map_view" 
+			android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:enabled="true"
 			android:clickable="true" android:apiKey="0YNirIfPWIR4qFwQ-fucYrFNxdJchiQZhdp3w6g" />
 	</LinearLayout>

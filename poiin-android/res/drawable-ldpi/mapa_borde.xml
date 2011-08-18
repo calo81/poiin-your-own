@@ -2,13 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 <item>
  <shape android:shape="rectangle">
-  <stroke android:width="5dp" android:height="5dp"
-   android:color="#BC8F8F" />
-  <padding android:left="1dp" android:top="1dp" android:right="1dp"
-   android:bottom="1dp" />
-  <corners android:radius="4dp" android:bottomRightRadius="8dp"
-   android:bottomLeftRadius="8dp" android:topLeftRadius="8dp"
-   android:topRightRadius="8dp" />
+  <stroke android:width="10dip" android:height="10dip"
+   android:color="#660033" />
+  <padding android:left="1dip" android:top="1dip" android:right="1dip"
+   android:bottom="1dip" />
+  <corners android:radius="4dip" android:bottomRightRadius="8dip"
+   android:bottomLeftRadius="8dip" android:topLeftRadius="8dip"
+   android:topRightRadius="8dip" />
  </shape>
 </item>
 
