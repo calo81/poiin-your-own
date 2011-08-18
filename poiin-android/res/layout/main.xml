@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/background2" android:gravity="bottom"
-	android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+	android:gravity="bottom"
+	android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/background_main">
 
 
 
 	<FrameLayout android:foregroundGravity="bottom"
 		android:layout_width="match_parent" android:layout_height="wrap_content"
-		android:id="@+id/frameLayout1" android:layout_gravity="center_horizontal|bottom"
-		android:layout_marginBottom="12dip">
+		android:id="@+id/frameLayout1" android:layout_gravity="center_horizontal|bottom" android:layout_marginBottom="40dip">
 		<RelativeLayout android:layout_gravity="center_horizontal|bottom"
 			android:id="@+id/relativeLayout1" android:gravity="center|center_vertical|bottom"
 			android:layout_width="wrap_content" android:layout_height="wrap_content">
@@ -18,9 +17,7 @@
 		</RelativeLayout>
 	</FrameLayout>
 
-	<LinearLayout android:layout_width="match_parent"
-		android:layout_margin="10dip" android:layout_gravity="center|top"
-		android:layout_height="395dip" >
+	<LinearLayout android:layout_margin="10dip" android:layout_gravity="center|top" android:layout_height="348dip" android:layout_width="290dip">
 		<com.google.android.maps.MapView
 			android:id="@+id/map_view" 
 			android:layout_width="fill_parent"

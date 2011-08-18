@@ -96,10 +96,12 @@ public class MessageReceivedActivity extends Activity {
 		linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 		TextView textView = new TextView(this);
 		textView.setText(message.getContent());
+		textView.setTextSize(20);
+		textView.setTextColor(0xff660033);
 		ImageView imageView = new ImageView(this);
 		imageView.setScaleType(ScaleType.FIT_XY);
-		imageView.setMinimumHeight(50);
-		imageView.setMinimumWidth(50);
+		imageView.setMinimumHeight(60);
+		imageView.setMinimumWidth(60);
 		GenericProfilePictureRetriever.retrieveToImageView(
 				this.getApplication(), imageView, message.getFromTwitterId(),
 				message.getFromFacebookId());
