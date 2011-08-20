@@ -1,30 +1,26 @@
 package com.poiin.yourown;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONException;
-
-import com.poiin.yourown.people.message.UserMessage;
-import com.poiin.yourown.people.message.UserMessageSender;
-import com.poiin.yourown.social.GenericProfilePictureRetriever;
-import com.poiin.yourown.social.facebook.FacebookProfilePictureRetriever;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
+
+import com.poiin.yourown.people.message.UserMessage;
+import com.poiin.yourown.people.message.UserMessageSender;
+import com.poiin.yourown.social.GenericProfilePictureRetriever;
 
 public class MessageReceivedActivity extends Activity {
 
@@ -67,6 +63,11 @@ public class MessageReceivedActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 		assertThatThisActivityIsNotForeground();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		startActivity(new Intent(this, Main.class));
 	}
 
 	private void assertThatThisActivityIsNotForeground() {

@@ -124,7 +124,7 @@ public class SocketClient {
 	private void readMessagesFromSocketAndHandle(
 			MessageReceivedHandler userMessageReceivedHandler,
 			BufferedReader reader) throws IOException {
-		while (true && socket.isConnected() && !socket.isInputShutdown()) {
+		while (socket.isConnected() && !socket.isInputShutdown()) {
 			String message = reader.readLine();
 			Log.i(SocketClient.class.getName(), "Received Message " + message);
 			handleMessage(userMessageReceivedHandler, message);

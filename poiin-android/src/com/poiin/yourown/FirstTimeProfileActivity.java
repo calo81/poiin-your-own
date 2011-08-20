@@ -3,16 +3,9 @@ package com.poiin.yourown;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.poiin.yourown.people.PeopleService;
-import com.poiin.yourown.people.PeopleServiceImpl;
-import com.poiin.yourown.people.Person;
-import com.poiin.yourown.social.facebook.FacebookAuthentication;
-import com.poiin.yourown.ui.CategoriesDeleteListViewAdapter;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,12 +19,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.poiin.yourown.people.PeopleService;
+import com.poiin.yourown.people.PeopleServiceImpl;
+import com.poiin.yourown.people.Person;
+import com.poiin.yourown.ui.CategoriesDeleteListViewAdapter;
 
 public class FirstTimeProfileActivity extends Activity {
 

@@ -148,7 +148,13 @@ public class Main extends MapActivity {
 
 			@Override
 			public void onClick(View v) {
-				poiin();
+				if (establishedLocation) {
+					poiin();
+				} else {
+					Toast msg =  Toast.makeText(Main.this.getApplicationContext(), "Still locating your device, wait a couple of seconds..", Toast.LENGTH_SHORT);
+					msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2, msg.getYOffset() / 2);
+					msg.show();
+				}
 			}
 		});
 	}
@@ -197,14 +203,14 @@ public class Main extends MapActivity {
 	}
 
 	private void setNotZoomable() {
-		mapView.setOnTouchListener(new View.OnTouchListener() {		
+		mapView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-	            if(event.getPointerCount() > 1) {
-	                return true;
-	            }
-	            return false;
-	        }
+				if (event.getPointerCount() > 1) {
+					return true;
+				}
+				return false;
+			}
 		});
 	}
 
@@ -242,12 +248,12 @@ public class Main extends MapActivity {
 		}
 		return null;
 	}
-	
+
 	private void initTwitterIfExistentButLoggedWithFacebook() {
 		if (data.getLoginOption() == Data.LoginOption.FACEBOOK) {
 			try {
-				if(appState.getMe().get("twitter_id")!=null){
-					new TwitterAuthenticatorHelper(this,appState).configureApplicationTwitter();
+				if (appState.getMe().get("twitter_id") != null) {
+					new TwitterAuthenticatorHelper(this, appState).configureApplicationTwitter();
 				}
 			} catch (JSONException e) {
 				// TODO Nothing to do here
@@ -259,7 +265,7 @@ public class Main extends MapActivity {
 	private void initFacebookIfExistentButLoggedWithTwitter() {
 		if (data.getLoginOption() == Data.LoginOption.TWITTER) {
 			try {
-				if(appState.getMe().get("facebook_id")!=null){
+				if (appState.getMe().get("facebook_id") != null) {
 					new FacebookAuthenticator(this, facebook).authenticate();
 				}
 			} catch (JSONException e) {
@@ -268,7 +274,6 @@ public class Main extends MapActivity {
 			}
 		}
 	}
-	
 
 	/**
 	 * Implemented for facebook requirements
@@ -278,7 +283,8 @@ public class Main extends MapActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		facebook.authorizeCallback(requestCode, resultCode, data);
 	}
-	
+
+	private boolean establishedLocation = false;
 	private final LocationListener locationListenerRecenterMap = new LocationListener() {
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -288,6 +294,7 @@ public class Main extends MapActivity {
 		}
 
 		public void onProviderDisabled(String provider) {
+			establishedLocation = false;
 		}
 
 		public void onLocationChanged(final Location loc) {
@@ -295,6 +302,7 @@ public class Main extends MapActivity {
 			int lon = (int) (loc.getLongitude() * LocationHelper.MILLION);
 			GeoPoint geoPoint = new GeoPoint(lat, lon);
 			mapController.animateTo(geoPoint);
+			establishedLocation = true;
 		}
 	};
 
