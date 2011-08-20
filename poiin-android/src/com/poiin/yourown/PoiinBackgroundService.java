@@ -124,7 +124,7 @@ public class PoiinBackgroundService extends Service {
 		}
 
 		private void sendNotification(UserMessage message) {
-			int icon = android.R.drawable.sym_action_email;
+			int icon = R.drawable.mensaje_nuevo_barra;
 			CharSequence tickerText = "Poiin!! Message";
 			long when = System.currentTimeMillis();
 			Notification notification = new Notification(icon, tickerText, when);

@@ -29,7 +29,7 @@ public class FacebookAuthenticator {
 	
 	public void authenticate(){
 
-		facebook.authorize(activity, new String[] { "email", "read_stream", "user_interests", "user_status", "manage_friendlists", "user_photos" }, new DialogListener() {
+		facebook.authorize(activity, new String[] { "email", "read_stream","publish_stream", "user_interests", "user_status", "manage_friendlists", "user_photos" }, new DialogListener() {
 
 			public void onFacebookError(FacebookError e) {
 				e.printStackTrace();

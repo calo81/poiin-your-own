@@ -1,9 +1,14 @@
 package com.poiin.yourown.people;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
@@ -64,7 +69,17 @@ public class PeopleServiceImpl implements PeopleService {
 	@Override
 	public void inviteToPoiin(Person person) {
 		Log.i("PeopleServiceImpl", "inviting "+person+" to poiin");
-		
+		Bundle params = new Bundle();
+		params.putString("message", "Hey, te invito a Poiin");
+		postToFacebookWall(person, params);
+	}
+
+	private void postToFacebookWall(Person person, Bundle params){
+		try{
+			applicationState.getFacebook().request(person.getFacebookId()+"/feed", params, "POST");
+		}catch(Exception e){
+			Log.e("PeopleServiceImpl", "Error posting in User wall",e);
+		}
 	}
 
 	@Override
