@@ -61,8 +61,8 @@ public class CategoriesDeleteListViewAdapter extends BaseAdapter {
 			params.setMargins(5, 3, 5, 0);
 			this.name = new TextView(context);
 			this.name.setText(name);
-			this.name.setTextSize(16f);
-			this.name.setTextColor(Color.WHITE);
+			this.name.setTextSize(10f);
+			this.name.setTextColor(0xff660033);
 			this.addView(this.name, params);
 			this.deleteIcon = new ImageView(context);
 			this.deleteIcon
