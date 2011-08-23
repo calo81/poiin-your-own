@@ -2,7 +2,6 @@ package com.poiin.yourown.social.twitter;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import twitter4j.ProfileImage;
 import twitter4j.ResponseList;
