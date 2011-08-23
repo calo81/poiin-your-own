@@ -42,11 +42,19 @@ public class RestClientServiceImpl implements RestClientService {
 	private static final String HTTP_MESSAGE_ENDPOINT = SERVER_HOST + "message";
 	private static final String HTTP_USER_ENDPOINT = SERVER_HOST + "user";
 	private HttpClient httpClient;
+	private static RestClientService instance;
 
-	public RestClientServiceImpl() {
+	private RestClientServiceImpl() {
 		configureHttpClient();
 	}
 
+	public synchronized static RestClientService getInstance(){
+		if(instance==null){
+			instance =  new RestClientServiceImpl();
+		}	
+		return instance;
+	}
+	
 	@Override
 	public void sendPoiin(Poiin poiin) {
 		Log.i("RestClient", poiin.toString());

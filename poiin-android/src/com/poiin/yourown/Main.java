@@ -148,7 +148,7 @@ public class Main extends MapActivity {
 
 			@Override
 			public void onClick(View v) {
-				if (establishedLocation) {
+				if (getLastKnownPoint()!=null) {
 					poiin();
 				} else {
 					Toast msg =  Toast.makeText(Main.this.getApplicationContext(), "Still locating your device, wait a couple of seconds..", Toast.LENGTH_SHORT);
@@ -284,7 +284,6 @@ public class Main extends MapActivity {
 		facebook.authorizeCallback(requestCode, resultCode, data);
 	}
 
-	private boolean establishedLocation = false;
 	private final LocationListener locationListenerRecenterMap = new LocationListener() {
 
 		public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -294,7 +293,7 @@ public class Main extends MapActivity {
 		}
 
 		public void onProviderDisabled(String provider) {
-			establishedLocation = false;
+			
 		}
 
 		public void onLocationChanged(final Location loc) {
@@ -302,8 +301,7 @@ public class Main extends MapActivity {
 			int lon = (int) (loc.getLongitude() * LocationHelper.MILLION);
 			GeoPoint geoPoint = new GeoPoint(lat, lon);
 			mapController.animateTo(geoPoint);
-			establishedLocation = true;
-		}
+		}	
 	};
 
 }

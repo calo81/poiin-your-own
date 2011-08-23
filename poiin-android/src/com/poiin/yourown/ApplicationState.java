@@ -138,7 +138,10 @@ public class ApplicationState extends Application {
 	 * 
 	 * @return configured twitter not related to logged user
 	 */
-	public Twitter getGenericTwitter() {
+	public Twitter getTwitterOrGenericTwitter() {
+		if(twitter!=null){
+			return twitter;
+		}
 		if (genericTwitter == null) {
 			Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(TwitterAuthentication.CONSUMER_KEY).setOAuthConsumerSecret(TwitterAuthentication.CONSUMER_SECRET).build();
 			genericTwitter = new TwitterFactory(conf).getInstance(new AccessToken("87712886-hOCQxighhB0MEXt4HkYPUaKivN5CpJjRLx4oIidbe", "EVsOBuu1TTTKGSdS0b2JpKPX66dtkJPUWnn6SwqPA"));

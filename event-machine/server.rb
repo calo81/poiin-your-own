@@ -11,14 +11,24 @@ module Server
   
   def post_init
     puts "Received a new connection"
-    
+  end
+
+  def init_timers  
      
     @message_timer = EM::PeriodicTimer.new(5) do
-      poll_for_messages
+     if(@user_id.nil? or @user_id=='')
+       close_connection
+     else 
+       poll_for_messages
+     end
     end
 
     @poiin_timer = EM::PeriodicTimer.new(30) do
-      poll_for_poiins
+     if(@user_id.nil? or @user_id=='')
+        close_connection
+     else 
+       poll_for_poiins
+     end
     end
 
   end
@@ -28,7 +38,7 @@ module Server
     http.callback do
       if http.response_header.status == 200
         if http.response && http.response != "[]"
-          puts "Message received #{http.response}. Sending to client.."
+          puts "Message received #{http.response}. Sending to client @{user_id}.."
           send_data "#{USER_MESSAGE_TYPE}|#{http.response}\n"
         end
       end
@@ -40,7 +50,7 @@ module Server
     http.callback do
       if http.response_header.status == 200
         if http.response && http.response != "[]"
-          puts "Message received #{http.response}. Sending to client.."
+          puts "Message received #{http.response}. Sending to client #{@user_id}.."
           send_data "#{POIIN_MESSAGE_TYPE}|#{http.response}\n"
         end
       end
@@ -48,7 +58,7 @@ module Server
   end
 
   def unbind
-    puts " Connection terminated "
+    puts " Connection terminated by id #{@user_id}"
     @message_timer.cancel
     @poiin_timer.cancel
   end
@@ -59,8 +69,9 @@ module Server
     case operation_data[0]
       when "USER_ID"
         @user_id = operation_data[1].chop
+        init_timers
       when "HEART_BEAT"
-         puts "HeartBeat received .."
+         puts "HeartBeat received for user #{@user_id}.."
       else
         puts "Unrecognized client request"
     end

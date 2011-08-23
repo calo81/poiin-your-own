@@ -1,9 +1,5 @@
 package com.poiin.yourown.people;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +14,7 @@ import com.poiin.yourown.network.RestClientServiceImpl;
 
 public class PeopleServiceImpl implements PeopleService {
 	private ApplicationState applicationState;
-	private RestClientService restClientService = new RestClientServiceImpl();
+	private RestClientService restClientService = RestClientServiceImpl.getInstance();
 
 	public PeopleServiceImpl(ApplicationState application) {
 		this.applicationState = application;

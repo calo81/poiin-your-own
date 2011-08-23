@@ -44,7 +44,7 @@ public class TwitterProfilePictureRetriever implements ProfilePictureRetriever {
 
 	private void setScreenNameToLookup(String twitterId) {
 		try {
-			User twitterUser = appState.getGenericTwitter().lookupUsers(new long[] { Long.parseLong(twitterId) }).get(0);
+			User twitterUser = appState.getTwitterOrGenericTwitter().lookupUsers(new long[] { Long.parseLong(twitterId) }).get(0);
 			this.twitterScreenName = twitterUser.getScreenName();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -53,7 +53,7 @@ public class TwitterProfilePictureRetriever implements ProfilePictureRetriever {
 
 	@Override
 	public Bitmap retrieveBitmap() {
-		Twitter twitter = appState.getGenericTwitter();
+		Twitter twitter = appState.getTwitterOrGenericTwitter();
 		try {
 			ProfileImage image = twitter.getProfileImage(twitterScreenName, ProfileImage.NORMAL);
 			return UrlBasedImageRetrieverHelper.retrieveBitmapFromUrl(image.getURL());
@@ -103,7 +103,7 @@ public class TwitterProfilePictureRetriever implements ProfilePictureRetriever {
 	private List<User> getTwitterUsers(long[] ids){
 		ResponseList<User> twitterUsers;
 		try {
-			twitterUsers = appState.getGenericTwitter().lookupUsers(ids);
+			twitterUsers = appState.getTwitterOrGenericTwitter().lookupUsers(ids);
 			return twitterUsers;
 		} catch (TwitterException e) {
 			e.printStackTrace();

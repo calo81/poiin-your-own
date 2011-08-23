@@ -19,11 +19,11 @@ public class ServerMessageListener {
 	private static ServerMessageListener instance;
 	private ApplicationState context;
 	private SocketClient socketClient;
-	private RestClientService restClient = new RestClientServiceImpl();
+	private RestClientService restClient = RestClientServiceImpl.getInstance();
 
 	private ServerMessageListener(ApplicationState context) {
 		this.context = context;
-		this.socketClient = new SocketClient();
+		this.socketClient = SocketClient.getInstance();
 	}
 
 	public static ServerMessageListener getInstance(ApplicationState context) {
